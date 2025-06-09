@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('telefono_empleado_encargado')->nullable();
             $table->string('telefono');
             $table->string('direccion');
-            $table->enum('estado', ['activo', 'inactivo'])->default('activo');
+            $table->string('ciudad');
+            $table->string('imagen');
             $table->timestamp('fecha_registro')->useCurrent();
             $table->timestamps();
         });
