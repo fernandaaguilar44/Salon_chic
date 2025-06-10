@@ -4,43 +4,33 @@
     <meta charset="UTF-8">
     <title>Editar Proveedor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
         body {
-            background-color: #E6E6FA; /* Lavanda */
-            color: white;
+            background-color: #E6E6FA;
         }
-
         .form-container {
             background-color: #fff;
             padding: 2rem;
             border-radius: 10px;
             color: black;
         }
-
         .form-label {
-            color: #e4007c; /* Rosa */
+            color: #e4007c;
         }
-
-        .form-control, .form-select {
+        .form-control {
             background-color: white;
             color: black;
         }
-
         .btn-primary {
-            background-color: #c97bff; /* Morado oscuro */
+            background-color: #c97bff;
             border-color: #c97bff;
         }
-
         .btn-secondary {
-            background-color: #c97bff; /* Rosa */
+            background-color: #c97bff;
             border-color: #c97bff;
             color: white;
         }
-
         .btn-secondary:hover {
             background-color: #e4007c;
             border-color: #e4007c;
@@ -59,11 +49,13 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Fila 1 -->
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="nombre_proveedor" class="form-label">Nombre del Proveedor</label>
-                            <input type="text" class="form-control @error('nombre_proveedor') is-invalid @enderror" id="nombre_proveedor" name="nombre_proveedor" value="{{ old('nombre_proveedor', $proveedor->nombre_proveedor) }}" required>
+                            <input type="text" name="nombre_proveedor" id="nombre_proveedor"
+                                   class="form-control @error('nombre_proveedor') is-invalid @enderror"
+                                   value="{{ old('nombre_proveedor', $proveedor->nombre_proveedor) }}"
+                                   required maxlength="35">
                             @error('nombre_proveedor')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -71,19 +63,13 @@
 
                         <div class="col-md-4">
                             <label for="telefono" class="form-label">Teléfono</label>
-                            <input
-                                type="text"
-                                class="form-control @error('telefono') is-invalid @enderror"
-                                id="telefono"
-                                name="telefono"
-                                value="{{ old('telefono', $proveedor->telefono) }}"
-                                required
-                                pattern="\d{8}"
-                                maxlength="8"
-                                inputmode="numeric"
-                                title="El teléfono debe contener 8 dígitos numéricos"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                            >
+                            <input type="text" name="telefono" id="telefono"
+                                   class="form-control @error('telefono') is-invalid @enderror"
+                                   value="{{ old('telefono', $proveedor->telefono) }}"
+                                   required pattern="^(?!([0-9])\1{7})\d{8}$"
+                                   maxlength="8" inputmode="numeric"
+                                   title="Debe tener 8 dígitos distintos. Ej: no '11111111'."
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             @error('telefono')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -91,28 +77,25 @@
 
                         <div class="col-md-4">
                             <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control @error('direccion') is-invalid @enderror" id="direccion" name="direccion" value="{{ old('direccion', $proveedor->direccion) }}" required>
+                            <input type="text" name="direccion" id="direccion"
+                                   class="form-control @error('direccion') is-invalid @enderror"
+                                   value="{{ old('direccion', $proveedor->direccion) }}"
+                                   required maxlength="100">
                             @error('direccion')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Fila 2 -->
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="ciudad" class="form-label">Ciudad</label>
-                            <input
-                                type="text"
-                                class="form-control @error('ciudad') is-invalid @enderror"
-                                id="ciudad"
-                                name="ciudad"
-                                value="{{ old('ciudad', $proveedor->ciudad) }}"
-                                required
-                                pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
-                                maxlength="50"
-                                title="La ciudad solo puede contener letras y espacios"
-                            >
+                            <input type="text" name="ciudad" id="ciudad"
+                                   class="form-control @error('ciudad') is-invalid @enderror"
+                                   value="{{ old('ciudad', $proveedor->ciudad) }}"
+                                   required maxlength="25"
+                                   pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+                                   title="Solo letras y espacios.">
                             @error('ciudad')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -120,7 +103,10 @@
 
                         <div class="col-md-4">
                             <label for="nombre_empresa" class="form-label">Nombre de la Empresa</label>
-                            <input type="text" class="form-control @error('nombre_empresa') is-invalid @enderror" id="nombre_empresa" name="nombre_empresa" value="{{ old('nombre_empresa', $proveedor->nombre_empresa) }}" required>
+                            <input type="text" name="nombre_empresa" id="nombre_empresa"
+                                   class="form-control @error('nombre_empresa') is-invalid @enderror"
+                                   value="{{ old('nombre_empresa', $proveedor->nombre_empresa) }}"
+                                   required maxlength="25">
                             @error('nombre_empresa')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -128,30 +114,26 @@
 
                         <div class="col-md-4">
                             <label for="empleado_encargado" class="form-label">Empleado Encargado</label>
-                            <input type="text" class="form-control @error('empleado_encargado') is-invalid @enderror" id="empleado_encargado" name="empleado_encargado" value="{{ old('empleado_encargado', $proveedor->empleado_encargado) }}" required>
+                            <input type="text" name="empleado_encargado" id="empleado_encargado"
+                                   class="form-control @error('empleado_encargado') is-invalid @enderror"
+                                   value="{{ old('empleado_encargado', $proveedor->empleado_encargado) }}"
+                                   required maxlength="35">
                             @error('empleado_encargado')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Fila 3 -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="telefono_empleado_encargado" class="form-label">Teléfono del Encargado</label>
-                            <input
-                                type="text"
-                                class="form-control @error('telefono_empleado_encargado') is-invalid @enderror"
-                                id="telefono_empleado_encargado"
-                                name="telefono_empleado_encargado"
-                                value="{{ old('telefono_empleado_encargado', $proveedor->telefono_empleado_encargado) }}"
-                                required
-                                pattern="\d{8}"
-                                maxlength="8"
-                                inputmode="numeric"
-                                title="El teléfono debe tener 8 dígitos"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                            >
+                            <input type="text" name="telefono_empleado_encargado" id="telefono_empleado_encargado"
+                                   class="form-control @error('telefono_empleado_encargado') is-invalid @enderror"
+                                   value="{{ old('telefono_empleado_encargado', $proveedor->telefono_empleado_encargado) }}"
+                                   required pattern="^(?!([0-9])\1{7})\d{8}$"
+                                   maxlength="8" inputmode="numeric"
+                                   title="Debe tener 8 dígitos distintos."
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             @error('telefono_empleado_encargado')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -159,19 +141,22 @@
 
                         <div class="col-md-6">
                             <label for="fecha_registro" class="form-label">Fecha de Registro</label>
-                            <input type="date" class="form-control @error('fecha_registro') is-invalid @enderror" id="fecha_registro" name="fecha_registro" value="{{ old('fecha_registro', $proveedor->fecha_registro) }}" required>
+                            <input type="date" name="fecha_registro" id="fecha_registro"
+                                   class="form-control @error('fecha_registro') is-invalid @enderror"
+                                   value="{{ old('fecha_registro', $proveedor->fecha_registro) }}"
+                                   required max="{{ now()->toDateString() }}">
                             @error('fecha_registro')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Fila 4: Imagen -->
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3">
-                            <label for="imagen" class="form-label">Cambiar Imagen del Proveedor (opcional)</label>
-                            <input type="file" id="imagen" name="imagen" accept="image/*"
-                                   class="form-control @error('imagen') is-invalid @enderror">
+                            <label for="imagen" class="form-label">Cambiar Imagen (opcional)</label>
+                            <input type="file" name="imagen" id="imagen"
+                                   class="form-control @error('imagen') is-invalid @enderror"
+                                   accept="image/*">
                             @error('imagen')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -181,21 +166,19 @@
                             <div>
                                 <p class="mb-1 fw-semibold">Imagen actual:</p>
                                 @if($proveedor->imagen)
-                                    <img src="{{ asset('storage/' . $proveedor->imagen) }}" alt="Imagen del proveedor"
+                                    <img src="{{ asset('storage/' . $proveedor->imagen) }}"
+                                         alt="Imagen del proveedor"
                                          class="rounded shadow" width="120">
+                                @else
+                                    <p class="text-muted">No hay imagen.</p>
                                 @endif
                             </div>
                         </div>
                     </div>
 
-                    <!-- Botones -->
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('proveedores.index') }}" class="btn btn-secondary">
-                            Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            Actualizar Proveedor
-                        </button>
+                        <a href="{{ route('proveedores.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Proveedor</button>
                     </div>
 
                 </form>
@@ -204,7 +187,6 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

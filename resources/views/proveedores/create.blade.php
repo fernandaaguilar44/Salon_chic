@@ -49,7 +49,7 @@
                     <label for="nombre_proveedor" class="form-label text-rosado fw-semibold">Nombre del Proveedor</label>
                     <input type="text" id="nombre_proveedor" name="nombre_proveedor"
                            value="{{ old('nombre_proveedor') }}"
-                           required
+                           required maxlength="35"
                            class="form-control @error('nombre_proveedor') is-invalid @enderror">
                     @error('nombre_proveedor')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -61,7 +61,7 @@
                     <input type="text" id="telefono" name="telefono"
                            value="{{ old('telefono') }}"
                            required pattern="\d{8}" maxlength="8" inputmode="numeric"
-                           title="El teléfono debe contener 8 dígitos"
+                           title="Debe contener 8 dígitos distintos"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                            class="form-control @error('telefono') is-invalid @enderror">
                     @error('telefono')
@@ -73,7 +73,7 @@
                     <label for="direccion" class="form-label text-rosado fw-semibold">Dirección</label>
                     <input type="text" id="direccion" name="direccion"
                            value="{{ old('direccion') }}"
-                           required
+                           required maxlength="100"
                            class="form-control @error('direccion') is-invalid @enderror">
                     @error('direccion')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -87,8 +87,8 @@
                     <label for="ciudad" class="form-label text-rosado fw-semibold">Ciudad</label>
                     <input type="text" id="ciudad" name="ciudad"
                            value="{{ old('ciudad') }}"
-                           required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" maxlength="50"
-                           title="La ciudad solo puede contener letras y espacios"
+                           required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" maxlength="25"
+                           title="Solo letras y espacios"
                            class="form-control @error('ciudad') is-invalid @enderror">
                     @error('ciudad')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -99,7 +99,7 @@
                     <label for="nombre_empresa" class="form-label text-rosado fw-semibold">Nombre de la Empresa</label>
                     <input type="text" id="nombre_empresa" name="nombre_empresa"
                            value="{{ old('nombre_empresa') }}"
-                           required
+                           required maxlength="25"
                            class="form-control @error('nombre_empresa') is-invalid @enderror">
                     @error('nombre_empresa')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -110,7 +110,7 @@
                     <label for="empleado_encargado" class="form-label text-rosado fw-semibold">Empleado Encargado</label>
                     <input type="text" id="empleado_encargado" name="empleado_encargado"
                            value="{{ old('empleado_encargado') }}"
-                           required
+                           required maxlength="35"
                            class="form-control @error('empleado_encargado') is-invalid @enderror">
                     @error('empleado_encargado')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -125,7 +125,7 @@
                     <input type="text" id="telefono_empleado_encargado" name="telefono_empleado_encargado"
                            value="{{ old('telefono_empleado_encargado') }}"
                            required pattern="\d{8}" maxlength="8" inputmode="numeric"
-                           title="El teléfono debe tener 8 dígitos"
+                           title="Debe contener 8 dígitos distintos"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                            class="form-control @error('telefono_empleado_encargado') is-invalid @enderror">
                     @error('telefono_empleado_encargado')
@@ -137,6 +137,7 @@
                     <label for="fecha_registro" class="form-label text-rosado fw-semibold">Fecha de Registro</label>
                     <input type="date" id="fecha_registro" name="fecha_registro"
                            value="{{ old('fecha_registro') }}"
+                           max="{{ now()->toDateString() }}"
                            required
                            class="form-control @error('fecha_registro') is-invalid @enderror">
                     @error('fecha_registro')
@@ -172,7 +173,7 @@
     </div>
 </div>
 
-<!-- Bootstrap JS opcional -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
