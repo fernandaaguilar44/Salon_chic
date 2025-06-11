@@ -15,8 +15,8 @@ return new class extends Migration
             $table->string('nombre_proveedor');
             $table->string('nombre_empresa');
             $table->string('empleado_encargado')->nullable();
-            $table->string('telefono_empleado_encargado')->nullable();
-            $table->string('telefono');
+            $table->string('telefono_empleado_encargado')->unique()->nullable();
+            $table->string('telefono')->unique();
             $table->string('direccion');
             $table->string('ciudad');
             $table->string('imagen');

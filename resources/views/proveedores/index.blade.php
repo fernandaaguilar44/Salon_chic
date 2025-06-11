@@ -20,7 +20,7 @@
         }
 
         .table th {
-            background-color: #c97bff; /* Morado oscuro */
+            background-color: #3a006b; /* Morado oscuro */
             color: white;
             text-align: center;
             white-space: nowrap;
@@ -35,14 +35,14 @@
         }
 
         .btn-primary {
-            background-color: #c97bff;
-            border-color: #c97bff;
+            background-color: #3a006b;
+            border-color: #3a006b;
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #c97bff;
-            border-color: #c97bff;
+            background-color: #3a006b;
+            border-color: #3a006b;
         }
 
         .btn-secondary {
@@ -62,7 +62,7 @@
         }
 
         h2 {
-            color: #c97bff;
+            color: #3a006b;
         }
 
         .action-buttons .btn {

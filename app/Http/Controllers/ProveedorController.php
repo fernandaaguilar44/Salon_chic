@@ -38,20 +38,34 @@ class ProveedorController extends Controller
 
     public function create()
     {
-        return view('proveedores.create');
+        $empresas = Proveedor::select('nombre_empresa')
+            ->distinct()
+            ->orderBy('nombre_empresa')
+            ->pluck('nombre_empresa');
+
+        return view('proveedores.create', compact('empresas'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre_proveedor' => 'required|string|max:35',
-            'telefono' => ['required', 'digits:8', 'regex:/^(?!([0-9])\1{7})[0-9]{8}$/'],
+            'telefono' => [
+                'required',
+                'digits:8',
+                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'unique:proveedores,telefono',
+            ],
             'direccion' => 'required|string|max:100',
             'ciudad' => 'required|string|max:25|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
             'nombre_empresa' => 'required|string|max:25',
             'empleado_encargado' => 'required|string|max:35',
-            'telefono_empleado_encargado' => ['required', 'digits:8', 'regex:/^(?!([0-9])\1{7})[0-9]{8}$/'],
-            'fecha_registro' => 'required|date|before_or_equal:today',
+            'telefono_empleado_encargado' => [
+                'required',
+                'digits:8',
+                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'unique:proveedores,telefono_empleado_encargado',
+            ],
             'imagen' => 'nullable|image|max:2048',
         ]);
 
@@ -81,13 +95,22 @@ class ProveedorController extends Controller
     {
         $request->validate([
             'nombre_proveedor' => 'required|string|max:35',
-            'telefono' => ['required', 'digits:8', 'regex:/^(?!([0-9])\1{7})[0-9]{8}$/'],
+            'telefono' => [
+                'required',
+                'digits:8',
+                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                Rule::unique('proveedores', 'telefono')->ignore($proveedor->id),
+            ],
             'direccion' => 'required|string|max:100',
             'ciudad' => 'required|string|max:25|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
             'nombre_empresa' => 'required|string|max:25',
             'empleado_encargado' => 'required|string|max:35',
-            'telefono_empleado_encargado' => ['required', 'digits:8', 'regex:/^(?!([0-9])\1{7})[0-9]{8}$/'],
-            'fecha_registro' => 'required|date|before_or_equal:today',
+            'telefono_empleado_encargado' => [
+                'required',
+                'digits:8',
+                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                Rule::unique('proveedores', 'telefono_empleado_encargado')->ignore($proveedor->id),
+            ],
             'imagen' => 'nullable|image|max:2048',
         ]);
 
@@ -108,7 +131,6 @@ class ProveedorController extends Controller
             'nombre_empresa' => $request->nombre_empresa,
             'empleado_encargado' => $request->empleado_encargado,
             'telefono_empleado_encargado' => $request->telefono_empleado_encargado,
-            'fecha_registro' => $request->fecha_registro,
             'imagen' => $proveedor->imagen,
         ]);
 
