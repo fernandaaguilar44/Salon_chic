@@ -24,7 +24,7 @@ class EmpleadoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nombre_empleado' => ['required', 'string', 'min:10', 'max:30', 'regex:/^[\pL\s]+$/u'],
+            'nombre_empleado' => ['required', 'string', 'min:10', 'max:50', 'regex:/^[\pL\s]+$/u'],
             'telefono' => ['required','regex:/^[23789]\d{7}$/', 'not_regex:/^0+$/', 'not_regex:/^(\d)\1{7}$/'],
             'direccion' => ['required', 'string', 'max:50','regex:/^[\pL0-9\s.,#\-]+$/u'],
             'salario' => ['required', 'numeric', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],

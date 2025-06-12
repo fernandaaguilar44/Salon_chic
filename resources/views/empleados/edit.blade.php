@@ -104,13 +104,14 @@
             <div class="col-md-6">
                 <label for="salario" class="form-label">Salario</label>
                 <input type="number"  id="salario" name="salario" class="form-control @error('salario') is-invalid @enderror"
-                       value="{{ old('salario', $empleado->salario) }}" required step="0.01"   onkeypress="return soloNumeros(event)"
+                       value="{{ old('salario', $empleado->salario) }}" required min="10000" max="20000" step="0.01"   onkeypress="return soloNumeros(event)"
                        placeholder="000000.00"
                        oninput="limitarSalario(this)" />
                 @error('salario')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
 
             <div class="col-md-6">
                 <label for="contacto_emergencia" class="form-label">Teléfono del contacto</label>
@@ -158,11 +159,14 @@
             <div class="col-md-6">
                 <label for="fecha_ingreso" class="form-label">Fecha de ingreso</label>
                 <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control @error('fecha_ingreso') is-invalid @enderror"
-                       value="{{ old('fecha_ingreso', $empleado->fecha_ingreso) }}" required />
+                       value="{{ old('fecha_ingreso', $empleado->fecha_ingreso) }}" required max="{{ date('Y-m-d') }}" />
                 @error('fecha_ingreso')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
+
+
         </div>
 
         <div class="d-flex justify-content-between mt-4">

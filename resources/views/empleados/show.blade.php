@@ -78,7 +78,7 @@
         <ul class="list-group mb-3">
             @foreach($empleado->llamados as $llamado)
                 <li class="list-group-item">
-                    <strong>{{ $llamado->fecha }}</strong>: {{ $llamado->descripcion }}
+                    <strong>{{ $llamado->fecha }}</strong>: {{ $llamado->motivo }}
                 </li>
             @endforeach
         </ul>
@@ -86,7 +86,7 @@
 
     <a href="{{ route('empleados.index') }}" class="btn btn-secondary">Volver al listado</a>
     <a href="{{ route('llamados.create') }}" class="btn btn-danger">+ Registrar llamado de atención</a>
- <a href="{{ route('empleados.historial', $empleado->id) }}">Ver historial de llamados</a>
+
 
 
 </div>

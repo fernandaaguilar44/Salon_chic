@@ -121,6 +121,10 @@
                     </form>
 
                     <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-sm btn-info" title="Ver detalles">Ver detalles</a>
+                    <a href="{{ route('llamados.historial', $empleado->id) }}" class="btn btn-sm btn-danger" title="Historial de Llamados">
+                        Ver llamados
+                    </a>
+
                 </td>
 
                 </td>

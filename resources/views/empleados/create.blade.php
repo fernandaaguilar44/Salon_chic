@@ -98,7 +98,7 @@
                             <label for="nombre_empleado" class="form-label">Nombre Empleado</label>
                             <input type="text" id="nombre_empleado" name="nombre_empleado"
                                    class="form-control @error('nombre_empleado') is-invalid @enderror"
-                                   value="{{ old('nombre_empleado') }}" required minlength="10" maxlength="30"
+                                   value="{{ old('nombre_empleado') }}" required minlength="10" maxlength="50"
                                    placeholder="Escriba nombre del empleado" onkeypress="return soloLetras(event)" />
                             <div class="invalid-feedback">
                                 Ingrese el nombre y debe ser solo letras.
@@ -141,7 +141,7 @@
                             <label for="direccion" class="form-label">Dirección</label>
                             <input type="text" id="direccion" name="direccion"
                                    class="form-control @error('direccion') is-invalid @enderror"
-                                   value="{{ old('direccion') }}" required maxlength="100"  placeholder="Escriba la dirrecion del empleado" />
+                                   value="{{ old('direccion') }}" required maxlength="50"  placeholder="Escriba la dirrecion del empleado" />
                             <div class="invalid-feedback">Ingrese la dirección es obligatoria y no debe ser muy larga.</div>
                         </div>
 
@@ -187,8 +187,8 @@
                             <label for="cargo" class="form-label">Cargo</label>
                             <select id="cargo" name="cargo" class="form-select @error('cargo') is-invalid @enderror" required>
                                 <option value="">Seleccione un cargo</option>
-                                <option value="Estilista" {{ old('cargo') == 'Estilista' ? 'selected' : '' }}>Estilista</option>
-                                <option value="Manicurista" {{ old('cargo') == 'Manicurista' ? 'selected' : '' }}>Manicurista</option>
+                                <option value="estilista" {{ old('cargo') == 'estilista' ? 'selected' : '' }}>Estilista</option>
+                                <option value="manicurista" {{ old('cargo') == 'manicurista' ? 'selected' : '' }}>Manicurista</option>
                             </select>
                             <div class="invalid-feedback">Debe seleccionar un cargo válido.</div>
                         </div>

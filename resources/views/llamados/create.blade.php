@@ -39,9 +39,17 @@
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Motivo</label>
             <div class="col-sm-10">
-                <input type="text" name="motivo" value="{{ old('motivo') }}" class="form-control border border-danger text-danger" required>
+                <input type="text"
+                       name="motivo"
+                       value="{{ old('motivo') }}"
+                       class="form-control border border-danger text-danger @error('motivo') is-invalid @enderror"
+                       required
+                       maxlength="40"
+                       placeholder="Escriba el motivo"
+                       onkeypress="return soloLetras(event)" />
             </div>
         </div>
+
 
 
 
@@ -54,3 +62,38 @@
 </div>
 </body>
 </html>
+
+<script>
+    function soloLetras(e) {
+        let key = e.keyCode || e.which;
+        let tecla = String.fromCharCode(key).toLowerCase();
+        let letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        let especiales = [8, 37, 39, 46]; // backspace, flechas, suprimir
+
+        let input = e.target;
+
+        // No permitir punto ni comilla simple ni caracteres no permitidos
+        if (tecla === '.' || tecla === "'" || (letras.indexOf(tecla) === -1 && !especiales.includes(key))) {
+            e.preventDefault();
+            return false;
+        }
+
+        // No permitir espacio como primer carácter
+        if (key === 32 && input.selectionStart === 0) {
+            e.preventDefault();
+            return false;
+        }
+
+        // No permitir múltiples espacios consecutivos
+        if (key === 32) {
+            const valor = input.value;
+            const pos = input.selectionStart;
+            if (valor.charAt(pos - 1) === ' ') {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        return true;
+    }
+    </script>

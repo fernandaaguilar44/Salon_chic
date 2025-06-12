@@ -24,3 +24,5 @@ Route::controller(EmpleadoController::class)->group(function () {
 Route::get('llamados/create', [LlamadoAtencionController::class, 'create'])->name('llamados.create');
 Route::post('llamados', [LlamadoAtencionController::class, 'store'])->name('llamados.store');
 Route::get('/empleados/{id}/historial', [EmpleadoController::class, 'historial'])->name('empleados.historial');
+Route::get('/empleados/{id}/llamados', [LlamadoAtencionController::class, 'historial'])->name('llamados.historial');
+

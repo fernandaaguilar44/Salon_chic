@@ -9,7 +9,7 @@
 <div class="container mt-5 bg-white p-4 rounded shadow">
     <h3 class="mb-4">Historial de llamados - {{ $empleado->nombre_empleado }}</h3>
 
-    <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-secondary mb-3">← Volver al detalle del empleado</a>
+    <a href="{{ route('empleados.index', $empleado->id) }}" class="btn btn-secondary mb-3">← Volver al listado de empleado</a>
 
     @if($empleado->llamados->isEmpty())
         <div class="alert alert-info">Este empleado no tiene llamados de atención registrados.</div>
@@ -25,7 +25,8 @@
             @foreach($empleado->llamados as $llamado)
                 <tr>
                     <td class="text-center">{{ \Carbon\Carbon::parse($llamado->fecha)->format('d/m/Y') }}</td>
-                    <td>{{ $llamado->motivo }}</td>
+                    <td class="text-center">{{ $llamado->motivo }}</td>
+
 
                 </tr>
             @endforeach
