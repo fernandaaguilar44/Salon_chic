@@ -72,11 +72,11 @@
     <hr>
     <h5 style="color: #4B0082;">Historial de Llamados de Atención</h5>
 
-    @if($empleado->llamadosAtencion->isEmpty())
+    @if($empleado->llamados->isEmpty())
         <p>No hay llamados de atención registrados.</p>
     @else
         <ul class="list-group mb-3">
-            @foreach($empleado->llamadosAtencion as $llamado)
+            @foreach($empleado->llamados as $llamado)
                 <li class="list-group-item">
                     <strong>{{ $llamado->fecha }}</strong>: {{ $llamado->descripcion }}
                 </li>
@@ -86,7 +86,7 @@
 
     <a href="{{ route('empleados.index') }}" class="btn btn-secondary">Volver al listado</a>
     <a href="{{ route('llamados.create') }}" class="btn btn-danger">+ Registrar llamado de atención</a>
-    <a href="{{ route('empleados.historial', $empleado->id) }}">Ver historial de llamados</a>
+ <a href="{{ route('empleados.historial', $empleado->id) }}">Ver historial de llamados</a>
 
 
 </div>

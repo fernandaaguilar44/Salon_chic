@@ -4,12 +4,13 @@ namespace App\Models;
 
 
 
-namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Empleado extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'nombre_empleado',
         'numero_identidad',
@@ -23,15 +24,12 @@ class Empleado extends Model
         'estado',
     ];
 
-    public function empleado()
-    {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
-    }
+
     public function llamados()
     {
-        return $this->hasMany(LlamadoAtencion::class, 'id_empleado');
-    }
 
+        return $this->hasMany(LlamadoAtencion::class);
+    }
 
 
 

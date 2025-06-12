@@ -133,8 +133,8 @@
                 <label for="cargo" class="form-label">Cargo</label>
                 <select id="cargo" name="cargo" class="form-select @error('cargo') is-invalid @enderror" required>
                     <option value="">Seleccione un cargo</option>
-                    <option value="Estilista" {{ old('cargo', $empleado->cargo) == 'Estilista' ? 'selected' : '' }}>Estilista</option>
-                    <option value="Manicurista" {{ old('cargo', $empleado->cargo) == 'Manicurista' ? 'selected' : '' }}>Manicurista</option>
+                    <option value="estilista" {{ old('cargo', $empleado->cargo) == 'estilista' ? 'selected' : '' }}>Estilista</option>
+                    <option value="manicurista" {{ old('cargo', $empleado->cargo) == 'manicurista' ? 'selected' : '' }}>Manicurista</option>
                     <!-- Puedes agregar más opciones si lo necesitas -->
                 </select>
                 @error('cargo')

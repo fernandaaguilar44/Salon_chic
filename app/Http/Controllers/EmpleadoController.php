@@ -4,6 +4,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Empleado;
+use App\Models\LlamadoAtencion;
+
 use Illuminate\Validation\Rule;
 
 
@@ -13,8 +15,9 @@ class EmpleadoController extends Controller
 {
     public function show($id)
     {
-        $empleado = Empleado::with('llamadosAtencion')->findOrFail($id); // Asegúrate de tener esta relación
-        return view('empleados.show', compact('empleado'));
+
+        $empleado = Empleado::with(['llamados'])->findOrFail($id);
+        return view('empleados.show')->with('empleado', $empleado);
     }
 
 
@@ -26,7 +29,7 @@ class EmpleadoController extends Controller
             'direccion' => ['required', 'string', 'max:50','regex:/^[\pL0-9\s.,#\-]+$/u'],
             'salario' => ['required', 'numeric', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
             'contacto_emergencia' => ['required','regex:/^[23789]\d{7}$/', 'not_regex:/^0+$/', 'not_regex:/^(\d)\1{7}$/'],
-            'cargo' =>['required', Rule::in(['activo', 'inactivo'])],
+            'cargo' =>['required', Rule::in(['manicurista', 'estilista'])],
             'fecha_ingreso' => ['required', 'before_or_equal:today'],
             'estado' => ['required', Rule::in(['activo', 'inactivo'])],
         ]);
@@ -104,8 +107,9 @@ class EmpleadoController extends Controller
             'direccion' => ['required', 'string', 'max:50', 'regex:/^[\pL0-9\s,.\-#]+$/u'],
             'salario' => ['required', 'numeric', 'regex:/^\d{1,6}(\.\d{1,2})?$/'],
             'contacto_emergencia' => ['required','regex:/^[23789]\d{7}$/', 'not_regex:/^0+$/', 'not_regex:/^(\d)\1{7}$/'],
+            'cargo' =>['required', Rule::in(['manicurista', 'estilista'])],
             'correo' => ['required', 'email', 'max:35', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', 'unique:empleados,correo'],
-            ['required', Rule::in(['activo', 'inactivo'])],
+            'estado' => ['required', Rule::in(['activo', 'inactivo'])],
             'fecha_ingreso' => ['required', 'before_or_equal:today']
         ]);
 

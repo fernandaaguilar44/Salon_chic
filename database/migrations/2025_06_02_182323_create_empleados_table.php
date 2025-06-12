@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
+
             $table->string('nombre_empleado', 30);
             $table->string('numero_identidad', 13)->unique();
             $table->string('telefono', 8);
@@ -24,7 +25,6 @@ return new class extends Migration
             $table->date('fecha_ingreso');
             $table->enum('estado', ['activo', 'inactivo']);
             $table->timestamps();
-            $table->foreign('proveedor_id')->references('id')->on('proveedores')->onDelete('cascade');
 
         });
     }

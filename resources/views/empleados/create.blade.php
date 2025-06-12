@@ -286,11 +286,7 @@
         if (/\d/.test(e.key) || permitidos.includes(e.key)) {
             return true;
         }
-        // Permitir un solo punto decimal
-        if (e.key === '.' && !e.target.value.includes('.')) {
-            return true;
-        }
-        e.preventDefault();
+        e.preventDefault(); // evita que se escriba otro carácter
         return false;
     }
 
