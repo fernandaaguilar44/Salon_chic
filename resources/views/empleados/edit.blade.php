@@ -24,18 +24,15 @@
             background-color: white;
             color: black;
         }
-        .btn-primary, .btn-secondary {
-            background-color: #C97BFF;
-            border-color: #C97BFF;
-            color: black;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .btn-secondary:hover,
-        .btn-primary:hover {
-            background-color: #C97BFF;
+        .btn-primary, .btn-secondary, .btn-danger {
+            background-color: #3a006b;
+            border-color: #3a006b;
             color: white;
-            transform: scale(1.1);
+        }
+        .btn-secondary:hover, .btn-danger:hover {
+            background-color: #e4007c;
+            border-color: #e4007c;
+            color: white;
         }
         .form-control.is-invalid,
         .form-select.is-invalid {
@@ -176,12 +173,10 @@
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <div class="btn-group" role="group" aria-label="Botones de acción">
-                            <a href="{{ route('empleados.index') }}" class="btn btn-secondary">❌ Cancelar</a>
-                            <button type="submit" class="btn btn-primary">💾 Actualizar</button>
+                    <div class="btn-group-left mt-4">
+                        <a href="{{ route('empleados.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>

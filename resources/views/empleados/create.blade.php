@@ -24,30 +24,17 @@
             background-color: white;
             color: black;
         }
-        .btn-primary {
-            background-color: #C97BFF;
-            border-color: #C97BFF;
-            color: black;
-            text-shadow: white 1px 1px;
-            font-weight: bold;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-        .btn-secondary {
-            background-color: #C97BFF;
-            border-color: rgba(16, 15, 15, 0.95);
-            color: black;
-            font-weight: bold;
-            text-shadow: white 1px 1px;
-            transition: all 0.4s ease;
-        }
-        .btn-secondary:hover,
-        .btn-primary:hover {
-            background-color: #C97BFF;
-            border-color: rgba(16, 15, 15, 0.95);
+
+        .btn-primary, .btn-secondary, .btn-danger {
+            background-color: #3a006b;
+            border-color: #3a006b;
             color: white;
-            transform: scale(1.2);
-            opacity: 0.9;
         }
+        .btn-secondary:hover, .btn-danger:hover {
+            background-color: #e4007c;
+            border-color: #e4007c;
+            color: white;
+            }
         .btn-primary:hover {
             text-shadow: black 1px 1px;
         }
@@ -171,13 +158,13 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <div class="btn-group" role="group" aria-label="Botones de acción">
-                            <button type="button" id="btnLimpiar" class="btn btn-secondary">🧹 Limpiar</button>
-                            <a href="{{ route('empleados.index') }}" class="btn btn-secondary">❌ Cancelar</a>
-                            <button type="submit" class="btn btn-primary">💾 Guardar</button>
-                        </div>
+                    <div class="btn-group-left mt-4">
+                        <a href="{{ route('empleados.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <button type="reset" class="btn btn-danger" id="btnLimpiar">Limpiar</button>
+                        <button type="submit" class="btn btn-primary">Crear </button>
+
                     </div>
+
                 </form>
             </div>
         </div>

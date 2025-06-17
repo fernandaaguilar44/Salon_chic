@@ -9,6 +9,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .container {
             max-width: 600px;
             background: white;
@@ -17,30 +18,37 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(180, 99, 167, 0.3);
         }
+
         h3 {
-            color: #7B2A8D; /* morado */
+            color: #7B2A8D;
             margin-bottom: 1.5rem;
             text-align: center;
         }
+
         label {
             color: rgba(16, 15, 15, 0.95);
             font-weight: 600;
         }
+
         .btn-danger {
             background-color: #E4007C;
             border: none;
         }
+
         .btn-danger:hover {
             background-color: #b30f5f;
         }
+
         .btn-secondary {
             background-color: #6c757d;
             border: none;
             margin-right: 0.5rem;
         }
+
         .btn-secondary:hover {
             background-color: #5a6268;
         }
+
         .info-empleado {
             background: #f3e6f9;
             border: 1px solid #d9b3e6;
@@ -50,10 +58,15 @@
             color: #4b0082;
             font-weight: 600;
         }
+
         .btn-group-left {
             display: flex;
             justify-content: flex-start;
             gap: 0.5rem;
+        }
+
+        textarea {
+            color: black !important;
         }
     </style>
 </head>
@@ -62,21 +75,9 @@
 <div class="container">
     <h3>Registrar nuevo llamado de atención</h3>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <!-- Aquí asumimos que $empleado es el empleado actual recibido desde el controlador -->
     <form action="{{ route('llamados.store') }}" method="POST">
         @csrf
 
-        <!-- Campo oculto con empleado_id -->
         <input type="hidden" name="empleado_id" value="{{ $empleado->id }}">
 
         <div class="info-empleado">
@@ -85,25 +86,34 @@
             <p><strong>Número de teléfono:</strong> {{ $empleado->telefono }}</p>
         </div>
 
+        <!-- Fecha -->
         <div class="mb-3">
             <input type="date"
                    name="fecha"
                    id="fecha"
-                   class="form-control"
-                   value="{ date('Y-m-d')) }"
+                   class="form-control @error('fecha') is-invalid @enderror"
+                   value="{{ old('fecha', date('Y-m-d')) }}"
                    required>
+            @error('fecha')
+            <div class="text-danger small">{{ $message }}</div>
+            @enderror
         </div>
 
+        <!-- Motivo -->
         <div class="mb-3">
             <label for="motivo">Motivo</label>
             <textarea
                     name="motivo"
                     id="motivo"
                     rows="4"
-                    class="form-control border border-danger text-danger @error('motivo') is-invalid @enderror"
-                    required maxlength="70"
+                    class="form-control @error('motivo') is-invalid @enderror"
+                    required
+                    maxlength="70"
                     placeholder="Escriba el motivo"
                     onkeypress="return soloLetras(event)">{{ old('motivo') }}</textarea>
+            @error('motivo')
+            <div class="text-danger small">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="btn-group-left">
@@ -114,35 +124,30 @@
 </div>
 
 <script>
-    // Función para permitir solo letras y algunos caracteres
     function soloLetras(e) {
-        let key = e.keyCode || e.which;
-        let tecla = String.fromCharCode(key).toLowerCase();
-        let letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-        let especiales = [8, 37, 39, 46, 13]; // backspace, flechas, suprimir, enter
+        const key = e.keyCode || e.which;
+        const tecla = String.fromCharCode(key).toLowerCase();
+        const letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        const especiales = [8, 37, 39, 46, 13];
+        const input = e.target;
 
-        let input = e.target;
-
-        if (tecla === '.' || tecla === "'" || (letras.indexOf(tecla) === -1 && !especiales.includes(key))) {
+        if (!letras.includes(tecla) && !especiales.includes(key)) {
             e.preventDefault();
             return false;
         }
 
-        // Evitar espacio al inicio
         if (key === 32 && input.selectionStart === 0) {
             e.preventDefault();
             return false;
         }
 
-        // Evitar doble espacio
-        if (key === 32) {
-            const valor = input.value;
-            const pos = input.selectionStart;
-            if (valor.charAt(pos - 1) === ' ') {
-                e.preventDefault();
-                return false;
-            }
+        const valor = input.value;
+        const pos = input.selectionStart;
+        if (key === 32 && valor.charAt(pos - 1) === ' ') {
+            e.preventDefault();
+            return false;
         }
+
         return true;
     }
 
@@ -156,7 +161,7 @@
             const año = fecha.getFullYear();
             const mes = String(fecha.getMonth() + 1).padStart(2, '0');
             const dia = String(fecha.getDate()).padStart(2, '0');
-            return `${año}-${mes}-${dia}`;
+            return ${año}-${mes}-${dia};
         };
 
         fechaInput.max = formatoFecha(hoy);
