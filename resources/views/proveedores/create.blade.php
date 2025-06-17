@@ -40,7 +40,7 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
             <div class="form-container">
-                <h2 class="mb-4 text-center" style="color: #c97bff;">Crear Proveedor</h2>
+                <h2 class="mb-4 text-center" style="color: #3a006b;">Crear Proveedor</h2>
                 <form id="formProveedor" method="POST" action="{{ route('proveedores.store') }}" enctype="multipart/form-data" novalidate>
                     @csrf
 
