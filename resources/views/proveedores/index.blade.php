@@ -8,7 +8,7 @@
 
     <style>
         body {
-            background-color: #E6E6FA; /* Lavanda */
+            background-color: #E6E6FA;
             color: #000;
         }
 
@@ -20,7 +20,7 @@
         }
 
         .table th {
-            background-color: #3a006b; /* Morado oscuro */
+            background-color: #3a006b;
             color: white;
             text-align: center;
             white-space: nowrap;
@@ -68,6 +68,11 @@
         .action-buttons .btn {
             margin-right: 0.25rem;
             white-space: nowrap;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
         @media (max-width: 991px) {
@@ -123,41 +128,41 @@
             </div>
         @endif
 
-        <form method="GET" action="{{ route('proveedores.index') }}" class="mb-4">
+        <!-- Búsqueda en tiempo real -->
+        <form class="mb-4">
             <div class="input-group">
-                <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Buscar por nombre o empresa...">
-                <button class="btn btn-secondary" type="submit">Buscar</button>
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o empresa...">
             </div>
         </form>
 
         <div class="table-responsive">
-            <table class="table table-bordered align-middle mb-0">
+            <table class="table table-bordered align-middle mb-0" id="proveedoresTable">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>
-                        <a href="{{ route('proveedores.index', array_merge(request()->all(), ['sort' => 'nombre_proveedor', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="text-white text-decoration-none">
-                            Nombre
-                            @if(request('sort') === 'nombre_proveedor')
-                                {{ request('direction') === 'asc' ? '↑' : '↓' }}
-                            @endif
-                        </a>
-                    </th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Ciudad</th>
-                    <th>
-                        <a href="{{ route('proveedores.index', array_merge(request()->all(), ['sort' => 'nombre_empresa', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="text-white text-decoration-none">
+                        <a href="{{ route('proveedores.index', ['sort' => 'nombre_empresa', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre_empresa' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
                             Empresa
                             @if(request('sort') === 'nombre_empresa')
-                                {{ request('direction') === 'asc' ? '↑' : '↓' }}
+                                @if(request('direction') === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
                             @endif
                         </a>
                     </th>
+                    <th>Ciudad</th>
+                    <th>Teléfono</th>
                     <th>
-                        <a href="{{ route('proveedores.index', array_merge(request()->all(), ['sort' => 'created_at', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="text-white text-decoration-none">
-                            Fecha Registro
-                            @if(request('sort') === 'created_at')
-                                {{ request('direction') === 'asc' ? '↑' : '↓' }}
+                        <a href="{{ route('proveedores.index', ['sort' => 'nombre_proveedor', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre_proveedor' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
+                            Nombre del vendedor
+                            @if(request('sort') === 'nombre_proveedor')
+                                @if(request('direction') === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
                             @endif
                         </a>
                     </th>
@@ -165,14 +170,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse ($proveedores as $proveedor)
+                @forelse ($proveedores as $index => $proveedor)
                     <tr>
-                        <td>{{ $proveedor->nombre_proveedor }}</td>
-                        <td>{{ $proveedor->telefono }}</td>
-                        <td>{{ $proveedor->direccion }}</td>
-                        <td>{{ $proveedor->ciudad }}</td>
+                        <td>{{ $loop->iteration + ($proveedores->currentPage() - 1) * $proveedores->perPage() }}</td>
                         <td>{{ $proveedor->nombre_empresa }}</td>
-                        <td>{{ $proveedor->created_at->format('d/m/Y') }}</td>
+                        <td>{{ $proveedor->ciudad }}</td>
+                        <td>{{ $proveedor->telefono }}</td>
+                        <td>{{ $proveedor->nombre_proveedor }}</td>
                         <td class="action-buttons">
                             <a href="{{ route('proveedores.show', $proveedor->id) }}" class="btn btn-secondary btn-sm">Ver</a>
                             <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-primary btn-sm">Editar</a>
@@ -180,7 +184,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center">No hay proveedores registrados.</td>
+                        <td colspan="6" class="text-center">No hay proveedores registrados.</td>
                     </tr>
                 @endforelse
                 </tbody>
@@ -194,5 +198,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Filtro en tiempo real
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#proveedoresTable tbody tr');
+
+        rows.forEach(row => {
+            const empresa = row.cells[1].textContent.toLowerCase();
+            const vendedor = row.cells[4].textContent.toLowerCase();
+            row.style.display = empresa.includes(filter) || vendedor.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
 </body>
 </html>

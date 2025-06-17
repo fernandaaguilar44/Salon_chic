@@ -49,36 +49,71 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_proveedor' => 'required|string|max:35',
+            'nombre_proveedor' => ['required', 'string', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono' => [
                 'required',
                 'digits:8',
-                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'regex:/^(?!([0-9])\1{7})([389])[0-9]{7}$/',
                 'unique:proveedores,telefono',
             ],
-            'direccion' => 'required|string|max:100',
-            'ciudad' => 'required|string|max:25|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
-            'nombre_empresa' => 'required|string|max:25',
-            'empleado_encargado' => 'required|string|max:35',
+            'direccion' => 'required|string|max:200',
+            'ciudad' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'nombre_empresa' => ['required', 'string', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono_empleado_encargado' => [
                 'required',
                 'digits:8',
-                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'regex:/^(?!([0-9])\1{7})([389])[0-9]{7}$/',
                 'unique:proveedores,telefono_empleado_encargado',
             ],
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => 'required|image|max:2048',
+        ], [
+            'nombre_proveedor.required' => 'Por favor, agregue el nombre del vendedor.',
+            'nombre_proveedor.regex' => 'El nombre del vendedor solo puede contener letras y espacios.',
+            'nombre_proveedor.max' => 'El nombre del vendedor no debe exceder los 50 caracteres.',
+
+            'telefono.required' => 'Por favor, agregue el número de teléfono del vendedor.',
+            'telefono.digits' => 'El número de teléfono debe contener exactamente 8 dígitos.',
+            'telefono.regex' => 'El número de teléfono debe comenzar con 3, 8 o 9.',
+            'telefono.unique' => 'El número de teléfono ingresado ya está registrado.',
+
+            'direccion.required' => 'Por favor, agregue la dirección de la empresa.',
+            'direccion.max' => 'La dirección no debe exceder los 200 caracteres.',
+
+            'ciudad.required' => 'Por favor, agregue la ciudad correspondiente.',
+            'ciudad.regex' => 'La ciudad solo puede contener letras y espacios.',
+            'ciudad.max' => 'El nombre de la ciudad no debe exceder los 25 caracteres.',
+
+            'nombre_empresa.required' => 'Por favor, agregue el nombre de la empresa.',
+            'nombre_empresa.regex' => 'El nombre de la empresa solo puede contener letras y espacios.',
+            'nombre_empresa.max' => 'El nombre de la empresa no debe exceder los 50 caracteres.',
+
+            'telefono_empleado_encargado.required' => 'Por favor, agregue el teléfono de la empresa.',
+            'telefono_empleado_encargado.digits' => 'El número de teléfono debe contener exactamente 8 dígitos.',
+            'telefono_empleado_encargado.regex' => 'El número de teléfono debe comenzar con 3, 8 o 9.',
+            'telefono_empleado_encargado.unique' => 'El número de teléfono de la empresa ya está registrado.',
+
+            'imagen.required' => 'Por favor, agregue una imagen del proveedor.',
+            'imagen.image' => 'El archivo debe ser una imagen válida.',
+            'imagen.max' => 'La imagen no debe exceder los 2MB de tamaño.',
         ]);
 
-        $datos = $request->all();
-
-        if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('proveedores', 'public');
-            $datos['imagen'] = $imagenPath;
+        if (!$request->hasFile('imagen') || !$request->file('imagen')->isValid()) {
+            return back()->withErrors(['imagen' => 'Por favor, adjunte una imagen válida.'])->withInput();
         }
 
-        Proveedor::create($datos);
+        $imagenPath = $request->file('imagen')->store('proveedores', 'public');
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado exitosamente.');
+        Proveedor::create([
+            'nombre_proveedor' => $request->nombre_proveedor,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
+            'ciudad' => $request->ciudad,
+            'nombre_empresa' => $request->nombre_empresa,
+            'telefono_empleado_encargado' => $request->telefono_empleado_encargado,
+            'imagen' => $imagenPath,
+        ]);
+
+        return redirect()->route('proveedores.index')->with('success', 'El proveedor ha sido registrado correctamente.');
     }
 
     public function show(Proveedor $proveedor)
@@ -94,24 +129,32 @@ class ProveedorController extends Controller
     public function update(Request $request, Proveedor $proveedor)
     {
         $request->validate([
-            'nombre_proveedor' => 'required|string|max:35',
+            'nombre_proveedor' => ['required', 'string', 'max:35', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono' => [
                 'required',
                 'digits:8',
-                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'regex:/^(?!([0-9])\1{7})([389])[0-9]{7}$/',
                 Rule::unique('proveedores', 'telefono')->ignore($proveedor->id),
             ],
             'direccion' => 'required|string|max:100',
-            'ciudad' => 'required|string|max:25|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
-            'nombre_empresa' => 'required|string|max:25',
-            'empleado_encargado' => 'required|string|max:35',
+            'ciudad' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'nombre_empresa' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono_empleado_encargado' => [
                 'required',
                 'digits:8',
-                'regex:/^(?!([0-9])\1{7})[0-9]{8}$/',
+                'regex:/^(?!([0-9])\1{7})([389])[0-9]{7}$/',
                 Rule::unique('proveedores', 'telefono_empleado_encargado')->ignore($proveedor->id),
             ],
             'imagen' => 'nullable|image|max:2048',
+        ], [
+            'nombre_proveedor.required' => 'Por favor, proporcione el nombre del vendedor.',
+            'telefono.required' => 'Por favor, proporcione el número de teléfono del vendedor.',
+            'direccion.required' => 'Por favor, proporcione la dirección de la empresa.',
+            'ciudad.required' => 'Por favor, indique la ciudad correspondiente.',
+            'nombre_empresa.required' => 'Por favor, proporcione el nombre de la empresa.',
+            'telefono_empleado_encargado.required' => 'Por favor, indique el teléfono de la empresa.',
+            'imagen.image' => 'El archivo debe ser una imagen válida.',
+            'imagen.max' => 'La imagen no debe exceder los 2MB de tamaño.',
         ]);
 
         if ($request->hasFile('imagen')) {
@@ -129,11 +172,10 @@ class ProveedorController extends Controller
             'direccion' => $request->direccion,
             'ciudad' => $request->ciudad,
             'nombre_empresa' => $request->nombre_empresa,
-            'empleado_encargado' => $request->empleado_encargado,
             'telefono_empleado_encargado' => $request->telefono_empleado_encargado,
             'imagen' => $proveedor->imagen,
         ]);
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente.');
+        return redirect()->route('proveedores.index')->with('success', 'El proveedor ha sido actualizado correctamente.');
     }
 }
