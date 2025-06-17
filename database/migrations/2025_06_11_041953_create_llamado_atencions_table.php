@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('llamado_atencions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('empleado_id');
-            $table->string('motivo', 40);
+            $table->string('motivo', 70);
             $table->date('fecha');
+            $table->enum('accion', ['advertencia', 'suspensión', 'despido'])->default('advertencia');
+            $table->integer('total_llamados')->default(0);
             $table->timestamps();
+
             $table->foreign('empleado_id')->references('id')->on('empleados')->onDelete('cascade');
         });
     }
@@ -30,3 +33,6 @@ return new class extends Migration
         Schema::dropIfExists('llamado_atencions');
     }
 };
+
+
+

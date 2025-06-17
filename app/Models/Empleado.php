@@ -2,35 +2,42 @@
 
 namespace App\Models;
 
-
-
-namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Empleado extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'nombre_empleado',
         'numero_identidad',
         'telefono',
-        'direccion',
         'salario',
+        'contacto_emergencia_nombre',
         'contacto_emergencia',
         'correo',
         'cargo',
         'fecha_ingreso',
         'estado',
+        'direccion'
     ];
 
-    public function empleado()
-    {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
+
+
+
+    public function llamados(){
+        return $this->hasMany(LlamadoAtencion::class, 'empleado_id');
     }
-    public function llamados()
+
+    public function estadoDisciplinario()
     {
-        return $this->hasMany(LlamadoAtencion::class, 'id_empleado');
+        $total = $this->llamados()->count();
+
+        if ($total >= 4) return 'despedido';
+        if ($total == 3) return 'suspendido';
+        return 'activo';
     }
+
 
 
 
