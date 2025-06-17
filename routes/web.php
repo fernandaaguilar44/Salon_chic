@@ -13,4 +13,3 @@ Route::post('/proveedores', [ProveedorController::class, 'store'])->name('provee
 Route::get('/proveedores/{proveedor}', [ProveedorController::class, 'show'])->name('proveedores.show');
 Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
-

@@ -14,12 +14,12 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_proveedor');
             $table->string('nombre_empresa');
-            $table->string('empleado_encargado')->nullable();
             $table->string('telefono_empleado_encargado')->unique()->nullable();
             $table->string('telefono')->unique();
             $table->string('direccion');
             $table->string('ciudad');
             $table->string('imagen');
+            $table->integer('empleado_id')->nullable();
             $table->timestamp('fecha_registro')->useCurrent();
             $table->timestamps();
         });
