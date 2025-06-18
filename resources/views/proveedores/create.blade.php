@@ -16,7 +16,7 @@
             color: black;
         }
         .form-label {
-            color: #e4007c;
+            color: #000000;
         }
         .btn-primary, .btn-secondary, .btn-danger {
             background-color: #3a006b;
@@ -36,10 +36,18 @@
     </style>
 </head>
 <body>
+@include('layouts.slider')
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+    </div>
+</div>
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
             <div class="form-container">
+
                 <h2 class="mb-4 text-center" style="color: #3a006b;">Crear Proveedor</h2>
                 <form id="formProveedor" method="POST" action="{{ route('proveedores.store') }}" enctype="multipart/form-data" novalidate>
                     @csrf

@@ -40,6 +40,12 @@
     </style>
 </head>
 <body>
+@include('layouts.slider')
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+        </div>
+    </div>
 
 <div class="container mt-5">
     <h2 class="mb-4">Detalles del Proveedor</h2>

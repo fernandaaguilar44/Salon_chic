@@ -44,6 +44,12 @@
     </style>
 </head>
 <body>
+@include('layouts.slider')
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+        </div>
+    </div>
 
 <div class="container">
     <h3>Historial de llamados - {{ $empleado->nombre_empleado }}</h3>
