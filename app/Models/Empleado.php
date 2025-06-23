@@ -42,4 +42,5 @@ class Empleado extends Model
 
 
 
+
 }
