@@ -9,24 +9,101 @@ use Illuminate\Validation\Rule;
 
 class EmpleadoController extends Controller
 {
+    // Mover los datos estáticos a una propiedad de la clase para evitar duplicación
+    private $municipiosPorDepto = [
+        '01' => 18, // Atlántida
+        '02' => 28, // Colón
+        '03' => 21, // Comayagua
+        '04' => 16, // Copán
+        '05' => 23, // Cortés
+        '06' => 16, // Choluteca
+        '07' => 19, // El Paraíso
+        '08' => 28, // Francisco Morazán
+        '09' => 16, // Gracias a Dios
+        '10' => 28, // Intibucá
+        '11' => 12, // Islas de la Bahía
+        '12' => 28, // La Paz
+        '13' => 28, // Lempira
+        '14' => 23, // Ocotepeque
+        '15' => 28, // Olancho
+        '16' => 28, // Santa Bárbara
+        '17' => 28, // Valle
+        '18' => 28, // Yoro
+    ];
+
     public function show($id)
     {
         $empleado = Empleado::with(['llamados'])->findOrFail($id);
         return view('empleados.show')->with('empleado', $empleado);
     }
 
+
+    private function getValidacionIdentidad()
+    {
+        return function ($attribute, $value, $fail) {
+            // Limpiar espacios y guiones
+            $value = preg_replace('/[\s-]/', '', $value);
+
+            if (!preg_match('/^\d{13}$/', $value)) {
+                return $fail('El número de identidad debe contener exactamente 13 dígitos numéricos.');
+            }
+
+            $departamento = substr($value, 0, 2);
+            $municipio = intval(substr($value, 2, 2));
+            $anio = substr($value, 4, 4); // Tomar 4 dígitos para el año
+            $correlativo = substr($value, 8, 5); // Ajustar posición del correlativo
+
+            // Validar departamento
+            if (!array_key_exists($departamento, $this->municipiosPorDepto)) {
+                return $fail('El código de departamento no es válido.');
+            }
+
+            // Validar municipio
+            if ($municipio < 1 || $municipio > $this->municipiosPorDepto[$departamento]) {
+                return $fail('El código de municipio no es válido para el departamento especificado.');
+            }
+
+            // Validar año (4 dígitos completos)
+            $anioNumerico = intval($anio);
+            $anioActual = intval(date('Y'));
+
+            // Validar que el año no sea 0000
+            if ($anioNumerico == 0) {
+                return $fail('El año de nacimiento no puede ser 0000.');
+            }
+
+            // Validar rango de años coherente: desde 1900 hasta el año actual
+            if ($anioNumerico < 1900 || $anioNumerico > $anioActual) {
+                return $fail('El año de nacimiento debe estar entre 1900 y ' . $anioActual . '.');
+            }
+
+            // Validar que no todos los números sean iguales
+            if (preg_match('/^(.)\1{12}$/', $value)) {
+                return $fail('La identidad no puede tener todos los números repetidos.');
+            }
+
+            // Validar que el correlativo no sea 00000
+            if ($correlativo === '00000') {
+                return $fail('El correlativo de la identidad no puede ser 00000.');
+            }
+        };
+    }
+
     public function update(Request $request, $id)
     {
         $modificarEmpleado = Empleado::findOrFail($id);
+
+
 
         $rules = [
             'nombre_empleado' => ['required', 'string', 'max:50', 'regex:/^[\pL\s]+$/u'],
             'numero_identidad' => [
                 'required',
                 'digits:13',
-                'not_regex:/^0+$/',
-                Rule::unique('empleados', 'numero_identidad')->ignore($modificarEmpleado->id)
+                Rule::unique('empleados', 'numero_identidad')->ignore($modificarEmpleado->id), $this->getValidacionIdentidad()
+
             ],
+
 
             'telefono' => [
                 'required',
@@ -42,7 +119,7 @@ class EmpleadoController extends Controller
                 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 Rule::unique('empleados', 'correo')->ignore($modificarEmpleado->id)
             ],
-            'salario' => ['required', 'integer', 'between:10000,20000'],
+            'salario' => ['required', 'integer','min:500' , 'max:999999'],
             'contacto_emergencia_nombre' => ['required', 'string',  'max:50', 'regex:/^[\pL\s]+$/u'],
             'contacto_emergencia' => [
                 'required',
@@ -51,7 +128,8 @@ class EmpleadoController extends Controller
                 'not_regex:/^(\d)\1{7}$/'
             ],
             'cargo' => ['required', Rule::in(['manicurista', 'estilista'])],
-            'fecha_ingreso' => ['required', 'before_or_equal:today'],
+            'fecha_ingreso' => ['required', 'after_or_equal:' . now()->subMonth()->toDateString(),
+                'before_or_equal:today' ],
             'estado' => ['required', Rule::in(['activo', 'inactivo'])],
             'direccion' => ['required', 'string', 'max:200', 'regex:/^[\pL0-9\s.,#\-]+$/u']
         ];
@@ -81,7 +159,8 @@ class EmpleadoController extends Controller
 
             'salario.required' => 'Debe ingresar el salario del empleado.',
             'salario.integer' => 'El salario debe ser un número entero.',
-            'salario.between' => 'El salario debe estar entre 10,000 y 20,000.',
+            'salario.min' => 'El salario debe ser al menos 500.',
+            'salario.max' => 'El salario no puede ser mayor a 999,999.',
 
             'contacto_emergencia_nombre.required' => 'Debe ingresar el nombre del contacto de emergencia.',
             'contacto_emergencia_nombre.string' => 'El nombre del contacto debe ser texto válido.',
@@ -96,6 +175,7 @@ class EmpleadoController extends Controller
             'cargo.in' => 'El cargo seleccionado no es válido.',
 
             'fecha_ingreso.required' => 'Debe ingresar la fecha de ingreso.',
+            'fecha_ingreso.after_or_equal' => 'La fecha de ingreso debe ser como mínimo 1 mes antes del día actual.',
             'fecha_ingreso.before_or_equal' => 'La fecha de ingreso no puede ser futura.',
 
             'estado.required' => 'Debe seleccionar el estado del empleado.',
@@ -190,9 +270,18 @@ class EmpleadoController extends Controller
 
     public function store(Request $request)
     {
+
+
         $rules = [
+
             'nombre_empleado' => ['required', 'string', 'max:50', 'regex:/^[\pL\s]+$/u'],
-            'numero_identidad' => 'required|digits:13|unique:empleados,numero_identidad',
+            'numero_identidad' => [
+                'required',
+                'digits:13',
+                'unique:empleados,numero_identidad',   $this->getValidacionIdentidad()
+
+],
+
             'telefono' => [
                 'required',
                 'regex:/^[23789]\d{7}$/',
@@ -200,7 +289,7 @@ class EmpleadoController extends Controller
                 'not_regex:/^(\d)\1{7}$/',
                 'unique:empleados,telefono'
             ],
-            'salario' => ['required', 'integer', 'between:10000,20000'],
+            'salario' => ['required', 'integer','min:500' , 'max:999999'],
             'contacto_emergencia_nombre' => ['required', 'string', 'max:50', 'regex:/^[\pL\s]+$/u'],
             'contacto_emergencia' => [
                 'required',
@@ -220,7 +309,7 @@ class EmpleadoController extends Controller
             'fecha_ingreso' => [
                 'required',
                 'date',
-                'after_or_equal:' . now()->subDays(14)->toDateString(),
+                'after_or_equal:' . now()->subMonth()->toDateString(),
                 'before_or_equal:today'
             ],
             'direccion' => ['required', 'string', 'max:200', 'regex:/^[\pL0-9\s.,#\-]+$/u'],
@@ -234,9 +323,10 @@ class EmpleadoController extends Controller
 
             'numero_identidad.required' => 'El número de identidad es obligatorio.',
             'numero_identidad.digits' => 'El número de identidad debe contener exactamente 13 dígitos.',
-            'numero_identidad.not_regex' => 'El número de identidad no puede ser solo ceros.',
-            'numero_identidad.regex' => 'El número de identidad no tiene un formato válido.',
             'numero_identidad.unique' => 'El número de identidad ya está registrado en el sistema.',
+            'numero_identidad.regex' => 'El número de identidad debe contener exactamente 13 dígitos numéricos.',
+            'numero_identidad.custom' => 'La identidad no cumple con la validación requerida.',
+
 
             'telefono.required' => 'Debe ingresar un número de teléfono.',
             'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 7, 8 o 9 y contener 8 dígitos en total.',
@@ -251,7 +341,8 @@ class EmpleadoController extends Controller
 
             'salario.required' => 'Debe ingresar el salario del empleado.',
             'salario.integer' => 'El salario debe ser un número entero.',
-            'salario.between' => 'El salario debe estar entre 10,000 y 20,000.',
+            'salario.min' => 'El salario debe ser al menos 500.',
+            'salario.max' => 'El salario no puede ser mayor a 999,999.',
 
             'contacto_emergencia_nombre.required' => 'Debe ingresar el nombre del contacto de emergencia.',
             'contacto_emergencia_nombre.string' => 'El nombre del contacto debe ser texto válido.',
@@ -266,7 +357,7 @@ class EmpleadoController extends Controller
             'cargo.in' => 'El cargo seleccionado no es válido.',
 
             'fecha_ingreso.required' => 'Debe ingresar la fecha de ingreso.',
-            'fecha_ingreso.after_or_equal' => 'La fecha de ingreso debe ser como mínimo 14 días antes del día actual.',
+            'fecha_ingreso.after_or_equal' => 'La fecha de ingreso debe ser como mínimo 1 mes antes del día actual.',
             'fecha_ingreso.before_or_equal' => 'La fecha de ingreso no puede ser futura.',
 
             'estado.required' => 'Debe seleccionar el estado del empleado.',
@@ -282,6 +373,8 @@ class EmpleadoController extends Controller
 
         Empleado::create($request->all());
 
-        return redirect()->route('empleados.index')->with('success', 'Empleado agregado correctamente.');
+
+
+        return redirect()->route('empleados.index')->with('mensaje', 'Empleado agregado correctamente.');
     }
 }
