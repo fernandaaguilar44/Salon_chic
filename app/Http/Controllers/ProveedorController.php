@@ -57,7 +57,7 @@ class ProveedorController extends Controller
                 'unique:proveedores,telefono',
             ],
             'direccion' => 'required|string|max:200',
-            'ciudad' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'ciudad' => ['required', 'string', 'max:35', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'nombre_empresa' => ['required', 'string', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono_empleado_encargado' => [
                 'required',
@@ -129,16 +129,16 @@ class ProveedorController extends Controller
     public function update(Request $request, Proveedor $proveedor)
     {
         $request->validate([
-            'nombre_proveedor' => ['required', 'string', 'max:35', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'nombre_proveedor' => ['required', 'string', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono' => [
                 'required',
                 'digits:8',
                 'regex:/^(?!([0-9])\1{7})([389])[0-9]{7}$/',
                 Rule::unique('proveedores', 'telefono')->ignore($proveedor->id),
             ],
-            'direccion' => 'required|string|max:100',
-            'ciudad' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
-            'nombre_empresa' => ['required', 'string', 'max:25', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'direccion' => 'required|string|max:200',
+            'ciudad' => ['required', 'string', 'max:35', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+            'nombre_empresa' => ['required', 'string', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'telefono_empleado_encargado' => [
                 'required',
                 'digits:8',
