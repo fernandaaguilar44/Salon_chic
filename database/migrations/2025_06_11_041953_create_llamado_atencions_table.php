@@ -16,8 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('empleado_id');
 
             // Información básica
-            $table->string('motivo', 70);
-            $table->text('descripcion');
+            $table->text('motivo');
             $table->date('fecha');
             $table->string('lugar', 100);
 

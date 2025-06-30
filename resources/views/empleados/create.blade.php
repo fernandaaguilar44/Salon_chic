@@ -150,9 +150,21 @@
                             <label for="salario" class="form-label">
                                 <i class="fas fa-dollar-sign"></i> Salario
                             </label>
-                            <input type="text" id="salario" name="salario" class="form-control @error('salario') is-invalid @enderror" value="{{ old('salario') }}" placeholder="000000" maxlength="6" inputmode="numeric" />
-                            @error('salario') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            <input
+                                    type="text"
+                                    id="salario"
+                                    name="salario"
+                                    class="form-control @error('salario') is-invalid @enderror"
+                                    value="{{ old('salario') }}"
+                                    placeholder="00000"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                            />
+                            @error('salario')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
 
                         <div class="col-12 col-md-4">
                             <label for="contacto_emergencia_nombre" class="form-label">

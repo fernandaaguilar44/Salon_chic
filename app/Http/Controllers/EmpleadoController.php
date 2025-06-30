@@ -37,7 +37,6 @@ class EmpleadoController extends Controller
         return view('empleados.show')->with('empleado', $empleado);
     }
 
-
     private function getValidacionIdentidad()
     {
         return function ($attribute, $value, $fail) {
@@ -50,8 +49,8 @@ class EmpleadoController extends Controller
 
             $departamento = substr($value, 0, 2);
             $municipio = intval(substr($value, 2, 2));
-            $anio = substr($value, 4, 4); // Tomar 4 dígitos para el año
-            $correlativo = substr($value, 8, 5); // Ajustar posición del correlativo
+            $anio = substr($value, 4, 4); // Tomar los 4 dígitos del año
+            $correlativo = substr($value, 8, 5); // Los últimos 5 dígitos
 
             // Validar departamento
             if (!array_key_exists($departamento, $this->municipiosPorDepto)) {
@@ -63,18 +62,17 @@ class EmpleadoController extends Controller
                 return $fail('El código de municipio no es válido para el departamento especificado.');
             }
 
-            // Validar año (4 dígitos completos)
+            // Validar año numérico
             $anioNumerico = intval($anio);
             $anioActual = intval(date('Y'));
+            $anioMinimoPermitido = $anioActual - 21; // Año máximo permitido para que tenga 21 años cumplidos
 
-            // Validar que el año no sea 0000
             if ($anioNumerico == 0) {
                 return $fail('El año de nacimiento no puede ser 0000.');
             }
 
-            // Validar rango de años coherente: desde 1900 hasta el año actual
-            if ($anioNumerico < 1900 || $anioNumerico > $anioActual) {
-                return $fail('El año de nacimiento debe estar entre 1900 y ' . $anioActual . '.');
+            if ($anioNumerico < 1900 || $anioNumerico > $anioMinimoPermitido) {
+                return $fail('Debe tener al menos 21 años para poder registrarse. Año de nacimiento no válido.');
             }
 
             // Validar que no todos los números sean iguales
@@ -88,6 +86,7 @@ class EmpleadoController extends Controller
             }
         };
     }
+
 
     public function update(Request $request, $id)
     {

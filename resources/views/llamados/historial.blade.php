@@ -260,9 +260,7 @@
                 <div class="call-text">
                     <strong>Motivo:</strong> <span>{{ $llamado->motivo }}</span>
                 </div>
-                <div class="call-text">
-                    <strong>Descripción:</strong> <span>{{ $llamado->descripcion ?? '-' }}</span>
-                </div>
+
                 <div class="call-text">
                     <strong>Lugar:</strong> <span>{{ $llamado->lugar }}</span>
                 </div>

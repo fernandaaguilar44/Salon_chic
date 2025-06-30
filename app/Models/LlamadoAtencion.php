@@ -14,7 +14,6 @@ class LlamadoAtencion extends Model
     protected $fillable = [
         'empleado_id',
         'motivo',
-        'descripcion',
         'fecha',
         'lugar',
         'sancion',
