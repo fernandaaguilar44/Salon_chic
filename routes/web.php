@@ -2,6 +2,7 @@
 <?php
 
 
+use App\Http\Controllers\ProveedorController;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\ProductoController;

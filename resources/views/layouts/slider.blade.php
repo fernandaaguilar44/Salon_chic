@@ -13,6 +13,7 @@
     </div>
 
     <div class="accordion" id="sidebarAccordion">
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingEmpleados">
                 <button
@@ -32,6 +33,32 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('empleados.create') }}" class="nav-link {{ request()->routeIs('empleados.create') ? 'active' : '' }}">
+                            Registrar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingServicios">
+                <button
+                        class="accordion-button {{ request()->routeIs('servicios.*') ? '' : 'collapsed' }}"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#serviciosMenu"
+                        aria-expanded="{{ request()->routeIs('servicios.*') ? 'true' : 'false' }}"
+                        aria-controls="serviciosMenu">
+                    <i class="bi bi-people me-2"></i> Servicios
+                </button>
+            </h2>
+            <div id="serviciosMenu" class="accordion-collapse collapse {{ request()->routeIs('servicios.*') ? 'show' : '' }}" aria-labelledby="headingServicios" data-bs-parent="#sidebarAccordion">
+                <ul class="nav flex-column ps-3 mb-0">
+                    <li class="nav-item">
+                        <a href="{{ route('servicios.index') }}" class="nav-link {{ request()->routeIs('servicios.index') ? 'active' : '' }}">
+                            Listado
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('servicios.create') }}" class="nav-link {{ request()->routeIs('servicios.create') ? 'active' : '' }}">
                             Registrar
                         </a>
                     </li>
@@ -64,6 +91,33 @@
                 </ul>
             </div>
         </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingProductos">
+                <button
+                        class="accordion-button {{ request()->routeIs('productos.*') ? '' : 'collapsed' }}"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#productosMenu"
+                        aria-expanded="{{ request()->routeIs('productos.*') ? 'true' : 'false' }}"
+                        aria-controls="productosMenu">
+                    <i class="bi bi-people me-2"></i> Productos
+                </button>
+            </h2>
+            <div id="productosMenu" class="accordion-collapse collapse {{ request()->routeIs('productos.*') ? 'show' : '' }}" aria-labelledby="headingProductos" data-bs-parent="#sidebarAccordion">
+                <ul class="nav flex-column ps-3 mb-0">
+                    <li class="nav-item">
+                        <a href="{{ route('productos.index') }}" class="nav-link {{ request()->routeIs('productos.index') ? 'active' : '' }}">
+                            Listado
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('productos.create') }}" class="nav-link {{ request()->routeIs('productos.create') ? 'active' : '' }}">
+                            Registrar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 </nav>
 
