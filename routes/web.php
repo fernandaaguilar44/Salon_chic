@@ -1,9 +1,11 @@
+
 <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
+use App\Http\Controllers\ServicioController;
 
 
 Route::get('/', function () {
@@ -29,3 +31,17 @@ Route::controller(EmpleadoController::class)->group(function () {
 Route::get('llamados/create/{empleado_id?}', [LlamadoAtencionController::class, 'create'])->name('llamados.create');
 Route::post('llamados', [LlamadoAtencionController::class, 'store'])->name('llamados.store');
 Route::get('/empleados/{id}/llamados', [LlamadoAtencionController::class, 'historial'])->name('llamados.historial');
+
+
+
+Route::controller(ServicioController::class)->group(function () {
+    Route::get('/servicios', 'index')->name('servicios.index');
+    Route::get('/servicios/buscar', 'buscar')->name('servicios.buscar');
+    Route::get('/servicios/create', 'create')->name('servicios.create');
+    Route::post('/servicios', 'store')->name('servicios.store');
+    Route::get('/servicios/{servicio}/edit', [ServicioController::class, 'edit'])->name('servicios.edit');
+    Route::put('servicios/{servicio}', [ServicioController::class, 'update'])->name('servicios.update');
+    Route::get('/servicios/{servicio}', 'show')->name('servicios.show');
+
+
+});

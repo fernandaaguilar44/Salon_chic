@@ -25,7 +25,11 @@
             </td>
         </tr>
     @empty
-        <tr><td colspan="6">No se encontraron empleados.</td></tr>
+        <!-- Mensaje dinámico para filtros -->
+        <tr id="fila-mensaje" style="display:none;">
+            <td colspan="6" class="text-center text-muted" style="font-style: italic;"></td>
+        </tr>
+
     @endforelse
     </tbody>
 </table>

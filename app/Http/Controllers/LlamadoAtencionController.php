@@ -35,13 +35,9 @@ class LlamadoAtencionController extends Controller
             'empleado_id' => 'required|exists:empleados,id',
 
             'motivo' => [
-                'required', 'string', 'max:70', 'regex:/^[\pL\s]+$/u'
+                'required', 'string', 'max:200', 'regex:/^[\pL\s]+$/u'
             ],
 
-            'descripcion' => [
-                'required', 'string', 'max:200',
-                'regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,-]*$/'
-            ],
 
             'fecha' => [
                 'required', 'date',
@@ -69,13 +65,10 @@ class LlamadoAtencionController extends Controller
 
             'motivo.required' => 'Ingrese el motivo.',
             'motivo.string' => 'Motivo inválido.',
-            'motivo.max' => 'Máximo 70 caracteres.',
+            'motivo.max' => 'Máximo 200 caracteres.',
             'motivo.regex' => 'Solo letras y espacios.',
 
-            'descripcion.required' => 'Ingrese la descripción.',
-            'descripcion.string' => 'Descripción inválida.',
-            'descripcion.max' => 'Máximo 200 caracteres.',
-            'descripcion.regex' => 'Solo letras, números y signos básicos (.,-)',
+
 
             'fecha.required' => 'Ingrese la fecha.',
             'fecha.date' => 'Fecha no válida.',
@@ -127,7 +120,6 @@ class LlamadoAtencionController extends Controller
         LlamadoAtencion::create([
             'empleado_id' => $empleado->id,
             'motivo' => $request->motivo,
-            'descripcion' => $request->descripcion,
             'fecha' => $request->fecha,
             'lugar' => $request->lugar,
             'sancion' => $request->sancion,

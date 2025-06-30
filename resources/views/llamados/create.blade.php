@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -358,11 +359,7 @@
                 @error('sancion') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
 
-            <div>
-                <label for="motivo"><i class="fas fa-clipboard-list"></i> Motivo</label>
-                <input type="text" name="motivo" id="motivo" class="form-control @error('motivo') is-invalid @enderror" maxlength="70" value="{{ old('motivo') }}" placeholder="Motivo principal">
-                @error('motivo') <div class="text-danger small">{{ $message }}</div> @enderror
-            </div>
+
 
             <div>
                 <label for="fecha"><i class="fas fa-calendar-alt"></i> Fecha</label>
@@ -406,9 +403,9 @@
             </div>
 
             <div>
-                <label for="descripcion"><i class="fas fa-edit"></i> Descripción detallada</label>
-                <textarea name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" rows="4" maxlength="200" placeholder="Detalles del incidente...">{{ old('descripcion') }}</textarea>
-                @error('descripcion') <div class="text-danger small">{{ $message }}</div> @enderror
+                <label for="motivo"><i class="fas fa-edit"></i> Motivo</label>
+                <textarea name="motivo" id="motivo" class="form-control @error('motivo') is-invalid @enderror" rows="4" maxlength="200" placeholder="Detalles del incidente...">{{ old('motivo') }}</textarea>
+                @error('motivo') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
         </div>
 
