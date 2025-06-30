@@ -213,12 +213,13 @@
                 <label for="codigo" class="form-label"><i class="fas fa-barcode"></i> Código</label>
                 <input type="text" name="codigo" id="codigo"
                        class="form-control @error('codigo') is-invalid @enderror"
-                       value="{{ old('codigo') }}" maxlength="9" inputmode="numeric"
-                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
+                       value="{{ old('codigo') }}" maxlength="8"
+                       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9-]/g, '')" required />
                 @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
         </div>
 
         <div class="row mb-3">
@@ -290,114 +291,138 @@
 <script>
     const form = document.getElementById('formProducto');
 
+    function mostrarError(input, mensaje) {
+        input.classList.add('is-invalid');
+
+        let feedback = input.parentNode.querySelector('.invalid-feedback');
+        if (!feedback) {
+            feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            input.parentNode.appendChild(feedback);
+        }
+
+        feedback.textContent = mensaje;
+    }
+
+    function limpiarError(input) {
+        input.classList.remove('is-invalid');
+        const feedback = input.parentNode.querySelector('.invalid-feedback');
+        if (feedback) feedback.remove();
+    }
+
+    // Limpia errores cuando se cambia la imagen
+    document.getElementById('imagen').addEventListener('change', function() {
+        limpiarError(this);
+    });
+
+    // Botón Limpiar
+    document.getElementById('btnLimpiar').addEventListener('click', () => {
+        const inputs = document.querySelectorAll('#formProducto input, #formProducto textarea, #formProducto select');
+        inputs.forEach(input => limpiarError(input));
+    });
+
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
         const inputs = form.querySelectorAll('input, textarea, select');
-        inputs.forEach(input => {
-            input.classList.remove('is-invalid');
-            const feedback = input.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.remove();
-            }
-        });
+        inputs.forEach(input => limpiarError(input));
 
         let valid = true;
-
-        function mostrarError(input, mensaje) {
-            input.classList.add('is-invalid');
-
-            let feedback = input.nextElementSibling;
-            if (!feedback || !feedback.classList.contains('invalid-feedback')) {
-                feedback = document.createElement('div');
-                feedback.classList.add('invalid-feedback');
-                input.parentNode.appendChild(feedback);
-            }
-
-            feedback.textContent = mensaje;
-            valid = false;
-        }
 
         // Validación nombre
         const nombre = form.nombre;
         if (!nombre.value.trim()) {
             mostrarError(nombre, 'El nombre del producto es obligatorio.');
+            valid = false;
         } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombre.value)) {
-            mostrarError(nombre, 'Solo se permiten letras, números y espacios.');
+            mostrarError(nombre, 'Solo se permiten letras y espacios.');
+            valid = false;
         } else if (nombre.value.length > 100) {
             mostrarError(nombre, 'Máximo 100 caracteres permitidos.');
+            valid = false;
         }
 
         // Validación código
         const codigo = form.codigo;
-        if (!codigo.value.trim()) {
+        const valorCodigo = codigo.value.trim();
+
+        if (!valorCodigo) {
             mostrarError(codigo, 'El código del producto es obligatorio.');
-        } else if (!/^\d+$/.test(codigo.value)) {
-            mostrarError(codigo, 'El código solo puede contener números.');
-        } else if (codigo.value.length > 9) {
-            mostrarError(codigo, 'Máximo 9 caracteres permitidos.');
+            valid = false;
+        } else if (valorCodigo.length < 5) {
+            mostrarError(codigo, 'Mínimo 5 caracteres requeridos.');
+            valid = false;
+        } else if (valorCodigo.length > 8) {
+            mostrarError(codigo, 'Máximo 8 caracteres permitidos.');
+            valid = false;
+        } else if (!/^[A-Z0-9-]+$/.test(valorCodigo)) {
+            mostrarError(codigo, 'El código solo puede contener letras mayúsculas, números y guiones.');
+            valid = false;
+        } else if (!/(?=.*[A-Z])/.test(valorCodigo)) {
+            mostrarError(codigo, 'El código debe contener al menos una letra mayúscula.');
+            valid = false;
+        } else if (!/(?=.*\d)/.test(valorCodigo)) {
+            mostrarError(codigo, 'El código debe contener al menos un número.');
+            valid = false;
+        } else if (!/(?=.*-)/.test(valorCodigo)) {
+            mostrarError(codigo, 'El código debe contener al menos un guion.');
+            valid = false;
         }
 
         // Validación categoría
         const categoria = form.categoria;
         if (!categoria.value.trim()) {
             mostrarError(categoria, 'La categoría es obligatoria.');
+            valid = false;
         } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(categoria.value)) {
             mostrarError(categoria, 'Solo se permiten letras y espacios.');
+            valid = false;
         } else if (categoria.value.length > 50) {
             mostrarError(categoria, 'Máximo 50 caracteres permitidos.');
+            valid = false;
         }
 
         // Validación marca
         const marca = form.marca;
         if (!marca.value.trim()) {
             mostrarError(marca, 'La marca es obligatoria.');
+            valid = false;
         } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(marca.value)) {
             mostrarError(marca, 'Solo se permiten letras y espacios.');
+            valid = false;
         } else if (marca.value.length > 50) {
             mostrarError(marca, 'Máximo 50 caracteres permitidos.');
+            valid = false;
         }
 
         // Validación descripción
         const descripcion = form.descripcion;
         if (!descripcion.value.trim()) {
             mostrarError(descripcion, 'La descripción es obligatoria.');
+            valid = false;
         } else if (descripcion.value.length > 200) {
             mostrarError(descripcion, 'Máximo 200 caracteres permitidos.');
+            valid = false;
         }
-
-        document.getElementById('imagen').addEventListener('change', function() {
-            this.classList.remove('is-invalid');
-            const feedback = this.parentNode.querySelector('.invalid-feedback');
-            if(feedback) feedback.remove();
-        });
 
         // Validación imagen
         const imagen = form.imagen;
         if (!imagen.value) {
             mostrarError(imagen, 'Debe seleccionar una imagen del producto.');
+            valid = false;
         } else {
             const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.bmp)$/i;
             if (!allowedExtensions.exec(imagen.value)) {
                 mostrarError(imagen, 'Formato no válido. Solo se permiten: .jpg, .jpeg, .png, .gif, .bmp');
+                valid = false;
             }
         }
 
         if (valid) {
             form.submit();
         }
-        document.getElementById('btnLimpiar').addEventListener('click', () => {
-            const inputs = document.querySelectorAll('#formProducto input, #formProducto textarea, #formProducto select');
-
-            inputs.forEach(input => {
-                input.classList.remove('is-invalid');
-                // Quitar mensajes de error si existen
-                const feedback = input.parentNode.querySelector('.invalid-feedback');
-                if (feedback) feedback.remove();
-            });
-        });
-
     });
+
 </script>
 
 </body>

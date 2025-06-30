@@ -23,11 +23,23 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
+        // Convertir código a mayúsculas antes de validar
+        $request->merge([
+            'codigo' => strtoupper($request->codigo),
+        ]);
+
         $request->validate([
             'nombre' => ['required', 'max:100', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'categoria' => ['required', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'marca' => ['required', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
-            'codigo' => 'required|digits_between:1,9|unique:productos,codigo',
+            'codigo' => [
+                'required',
+                'string',
+                'max:8',
+                'min:5',
+                'unique:productos,codigo',
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
+            ],
             'descripcion' => 'required|max:200',
             'imagen' => 'nullable|image|max:2048',
         ]);
@@ -53,22 +65,34 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
 
+        // Convertir código a mayúsculas antes de validar
+        $request->merge([
+            'codigo' => strtoupper($request->codigo),
+        ]);
+
         $request->validate([
             'nombre' => 'required|string|max:100',
             'categoria' => 'required|string|max:50',
             'marca' => 'required|string|max:50',
+            'codigo' => [
+                'required',
+                'string',
+                'max:8',
+                'min:5',
+                'unique:productos,codigo,' . $producto->id, // Para ignorar el código actual en unique
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
+            ],
             'descripcion' => 'nullable|string|max:500',
-            'imagen' => 'nullable|image|max:2048', // max 2MB
+            'imagen' => 'nullable|image|max:2048',
         ]);
 
         $producto->nombre = $request->nombre;
         $producto->categoria = $request->categoria;
         $producto->marca = $request->marca;
+        $producto->codigo = $request->codigo;
         $producto->descripcion = $request->descripcion;
 
-        // Si hay nueva imagen
         if ($request->hasFile('imagen')) {
-            // Opcional: borrar imagen vieja
             if ($producto->imagen && Storage::exists('public/' . $producto->imagen)) {
                 Storage::delete('public/' . $producto->imagen);
             }
@@ -87,5 +111,4 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
         return view('productos.show', compact('producto'));
     }
-
 }
