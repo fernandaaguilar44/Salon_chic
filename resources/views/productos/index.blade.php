@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Proveedores</title>
+    <title>Lista de Productos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -207,6 +207,17 @@
             color: #212529;
         }
 
+        .btn-danger-beauty {
+            background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+            color: white;
+        }
+
+        .btn-danger-beauty:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+
         .action-buttons {
             display: flex;
             gap: 0.5rem;
@@ -248,6 +259,56 @@
         .alert-success {
             background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(25, 135, 84, 0.05));
             border-left: 4px solid #28a745;
+        }
+
+        /* Badge para stock */
+        .stock-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .stock-alto {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .stock-medio {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            color: white;
+        }
+
+        .stock-bajo {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+            color: white;
+        }
+
+        .stock-agotado {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+        }
+
+        /* Imagen del producto */
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .no-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 1.2rem;
         }
 
         /* Responsive */
@@ -306,7 +367,7 @@
 
 <div class="container py-5">
     <div class="beauty-header">
-        <h2><i class="fas fa-truck"></i> Lista de Proveedores</h2>
+        <h2><i class="fas fa-boxes"></i> Lista de Productos</h2>
     </div>
 
     @if(session('success'))
@@ -320,115 +381,118 @@
         <div class="row align-items-end">
             <div class="col-md-8 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
-                    <i class="fas fa-search"></i> Buscar proveedor
+                    <i class="fas fa-search"></i> Buscar producto
                 </label>
-                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o empresa...">
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o marca...">
                 <div id="resultadosTexto" class="mt-2 text-muted small" style="display: none;">
                     <i class="fas fa-info-circle"></i> <span id="contadorResultados"></span>
                 </div>
             </div>
             <div class="col-md-4 text-end">
-                <a href="{{ route('proveedores.create') }}" class="btn btn-beauty btn-primary-beauty">
-                    <i class="fas fa-plus"></i> Crear nuevo proveedor
+                <a href="{{ route('productos.create') }}" class="btn btn-beauty btn-primary-beauty">
+                    <i class="fas fa-plus"></i> Crear nuevo producto
                 </a>
             </div>
         </div>
     </div>
 
     <div class="table-container">
-        <div>
-            <table class="table table-bordered align-middle mb-0" id="proveedoresTable">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>
-                        <a href="{{ route('proveedores.index', ['sort' => 'nombre_empresa', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre_empresa' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
-                            Empresa
-                            @if(request('sort') === 'nombre_empresa')
-                                @if(request('direction') === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
-                        </a>
-                    </th>
-                    <th>Ciudad</th>
-                    <th>Teléfono</th>
-                    <th>
-                        <a href="{{ route('proveedores.index', ['sort' => 'nombre_proveedor', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre_proveedor' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
-                            Nombre del vendedor
-                            @if(request('sort') === 'nombre_proveedor')
-                                @if(request('direction') === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
-                        </a>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                @forelse ($proveedores as $index => $proveedor)
-                    <tr>
-                        <td>{{ $loop->iteration + ($proveedores->currentPage() - 1) * $proveedores->perPage() }}</td>
-                        <td>{{ $proveedor->nombre_empresa }}</td>
-                        <td>{{ $proveedor->ciudad }}</td>
-                        <td>{{ $proveedor->telefono }}</td>
-                        <td>{{ $proveedor->nombre_proveedor }}</td>
-                        <td class="action-buttons">
-                            <a href="{{ route('proveedores.show', $proveedor->id) }}" class="btn btn-beauty btn-secondary-beauty btn-sm">
-                                Ver
-                            </a>
-                            <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-beauty btn-warning-beauty btn-sm">
-                                Editar
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center">No hay proveedores registrados.</td>
-                    </tr>
-                @endforelse
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-bordered align-middle mb-0" id="productosTable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>
+                    <a href="{{ route('productos.index', ['sort' => 'nombre', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
+                        Nombre
+                        @if(request('sort') === 'nombre')
+                            {{ request('direction') === 'asc' ? '↑' : '↓' }}
+                        @endif
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ route('productos.index', ['sort' => 'categoria', 'direction' => request('direction') === 'asc' && request('sort') === 'categoria' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
+                        Marca
+                        @if(request('sort') === 'categoria')
+                            {{ request('direction') === 'asc' ? '↑' : '↓' }}
+                        @endif
+                    </a>
+                </th>
 
-        <!-- Paginación -->
-        @if ($proveedores->hasPages())
-            <div class="d-flex flex-column align-items-center mt-4">
-                <div class="text-muted small mb-2">
-                    Mostrando {{ $proveedores->firstItem() }} a {{ $proveedores->lastItem() }} de {{ $proveedores->total() }} resultados
-                </div>
-                <nav>
-                    <ul class="pagination justify-content-center m-0">
-                        <li class="page-item {{ $proveedores->onFirstPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $proveedores->previousPageUrl() }}" aria-label="Anterior">Anterior</a>
-                        </li>
-                        @foreach ($proveedores->getUrlRange(1, $proveedores->lastPage()) as $page => $url)
-                            <li class="page-item {{ $page == $proveedores->currentPage() ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                            </li>
-                        @endforeach
-                        <li class="page-item {{ !$proveedores->hasMorePages() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $proveedores->nextPageUrl() }}" aria-label="Siguiente">Siguiente</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        @endif
+
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tbody>
+            @php $contadorVisible = 1; @endphp
+            @forelse ($productos as $index => $producto)
+                <tr>
+                    <td>{{ $loop->iteration + ($productos->currentPage() - 1) * $productos->perPage() }}</td>
+                    <td>{{ $producto->nombre }}</td>
+                    <td>{{ $producto->categoria }}</td>
+                    <td>
+                        @if($producto->imagen)
+                            <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen de {{ $producto->nombre }}" class="product-image">
+                        @else
+                            <div class="no-image">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        @endif
+                    </td>
+                    <td class="action-buttons">
+                        <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-beauty btn-secondary-beauty btn-sm">Ver</a>
+                        <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-beauty btn-warning-beauty btn-sm">Editar</a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <em> No hay productos registrados. </em>
+                    </td>
+                </tr>
+            @endforelse
+            <tr id="mensajeBusqueda" style="display: none;">
+                <td colspan="7" class="text-center text-muted">
+                    <span id="contadorResultados"></span>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
     </div>
+
+
+    @if ($productos->hasPages())
+        <div class="d-flex flex-column align-items-center mt-4" id="paginationContainer">
+            <div class="text-muted small mb-2">
+                Mostrando {{ $productos->firstItem() }} a {{ $productos->lastItem() }} de {{ $productos->total() }} resultados
+            </div>
+            <nav>
+                <ul class="pagination justify-content-center m-0">
+                    <li class="page-item {{ $productos->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $productos->previousPageUrl() }}" aria-label="Anterior">Anterior</a>
+                    </li>
+                    @foreach ($productos->getUrlRange(1, $productos->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $productos->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+                    <li class="page-item {{ !$productos->hasMorePages() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $productos->nextPageUrl() }}" aria-label="Siguiente">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-
-    // Filtro en tiempo real con mensaje y ocultar paginación
-    document.getElementById('searchInput').addEventListener('keyup', function () {
+        // Filtro en tiempo real con mensaje y ocultar paginación
+        document.getElementById('searchInput').addEventListener('keyup', function () {
         const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#proveedoresTable tbody tr');
+        const rows = document.querySelectorAll('#productosTable tbody tr');
         const resultadosTexto = document.getElementById('resultadosTexto');
         const contadorResultados = document.getElementById('contadorResultados');
         const pagination = document.getElementById('paginationContainer');
@@ -437,47 +501,44 @@
         let numeroVisible = 1;
 
         rows.forEach(row => {
-            const esFilaVacia = row.cells.length === 1 && row.cells[0].colSpan;
+        const esFilaVacia = row.cells.length === 1 && row.cells[0].colSpan;
 
-            if (!esFilaVacia) {
-                const empresa = row.cells[1].textContent.toLowerCase();
-                const vendedor = row.cells[4].textContent.toLowerCase();
-                const coincide = empresa.includes(filter) || vendedor.includes(filter);
+        if (!esFilaVacia) {
+        const nombre = row.cells[1].textContent.toLowerCase();
+        const marca = row.cells[2].textContent.toLowerCase();
+        const proveedor = row.cells.length > 4 ? row.cells[4].textContent.toLowerCase() : ''; // por si no hay proveedor
+        const coincide = nombre.includes(filter) || marca.includes(filter) || proveedor.includes(filter);
 
-                if (coincide) {
-                    row.style.display = '';
-                    row.cells[0].textContent = numeroVisible++;
-                    contador++;
-                } else {
-                    row.style.display = 'none';
-                }
-            } else {
-                row.style.display = (filter && contador === 0) ? '' : 'none';
-            }
-        });
+        if (coincide) {
+        row.style.display = '';
+        row.cells[0].textContent = numeroVisible++;
+        contador++;
+    } else {
+        row.style.display = 'none';
+    }
+    } else {
+        row.style.display = (filter && contador === 0) ? '' : 'none';
+    }
+    });
 
         if (filter === '') {
-            resultadosTexto.style.display = 'none';
-            if (pagination) pagination.style.display = '';
-        } else {
-            resultadosTexto.style.display = 'block';
-            if (pagination) pagination.style.display = 'none';
+        resultadosTexto.style.display = 'none';
+        if (pagination) pagination.style.display = '';
+    } else {
+        resultadosTexto.style.display = 'block';
+        if (pagination) pagination.style.display = 'none';
 
             if (contador === 0) {
-                contadorResultados.textContent = 'No se encontraron resultados';
-                contadorResultados.style.color = '#dc3545';
+                contadorResultados.textContent = 'No se encontraron resultados.';
             } else if (contador === 1) {
-                contadorResultados.textContent = 'Se encontró 1 resultado';
-                contadorResultados.style.color = '#28a745';
+                contadorResultados.textContent = '1 resultado encontrado.';
             } else {
-                contadorResultados.textContent = `Se encontraron ${contador} resultados`;
-                contadorResultados.style.color = '#28a745';
+                contadorResultados.textContent = `${contador} resultados encontrados.`;
             }
+            document.getElementById('filaResultados').style.display = filter ? '' : 'none';
+
         }
     });
 </script>
 </body>
 </html>
-
-
-quiero que analices el formato del diseño VISUAL de esta vista, te mandare otra para que me la hagas igual, con todo lo que es el diseño visual, el filtro de buscar, la paginacion
