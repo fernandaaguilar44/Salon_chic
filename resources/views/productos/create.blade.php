@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Crear Proveedor</title>
+    <title>Crear Producto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -184,31 +184,32 @@
 <body>
 
 <div class="form-container">
-    <h2><i class="fas fa-truck"></i> Crear un nuevo proveedor</h2>
-    <form id="formProveedor" method="POST" action="{{ route('proveedores.store') }}" enctype="multipart/form-data" novalidate>
+    <h2><i class="fas fa-box"></i> Registrar nuevo producto</h2>
+    <form id="formProducto" method="POST" action="{{ route('productos.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
 
-        <!-- Datos empresa -->
-        <h5><i class="fas fa-building"></i> Datos de la empresa</h5>
+        <!-- Información básica del producto -->
+        <h5><i class="fas fa-info-circle"></i> Información básica</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="nombre_empresa" class="form-label"><i class="fas fa-industry"></i> Nombre de la empresa</label>
-                <input type="text" name="nombre_empresa" id="nombre_empresa"
-                       class="form-control @error('nombre_empresa') is-invalid @enderror"
-                       value="{{ old('nombre_empresa') }}" maxlength="50"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
-                @error('nombre_empresa')
+                <label for="nombre" class="form-label"><i class="fas fa-tag"></i> Nombre del producto</label>
+                <input type="text" name="nombre" id="nombre"
+                       class="form-control @error('nombre') is-invalid @enderror"
+                       value="{{ old('nombre') }}" maxlength="100"
+                       placeholder="Ej: Crema hidratante"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s0-9]+$" required />
+                @error('nombre')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="col-md-6">
-                <label for="telefono_empleado_encargado" class="form-label"><i class="fas fa-phone"></i> Teléfono de la empresa</label>
-                <input type="text" name="telefono_empleado_encargado" id="telefono_empleado_encargado"
-                       class="form-control @error('telefono_empleado_encargado') is-invalid @enderror"
-                       value="{{ old('telefono_empleado_encargado') }}" maxlength="8" inputmode="numeric"
+                <label for="codigo" class="form-label"><i class="fas fa-barcode"></i> Código</label>
+                <input type="text" name="codigo" id="codigo"
+                       class="form-control @error('codigo') is-invalid @enderror"
+                       value="{{ old('codigo') }}" maxlength="9" inputmode="numeric"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-                @error('telefono_empleado_encargado')
+                @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -216,58 +217,49 @@
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="direccion" class="form-label"><i class="fas fa-address-book"></i>Dirección</label>
-                <textarea name="direccion" id="direccion"
-                          class="form-control @error('direccion') is-invalid @enderror"
-                          maxlength="200" rows="3" required>{{ old('direccion') }}</textarea>
-                @error('direccion')
+                <label for="categoria" class="form-label"><i class="fas fa-list"></i> Categoría</label>
+                <input type="text" name="categoria" id="categoria"
+                       class="form-control @error('categoria') is-invalid @enderror"
+                       value="{{ old('categoria') }}" maxlength="50"
+                       placeholder="Ej: Cuidado facial, Maquillaje, etc."
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
+                @error('categoria')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-
             <div class="col-md-6">
-                <label for="ciudad" class="form-label"><i class="fas fa-city"></i> Ciudad</label>
-                <input type="text" name="ciudad" id="ciudad"
-                       class="form-control @error('ciudad') is-invalid @enderror"
-                       value="{{ old('ciudad') }}" maxlength="35"
+                <label for="marca" class="form-label"><i class="fas fa-copyright"></i> Marca</label>
+                <input type="text" name="marca" id="marca"
+                       class="form-control @error('marca') is-invalid @enderror"
+                       value="{{ old('marca') }}" maxlength="50"
+                       placeholder="Ej: L'Oréal, Maybelline, etc."
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
-                @error('ciudad')
+                @error('marca')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
         </div>
 
         <div class="mb-3">
-            <label for="imagen" class="form-label"><i class="fas fa-image"></i> Imagen</label>
-            <input type="file" name="imagen" id="imagen"
-                   class="form-control @error('imagen') is-invalid @enderror" accept="image/*" required />
-            @error('imagen')
+            <label for="descripcion" class="form-label"><i class="fas fa-align-left"></i> Descripción</label>
+            <textarea name="descripcion" id="descripcion"
+                      class="form-control @error('descripcion') is-invalid @enderror"
+                      maxlength="200" rows="3"
+                      placeholder="Describe las características principales del producto..."
+                      required {{ old('descripcion') }} ></textarea>
+            @error('descripcion')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
-        <!-- Datos vendedor -->
-        <h5 class="mt-4"><i class="fas fa-user-tie"></i> Datos del vendedor</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="nombre_proveedor" class="form-label"><i class="fas fa-user"></i> Nombre del vendedor</label>
-                <input type="text" name="nombre_proveedor" id="nombre_proveedor"
-                       class="form-control @error('nombre_proveedor') is-invalid @enderror"
-                       value="{{ old('nombre_proveedor') }}" maxlength="50"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
-                @error('nombre_proveedor')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="col-md-6">
-                <label for="telefono" class="form-label"><i class="fas fa-phone"></i> Teléfono del vendedor</label>
-                <input type="text" name="telefono" id="telefono"
-                       class="form-control @error('telefono') is-invalid @enderror"
-                       value="{{ old('telefono') }}" maxlength="8" inputmode="numeric"
-                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-                @error('telefono')
+                <label for="imagen" class="form-label"><i class="fas fa-image"></i> Imagen del producto</label>
+                <input type="file" name="imagen" id="imagen"
+                       class="form-control @error('imagen') is-invalid @enderror"
+                       accept="image/*" required />
+                @error('imagen')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -275,14 +267,14 @@
 
         <!-- Botones -->
         <div class="btn-group-left">
-            <a href="{{ route('proveedores.index') }}" class="btn btn-secondary">
+            <a href="{{ route('productos.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Cancelar
             </a>
             <button type="reset" class="btn btn-danger" id="btnLimpiar">
                 <i class="fas fa-eraser"></i> Limpiar
             </button>
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Crear proveedor
+                <i class="fas fa-save"></i> Guardar producto
             </button>
         </div>
     </form>
@@ -290,25 +282,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const form = document.getElementById('formProveedor');
-
-    document.getElementById('btnLimpiar').addEventListener('click', () => {
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.value = ''; // limpia el contenido
-            input.classList.remove('is-invalid');
-            const feedback = input.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.remove();
-            }
-        });
-    });
-
+    const form = document.getElementById('formProducto');
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const inputs = form.querySelectorAll('input');
+        const inputs = form.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             input.classList.remove('is-invalid');
             const feedback = input.nextElementSibling;
@@ -333,70 +312,87 @@
             valid = false;
         }
 
-        // Validaciones
-        const nombreEmpresa = form.nombre_empresa;
-        if (!nombreEmpresa.value.trim()) {
-            mostrarError(nombreEmpresa, 'El nombre de la empresa es obligatorio.');
-        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreEmpresa.value)) {
-            mostrarError(nombreEmpresa, 'Solo se permiten letras y espacios.');
-        } else if (nombreEmpresa.value.length > 50) {
-            mostrarError(nombreEmpresa, 'Máximo 50 caracteres.');
+        // Validación nombre
+        const nombre = form.nombre;
+        if (!nombre.value.trim()) {
+            mostrarError(nombre, 'El nombre del producto es obligatorio.');
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombre.value)) {
+            mostrarError(nombre, 'Solo se permiten letras, números y espacios.');
+        } else if (nombre.value.length > 100) {
+            mostrarError(nombre, 'Máximo 100 caracteres permitidos.');
         }
 
-        const telefonoEncargado = form.telefono_empleado_encargado;
-        if (!telefonoEncargado.value.trim()) {
-            mostrarError(telefonoEncargado, 'El teléfono de la empresa es obligatorio.');
-        } else if (!/^\d{8}$/.test(telefonoEncargado.value)) {
-            mostrarError(telefonoEncargado, 'Debe tener exactamente 8 dígitos.');
-        } else if (!/^[389]/.test(telefonoEncargado.value)) {
-            mostrarError(telefonoEncargado, 'Debe comenzar con 3, 8 o 9.');
+        // Validación código
+        const codigo = form.codigo;
+        if (!codigo.value.trim()) {
+            mostrarError(codigo, 'El código del producto es obligatorio.');
+        } else if (!/^\d+$/.test(codigo.value)) {
+            mostrarError(codigo, 'El código solo puede contener números.');
+        } else if (codigo.value.length > 9) {
+            mostrarError(codigo, 'Máximo 9 caracteres permitidos.');
         }
 
-        const direccion = form.direccion;
-        if (!direccion.value.trim()) {
-            mostrarError(direccion, 'La dirección es obligatoria.');
-        } else if (direccion.value.length > 200) {
-            mostrarError(direccion, 'Máximo 200 caracteres.');
+        // Validación categoría
+        const categoria = form.categoria;
+        if (!categoria.value.trim()) {
+            mostrarError(categoria, 'La categoría es obligatoria.');
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(categoria.value)) {
+            mostrarError(categoria, 'Solo se permiten letras y espacios.');
+        } else if (categoria.value.length > 50) {
+            mostrarError(categoria, 'Máximo 50 caracteres permitidos.');
         }
 
-        const ciudad = form.ciudad;
-        if (!ciudad.value.trim()) {
-            mostrarError(ciudad, 'La ciudad es obligatoria.');
-        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(ciudad.value)) {
-            mostrarError(ciudad, 'Solo letras y espacios.');
-        } else if (ciudad.value.length > 25) {
-            mostrarError(ciudad, 'Máximo 25 caracteres.');
+        // Validación marca
+        const marca = form.marca;
+        if (!marca.value.trim()) {
+            mostrarError(marca, 'La marca es obligatoria.');
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(marca.value)) {
+            mostrarError(marca, 'Solo se permiten letras y espacios.');
+        } else if (marca.value.length > 50) {
+            mostrarError(marca, 'Máximo 50 caracteres permitidos.');
         }
 
+        // Validación descripción
+        const descripcion = form.descripcion;
+        if (!descripcion.value.trim()) {
+            mostrarError(descripcion, 'La descripción es obligatoria.');
+        } else if (descripcion.value.length > 200) {
+            mostrarError(descripcion, 'Máximo 200 caracteres permitidos.');
+        }
+
+        document.getElementById('imagen').addEventListener('change', function() {
+            this.classList.remove('is-invalid');
+            const feedback = this.parentNode.querySelector('.invalid-feedback');
+            if(feedback) feedback.remove();
+        });
+
+        // Validación imagen
         const imagen = form.imagen;
         if (!imagen.value) {
-            mostrarError(imagen, 'Debe subir una imagen válida.');
-        }
-
-        const nombreProveedor = form.nombre_proveedor;
-        if (!nombreProveedor.value.trim()) {
-            mostrarError(nombreProveedor, 'El nombre del vendedor es obligatorio.');
-        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreProveedor.value)) {
-            mostrarError(nombreProveedor, 'Solo letras y espacios.');
-        } else if (nombreProveedor.value.length > 50) {
-            mostrarError(nombreProveedor, 'Máximo 50 caracteres.');
-        }
-
-        const telefono = form.telefono;
-        if (!telefono.value.trim()) {
-            mostrarError(telefono, 'El teléfono del vendedor es obligatorio.');
-        } else if (!/^\d{8}$/.test(telefono.value)) {
-            mostrarError(telefono, 'Debe tener exactamente 8 dígitos.');
-        } else if (!/^[389]/.test(telefono.value)) {
-            mostrarError(telefono, 'Debe comenzar con 3, 8 o 9.');
+            mostrarError(imagen, 'Debe seleccionar una imagen del producto.');
+        } else {
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.bmp)$/i;
+            if (!allowedExtensions.exec(imagen.value)) {
+                mostrarError(imagen, 'Formato no válido. Solo se permiten: .jpg, .jpeg, .png, .gif, .bmp');
+            }
         }
 
         if (valid) {
             form.submit();
         }
+        document.getElementById('btnLimpiar').addEventListener('click', () => {
+            const inputs = document.querySelectorAll('#formProducto input, #formProducto textarea, #formProducto select');
+
+            inputs.forEach(input => {
+                input.classList.remove('is-invalid');
+                // Quitar mensajes de error si existen
+                const feedback = input.parentNode.querySelector('.invalid-feedback');
+                if (feedback) feedback.remove();
+            });
+        });
+
     });
 </script>
 
 </body>
 </html>
-

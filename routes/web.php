@@ -1,16 +1,14 @@
 
 <?php
 
+
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
-
-use App\Http\Controllers\ProveedorController;
-
 use App\Http\Controllers\ServicioController;
-
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,11 +23,7 @@ Route::controller(EmpleadoController::class)->group(function () {
     Route::put('/empleados/{id}/deshabilitar', [EmpleadoController::class, 'deshabilitar'])->name('empleados.deshabilitar');
     Route::put('/empleados/{id}', 'update')->name('empleados.update');
     Route::get('/empleados/{id}', 'show')->name('empleados.show');// ✅ Ruta con parámetro debe ir al final
-
-
 });
-
-
 
 // Rutas para llamados de atención
 Route::get('llamados/create/{empleado_id?}', [LlamadoAtencionController::class, 'create'])->name('llamados.create');
@@ -37,20 +31,16 @@ Route::post('llamados', [LlamadoAtencionController::class, 'store'])->name('llam
 
 Route::get('/empleados/{id}/historial', [EmpleadoController::class, 'historial'])->name('empleados.historial');
 
-
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
 Route::get('/proveedores/create', [ProveedorController::class, 'create'])->name('proveedores.create');
 Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
 Route::get('/proveedores/{proveedor}', [ProveedorController::class, 'show'])->name('proveedores.show');
 Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
-
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
 
 
 Route::get('/empleados/{id}/llamados', [LlamadoAtencionController::class, 'historial'])->name('llamados.historial');
-
-
 
 Route::controller(ServicioController::class)->group(function () {
     Route::get('/servicios', 'index')->name('servicios.index');
@@ -60,7 +50,12 @@ Route::controller(ServicioController::class)->group(function () {
     Route::get('/servicios/{servicio}/edit', [ServicioController::class, 'edit'])->name('servicios.edit');
     Route::put('servicios/{servicio}', [ServicioController::class, 'update'])->name('servicios.update');
     Route::get('/servicios/{servicio}', 'show')->name('servicios.show');
-
-
 });
 
+Route::resource('productos', ProductoController::class);
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
+Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+Route::get('/productos/{producto}', [ProductoController::class, 'show'])->name('productos.show');
+Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
+Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
