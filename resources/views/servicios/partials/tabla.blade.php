@@ -4,12 +4,14 @@
 <table id="tabla-servicios" class="table table-bordered table-hover align-middle text-center" style="table-layout: fixed; width: 100%;">
     <thead>
     <tr>
-        <th style="width: 5%;">#</th>
-        <th style="width: 22%;">Nombre</th>
-        <th style="width: 15%;">Categoría</th>
+        <th style="width: 4%;">#</th>
+        <th style="width: 10%;">Código</th>
+        <th style="width: 33%;">Nombre</th>
+        <th style="width: 10%;">Categoría</th>
         <th style="width: 10%;">Precio</th>
-        <th style="width: 12%;">Estado</th>
-        <th style="width: 14%;">Acciones</th>
+        <th style="width: 15%;">Estado</th>
+        <th style="width: 11%;">Acciones</th>
+
     </tr>
     </thead>
     <tbody>
@@ -22,7 +24,11 @@
                 style="cursor: default;"
         >
             <td>{{ $servicios->firstItem() + $index }}</td>
-            <td class="text-truncate" title="{{ $servicio->nombre_servicio }}">{{ $servicio->nombre_servicio }}</td>
+            <td class="text-truncate" title="{{ $servicio->codigo_servicio }}">{{ $servicio->codigo_servicio }}</td>
+            <td class="text-truncate" style="max-width: 300px;" title="{{ $servicio->nombre_servicio }}">
+                {{ $servicio->nombre_servicio }}
+            </td>
+
             <td>{{ ucfirst($servicio->categoria_servicio) }}</td>
             <td>L {{ number_format($servicio->precio_base, 2) }}</td>
             <td>
@@ -53,21 +59,19 @@
 
     <!-- Mensaje dinámico para filtros -->
     <tr id="fila-mensaje" style="display:none;">
-        <td colspan="6" class="text-center text-muted" style="font-style: italic;"></td>
+        <td colspan="8" class="text-center text-muted" style="font-style: italic;"></td>
+
     </tr>
     </tbody>
 </table>
 
 
-<!-- Paginación -->
-    <div class="pagination-container">
-        {{ $servicios->appends(request()->query())->links('pagination::bootstrap-5') }}
+<div class="pagination-container">
+    @if($servicios->hasPages())
+        <div class="pagination-info mb-2 text-center">
+            Mostrando del {{ $servicios->firstItem() }} al {{ $servicios->lastItem() }} de {{ $servicios->total() }} servicios
+        </div>
+    @endif
 
-        <!-- Información de paginación personalizada en español -->
-        @if($servicios->hasPages())
-            <div class="pagination-info">
-                Mostrando del {{ $servicios->firstItem() }} al {{ $servicios->lastItem() }} de {{ $servicios->total() }} servicios
-            </div>
-        @endif
-    </div>
+    {{ $servicios->appends(request()->query())->links('pagination::bootstrap-5') }}
 </div>

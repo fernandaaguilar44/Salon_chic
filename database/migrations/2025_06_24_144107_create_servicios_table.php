@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
 
             // Datos básicos del servicio
-            $table->string('nombre_servicio', 40);
+            $table->string('nombre_servicio', 50);
             $table->text('descripcion');
             $table->string('codigo_servicio', 8)->unique();
 
             // Clasificación clara según cargo y tipo
             $table->enum('tipo_servicio', [
-                'cabello', 'manicure', 'pedicure']);
+                'cabello', 'manicura', 'pedicura']);
 
             $table->enum('categoria_servicio', ['basico', 'intermedio', 'avanzado']);
 
