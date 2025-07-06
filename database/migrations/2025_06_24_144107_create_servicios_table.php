@@ -17,7 +17,7 @@ return new class extends Migration
             // Datos básicos del servicio
             $table->string('nombre_servicio', 50);
             $table->text('descripcion');
-            $table->string('codigo_servicio', 8)->unique();
+            $table->string('codigo_servicio', 7)->unique();
 
             // Clasificación clara según cargo y tipo
             $table->enum('tipo_servicio', [
