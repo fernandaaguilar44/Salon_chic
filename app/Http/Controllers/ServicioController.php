@@ -28,17 +28,23 @@ class ServicioController extends Controller
 
 
 
-
     public function buscar(Request $request)
     {
         $buscar = $request->buscar;
         $categoria = $request->categoria;
         $estado = $request->estado;
 
+        // Total general sin filtros (todos los servicios)
+        $totalGeneral = \App\Models\Servicio::count();
+
         $query = \App\Models\Servicio::query();
 
         if ($buscar) {
-            $query->where('nombre_servicio', 'LIKE', '%' . $buscar . '%');
+            // Buscar por nombre o código con OR
+            $query->where(function($q) use ($buscar) {
+                $q->where('nombre_servicio', 'LIKE', '%' . $buscar . '%')
+                    ->orWhere('codigo_servicio', 'LIKE', '%' . $buscar . '%');
+            });
         }
 
         if ($categoria) {
@@ -49,14 +55,14 @@ class ServicioController extends Controller
             $query->where('estado', $estado);
         }
 
-        $totalFiltrado = $query->count(); // 🔥 Total correcto sin paginación
+        $totalFiltrado = $query->count();
 
         $servicios = $query->orderBy('nombre_servicio')->paginate(8);
 
-        // 🔥 Devuelve JSON con el HTML de la tabla y el total filtrado
         return response()->json([
             'tabla' => view('servicios.partials.tabla', compact('servicios'))->render(),
-            'totalFiltrado' => $totalFiltrado
+            'totalFiltrado' => $totalFiltrado,
+            'totalGeneral' => $totalGeneral,
         ]);
     }
 
@@ -77,17 +83,18 @@ class ServicioController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nombre_servicio' => ['required', 'string', 'max:40', 'min:5', 'regex:/^[\pL\s]+$/u'],
+            'nombre_servicio' => ['required', 'string', 'max:50', 'min:5', 'regex:/^[\pL\s]+$/u'],
             'descripcion' => ['required', 'string', 'max:200', 'min:10', 'regex:/^[\pL\s]+$/u'],
             'codigo_servicio' => [
                 'required',
                 'string',
-                'max:8',
-                'min:5',
+                'max:7',
+                'min:7',
                 'unique:servicios,codigo_servicio',
-                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
+                'regex:/^[A-Z]{3}-\d{3}$/'
             ],
-            'tipo_servicio' => ['required', 'in:cabello,manicure,pedicure'],
+
+            'tipo_servicio' => ['required', 'in:cabello,manicura,pedicura'],
             'precio_base' => ['required', 'integer', 'min:30', 'max:9999'], // Cambiado min:1 para evitar cero
             'duracion_estimada' => ['required', 'integer', 'min:5', 'max:240'],
 
@@ -116,14 +123,15 @@ class ServicioController extends Controller
             'descripcion.regex' => 'La descripción solo puede contener letras y espacios, sin números ni símbolos.',
 
 
-            // CÓDIGO SERVICIO
-            'codigo_servicio.required' => 'El código del servicio es obligatorio.',
-            'codigo_servicio.string' => 'El código debe ser texto.',
-            'codigo_servicio.min' => 'Debe tener al menos 5 caracteres.',
-            'codigo_servicio.max' => 'No puede tener más de 8 caracteres.',
-            'codigo_servicio.unique' => 'Este código ya está registrado.',
-            'codigo_servicio.regex' => 'El código debe contener al menos una letra mayúscula, un número y un guion (ej: CAB-001).',
 
+
+            // CÓDIGO DEL SERVICIO
+            'codigo_servicio.required' => 'El código del servicio es obligatorio.',
+            'codigo_servicio.string'   => 'El código del servicio debe ser una cadena de texto válida.',
+            'codigo_servicio.min'      => 'El código debe contener exactamente 7 caracteres.',
+            'codigo_servicio.max'      => 'El código debe contener exactamente 7 caracteres.',
+            'codigo_servicio.unique'   => 'Ya existe un servicio registrado con este código.',
+            'codigo_servicio.regex' => 'El código debe iniciar con tres letras mayúsculas, seguido de un guión y terminar con tres números.',
 
             // TIPO Y CARGO
             'tipo_servicio.required' => 'Debe seleccionar un tipo de servicio.',
@@ -192,17 +200,17 @@ class ServicioController extends Controller
     public function update(Request $request, Servicio $servicio)
     {
         $rules = [
-            'nombre_servicio' => ['required', 'string', 'max:40', 'min:5', 'regex:/^[\pL\s]+$/u'],
+            'nombre_servicio' => ['required', 'string', 'max:50', 'min:5', 'regex:/^[\pL\s]+$/u'],
             'descripcion' => ['required', 'string', 'max:200','min:10', 'regex:/^[\pL\s]+$/u'],
             'codigo_servicio' => [
                 'required',
                 'string',
-                'max:8',
-                'min:5',
+                'max:7',
+                'min:7',
                 Rule::unique('servicios', 'codigo_servicio')->ignore($servicio->id),
-                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
+                'regex:/^[A-Z]{3}-\d{3}$/'
             ],
-            'tipo_servicio' => ['required', 'in:cabello,manicure,pedicure'],
+            'tipo_servicio' => ['required', 'in:cabello,manicura,pedicura'],
             'precio_base' => ['required', 'integer', 'min:30', 'max:9999'],
             'duracion_estimada' => ['required', 'integer', 'min:5', 'max:240'],
             'categoria_servicio' => 'required|in:basico,intermedio,avanzado',
@@ -224,13 +232,13 @@ class ServicioController extends Controller
             'descripcion.regex' => 'La descripción solo puede contener letras y espacios, sin números ni símbolos.',
 
 
-            // CÓDIGO SERVICIO
+            // CÓDIGO DEL SERVICIO
             'codigo_servicio.required' => 'El código del servicio es obligatorio.',
-            'codigo_servicio.string' => 'El código debe ser texto.',
-            'codigo_servicio.min' => 'Debe tener al menos 5 caracteres.',
-            'codigo_servicio.max' => 'No puede tener más de 8 caracteres.',
-            'codigo_servicio.unique' => 'Este código ya está registrado.',
-            'codigo_servicio.regex' => 'El código debe contener al menos una letra mayúscula, un número y un guion (ej: CAB-001).',
+            'codigo_servicio.string'   => 'El código del servicio debe ser una cadena de texto válida.',
+            'codigo_servicio.min'      => 'El código debe contener exactamente 7 caracteres.',
+            'codigo_servicio.max'      => 'El código debe contener exactamente 7 caracteres.',
+            'codigo_servicio.unique'   => 'Ya existe un servicio registrado con este código.',
+            'codigo_servicio.regex' => 'El código debe iniciar con tres letras mayúsculas, seguido de un guión y terminar con tres números.',
 
 
             'tipo_servicio.required' => 'Debe seleccionar un tipo de servicio.',

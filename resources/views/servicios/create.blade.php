@@ -126,7 +126,7 @@
                         <label for="codigo_servicio" class="form-label">
                             <i class="fas fa-barcode"></i> Código del servicio
                         </label>
-                        <input type="text" id="codigo_servicio" name="codigo_servicio" maxlength="8"  class="form-control @error('codigo_servicio') is-invalid @enderror" value="{{ old('codigo_servicio') }}" placeholder="Código único" />
+                        <input type="text" id="codigo_servicio" name="codigo_servicio" oninput="this.value = this.value.toUpperCase()" maxlength="7"  class="form-control @error('codigo_servicio') is-invalid @enderror" value="{{ old('codigo_servicio') }}" placeholder="Código único" />
                         @error('codigo_servicio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
@@ -135,7 +135,7 @@
                             <label for="nombre_servicio" class="form-label">
                                 <i class="fas fa-tag"></i> Nombre del servicio
                             </label>
-                            <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="40"  class="form-control @error('nombre_servicio') is-invalid @enderror" value="{{ old('nombre_servicio') }}" placeholder="Nombre del servicio" />
+                            <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="50"  class="form-control @error('nombre_servicio') is-invalid @enderror" value="{{ old('nombre_servicio') }}" placeholder="Nombre del servicio" />
                             @error('nombre_servicio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
@@ -150,8 +150,8 @@
                             <select id="tipo_servicio" name="tipo_servicio" class="form-select @error('tipo_servicio') is-invalid @enderror">
                                 <option value="">Seleccione un tipo</option>
                                 <option value="cabello" {{ old('tipo_servicio') == 'cabello' ? 'selected' : '' }}>Cabello</option>
-                                <option value="manicure" {{ old('tipo_servicio') == 'manicure' ? 'selected' : '' }}>Manicure</option>
-                                <option value="pedicure" {{ old('tipo_servicio') == 'pedicure' ? 'selected' : '' }}>Pedicure</option>
+                                <option value="manicura" {{ old('tipo_servicio') == 'manicura' ? 'selected' : '' }}>Manicura</option>
+                                <option value="pedicura" {{ old('tipo_servicio') == 'pedicura' ? 'selected' : '' }}>Pedicura</option>
                             </select>
                             @error('tipo_servicio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
@@ -225,6 +225,59 @@
 </div>
 
 <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Campos a validar
+        const campos = ['precio_base', 'duracion_estimada'];
+
+        campos.forEach(function(campoId) {
+            const input = document.getElementById(campoId);
+
+            input.addEventListener('input', function () {
+                // Elimina ceros al inicio
+                this.value = this.value.replace(/^0+/, '');
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('codigo_servicio');
+        let previousValue = '';
+
+        input.addEventListener('input', function (e) {
+            let val = e.target.value.toUpperCase();
+
+            // Permitir sólo letras, números y guion
+            val = val.replace(/[^A-Z0-9-]/g, '');
+
+            // Contar letras (sin contar guion)
+            const letras = val.replace(/[^A-Z]/g, '');
+
+            // Detectar si el usuario está borrando
+            const isDeleting = val.length < previousValue.length;
+
+            // Si está borrando o menos de 3 letras, no ponemos guion automático
+            if (isDeleting || letras.length < 3) {
+                previousValue = val;
+                e.target.value = val;
+                return;
+            }
+
+            // Si ya hay 3 letras y no hay guion en la posición correcta, lo insertamos
+            if (val[3] !== '-') {
+                val = val.slice(0,3) + '-' + val.slice(3);
+            }
+
+            // Limitar a máximo 7 caracteres (3 letras + guion + 3 números)
+            val = val.slice(0,7);
+
+            previousValue = val;
+            e.target.value = val;
+        });
+    });
+
+
+
     document.getElementById('btnLimpiar').addEventListener('click', function (e) {
         e.preventDefault(); // Prevenir comportamiento por defecto
 

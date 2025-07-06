@@ -235,13 +235,13 @@
 
         .pagination-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column; /* Poner en columna (texto arriba, paginación abajo) */
+            align-items: center;    /* Centrar horizontalmente */
+            gap: 0.25rem;           /* Espacio pequeño entre texto y paginación */
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
         }
-
 
 
         .pagination {
@@ -400,7 +400,7 @@
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-search"></i> Buscar por nombre
                 </label>
-                <input type="text" id="buscar" class="form-control" placeholder="Ej: Manicura Francesa, Corte de Pelo" autocomplete="off">
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre o código " autocomplete="off">
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
@@ -462,13 +462,11 @@
             url: "{{ route('servicios.buscar') }}?page=" + page,
             type: 'GET',
             data: { buscar, categoria, estado },
-            success: function(data) { // 🔥 Aquí es 'data', no 'response'
-                $('#tabla-container').html(data.tabla); // 🔥 Corrección aquí también
+            success: function(data) {
+                $('#tabla-container').html(data.tabla);
 
-                const totalFiltrados = data.totalFiltrado; // 🔥 Corrección aquí
-
-                let newFirstItem = $('#tabla-container #first-item').data('value') || ((page - 1) * 8) + 1;
-                $('.table-container').attr('data-first-item', newFirstItem);
+                const totalFiltrados = data.totalFiltrado;
+                const totalGeneral = data.totalGeneral;  // <--- Agrega esta línea
 
                 const estaFiltrando = buscar !== '' || categoria !== '' || estado !== '';
 
@@ -482,16 +480,16 @@
 
                     if (totalFiltrados > 0) {
                         celdaMensaje.html(`
-                            <div class="alert alert-info text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #ffeef8, #f3e6f9); color: #7B2A8D;">
-                                <i class="fas fa-info-circle"></i> ${totalFiltrados} resultado${totalFiltrados > 1 ? 's' : ''} encontrado${totalFiltrados > 1 ? 's' : ''}.
-                            </div>
-                        `);
+                <div class="alert alert-info text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #ffeef8, #f3e6f9); color: #7B2A8D;">
+                    <i class="fas fa-info-circle"></i> ${totalFiltrados} resultado${totalFiltrados > 1 ? 's' : ''} de ${totalGeneral} registrado${totalGeneral > 1 ? 's' : ''}.
+                </div>
+            `);
                     } else {
                         celdaMensaje.html(`
-                            <div class="alert alert-warning text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #fff3cd, #fae9b5); color: #856404;">
-                                <i class="fas fa-exclamation-circle"></i> No se encontraron servicios.
-                            </div>
-                        `);
+                <div class="alert alert-warning text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #fff3cd, #fae9b5); color: #856404;">
+                    <i class="fas fa-exclamation-circle"></i> No se encontraron servicios.
+                </div>
+            `);
                     }
 
                 } else {
@@ -503,6 +501,7 @@
 
                 ocultarTextoInglesPaginacion();
             },
+
             error: function() {
                 alert('Error al filtrar los servicios');
             }
