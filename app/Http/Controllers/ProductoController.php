@@ -85,7 +85,7 @@ class ProductoController extends Controller
 
                 'max:9',
                 'regex:/^[A-Z0-9\-]+$/',
-                'unique:productos,codigo',
+                'unique:productos,codigo'git add app/Http/Controllers/ProductoController.php,
 
             ],
             'descripcion' => 'required|max:200',
@@ -149,17 +149,19 @@ class ProductoController extends Controller
                 'max:9',
                 'regex:/^[A-Z0-9\-]+$/',
                 'unique:productos,codigo,' . $producto->id,
-            ],
-            'descripcion' => 'nullable|string|max:500',
-            'imagen' => 'nullable|image|max:2048', // max 2MB
-        ], [
+             [
             'codigo.required' => 'El código del producto es obligatorio.',
             'codigo.max' => 'El código no puede tener más de 9 caracteres.',
             'codigo.regex' => 'El código solo puede contener letras mayúsculas, números y guion (-).',
             'codigo.unique' => 'El código ya está en uso, por favor elige otro.',
             'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
             'categoria.regex' => 'La categoría solo puede contener letras y espacios.',
+
             'marca.regex' => 'La marca solo puede contener letras y espacios.',
+
+
+            'marca.regex' => 'La marca solo puede contener letras y espacios.',]
+        ]
 
         ]);
 
