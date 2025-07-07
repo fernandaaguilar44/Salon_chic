@@ -84,7 +84,7 @@
             }
         }
 
-        .form-control {
+        .form-control, .form-select {
             border: 2px solid #e9ecef;
             border-radius: 12px;
             padding: 0.75rem 1rem;
@@ -93,7 +93,7 @@
             background: rgba(255, 255, 255, 0.9);
         }
 
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             border-color: #E4007C;
             box-shadow: 0 0 0 0.2rem rgba(228, 0, 124, 0.15);
             background: white;
@@ -107,9 +107,20 @@
             margin-bottom: 1rem;
         }
 
+
         .table {
-            margin-bottom: 0;
-            background: white;
+            table-layout: fixed;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .table-responsive {
+            overflow-x: visible !important;
+        }
+
+        .table td, .table th {
+            word-break: break-word;
+            white-space: normal !important;
         }
 
         .table thead th {
@@ -261,35 +272,6 @@
             border-left: 4px solid #28a745;
         }
 
-        /* Badge para stock */
-        .stock-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
-
-        .stock-alto {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-        }
-
-        .stock-medio {
-            background: linear-gradient(135deg, #ffc107, #fd7e14);
-            color: white;
-        }
-
-        .stock-bajo {
-            background: linear-gradient(135deg, #dc3545, #e74c3c);
-            color: white;
-        }
-
-        .stock-agotado {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: white;
-        }
-
         /* Imagen del producto */
         .product-image {
             width: 50px;
@@ -361,6 +343,17 @@
                 }
             }
         }
+
+        /* Fila de mensaje de resultados */
+        #fila-mensaje {
+            background: transparent;
+        }
+
+        #fila-mensaje td {
+            padding: 1rem;
+            border: none;
+        }
+
     </style>
 </head>
 <body>
@@ -373,7 +366,7 @@
 
 <div class="container py-5">
     <div class="beauty-header">
-        <h2><i class="fas fa-boxes"></i> Lista de Productos</h2>
+        <h2><i class="fas fa-box"></i> Lista de Productos</h2>
     </div>
 
     @if(session('success'))
@@ -383,16 +376,31 @@
         </div>
     @endif
 
+    @if(session('mensaje'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><i class="fas fa-check-circle"></i> Felicidades:</strong> {{ session('mensaje') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    @endif
+
     <div class="header-actions">
         <div class="row align-items-end">
-            <div class="col-md-8 mb-3 mb-md-0">
+            <div class="col-md-4 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
-                    <i class="fas fa-search"></i> Buscar producto
+                    <i class="fas fa-search"></i> Buscar por nombre
                 </label>
-                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o marca...">
-                <div id="resultadosTexto" class="mt-2 text-muted small" style="display: none;">
-                    <i class="fas fa-info-circle"></i> <span id="contadorResultados"></span>
-                </div>
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o código...">
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <label class="form-label fw-semibold text-muted">
+                    <i class="fas fa-layer-group"></i> Filtrar por categoría
+                </label>
+                <select id="categoriaFilter" class="form-select">
+                    <option value="">Todas las categorías</option>
+                    <option value="cabello">Cabello</option>
+                    <option value="manicura">Manicura</option>
+                    <option value="pedicura">Pedicura</option>
+                </select>
             </div>
             <div class="col-md-4 text-end">
                 <a href="{{ route('productos.create') }}" class="btn btn-beauty btn-primary-beauty">
@@ -403,147 +411,167 @@
     </div>
 
     <div class="table-container">
+        <div class="table-responsive" style="max-width: 100%;">
         <table class="table table-bordered align-middle mb-0" id="productosTable">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>
-                    <a href="{{ route('productos.index', ['sort' => 'nombre', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
-                        Nombre
-                        @if(request('sort') === 'nombre')
-                            {{ request('direction') === 'asc' ? '↑' : '↓' }}
-                        @endif
-                    </a>
-                </th>
-                <th>
-                    <a href="{{ route('productos.index', ['sort' => 'categoria', 'direction' => request('direction') === 'asc' && request('sort') === 'categoria' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
-                        Marca
-                        @if(request('sort') === 'categoria')
-                            {{ request('direction') === 'asc' ? '↑' : '↓' }}
-                        @endif
-                    </a>
-                </th>
-
-
-                <th>Imagen</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tbody>
-            @php $contadorVisible = 1; @endphp
-            @forelse ($productos as $index => $producto)
+                <thead>
                 <tr>
-                    <td>{{ $loop->iteration + ($productos->currentPage() - 1) * $productos->perPage() }}</td>
-                    <td>{{ $producto->nombre }}</td>
-                    <td>{{ $producto->categoria }}</td>
-                    <td>
-                        @if($producto->imagen)
-                            <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen de {{ $producto->nombre }}" class="product-image">
-                        @else
-                            <div class="no-image">
-                                <i class="fas fa-image"></i>
-                            </div>
-                        @endif
-                    </td>
-                    <td class="action-buttons">
-                        <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-beauty btn-secondary-beauty btn-sm">Ver</a>
-                        <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-beauty btn-warning-beauty btn-sm">Editar</a>
-                    </td>
+                    <th>#</th>
+                    <th>Imagen</th>
+                    <th>
+                        <a href="{{ route('productos.index', ['sort' => 'nombre', 'direction' => request('direction') === 'asc' && request('sort') === 'nombre' ? 'desc' : 'asc'] + request()->except(['sort', 'direction'])) }}">
+                            Nombre
+                            @if(request('sort') === 'nombre')
+                                @if(request('direction') === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
+                            @endif
+                        </a>
+                    </th>
+                    <th>Código</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="7" class="text-center text-muted">
-                        <em> No hay productos registrados. </em>
-                    </td>
-                </tr>
-            @endforelse
-            <tr id="mensajeBusqueda" style="display: none;">
-                <td colspan="7" class="text-center text-muted">
-                    <span id="contadorResultados"></span>
-                </td>
-            </tr>
-            </tbody>
+                </thead>
+                <tbody>
+                @forelse ($productos as $index => $producto)
+                    <tr>
+                        <td>{{ $loop->iteration + ($productos->currentPage() - 1) * $productos->perPage() }}</td>
+                        <td>
+                            @if($producto->imagen)
+                                <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" class="product-image">
+                            @else
+                                <div class="no-image">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td>{{ $producto->nombre }}</td>
+                        <td>{{ $producto->codigo }}</td>
+                        <td>{{ ucfirst($producto->categoria) }}</td>
 
-        </table>
-    </div>
-
-
-    @if ($productos->hasPages())
-        <div class="d-flex flex-column align-items-center mt-4" id="paginationContainer">
-            <div class="text-muted small mb-2">
-                Mostrando {{ $productos->firstItem() }} a {{ $productos->lastItem() }} de {{ $productos->total() }} resultados
-            </div>
-            <nav>
-                <ul class="pagination justify-content-center m-0">
-                    <li class="page-item {{ $productos->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $productos->previousPageUrl() }}" aria-label="Anterior">Anterior</a>
-                    </li>
-                    @foreach ($productos->getUrlRange(1, $productos->lastPage()) as $page => $url)
-                        <li class="page-item {{ $page == $productos->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endforeach
-                    <li class="page-item {{ !$productos->hasMorePages() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $productos->nextPageUrl() }}" aria-label="Siguiente">Siguiente</a>
-                    </li>
-                </ul>
-            </nav>
+                        <td class="action-buttons">
+                            <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-beauty btn-secondary-beauty btn-sm">
+                                Ver
+                            </a>
+                            <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-beauty btn-warning-beauty btn-sm">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center">No hay productos registrados.</td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
         </div>
-    @endif
+        <!-- RESULTADOS -->
+        <div id="resultadosTexto" class="mt-3 text-muted small text-center" style="display: none;">
+            <i class="fas fa-info-circle"></i> <span id="contadorResultados"></span>
+        </div>
+
+        <!-- Paginación -->
+        @if ($productos->hasPages())
+            <div class="d-flex flex-column align-items-center mt-4" id="paginationContainer">
+                <div class="text-muted small mb-2">
+                    Mostrando {{ $productos->firstItem() }} a {{ $productos->lastItem() }} de {{ $productos->total() }} resultados
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center m-0">
+                        <li class="page-item {{ $productos->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $productos->previousPageUrl() }}" aria-label="Anterior">Anterior</a>
+                        </li>
+                        @foreach ($productos->getUrlRange(1, $productos->lastPage()) as $page => $url)
+                            <li class="page-item {{ $page == $productos->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                            </li>
+                        @endforeach
+                        <li class="page-item {{ !$productos->hasMorePages() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $productos->nextPageUrl() }}" aria-label="Siguiente">Siguiente</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        @endif
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-        // Filtro en tiempo real con mensaje y ocultar paginación
-        document.getElementById('searchInput').addEventListener('keyup', function () {
+    const todosLosProductos = @json($todos);
+</script>
+<script>
+    // Filtro en tiempo real con mensaje y ocultar paginación
+    document.getElementById('searchInput').addEventListener('keyup', function () {
         const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#productosTable tbody tr');
+        const categoriaFilter = document.getElementById('categoriaFilter').value.toLowerCase();
         const resultadosTexto = document.getElementById('resultadosTexto');
         const contadorResultados = document.getElementById('contadorResultados');
+        const tbody = document.querySelector('#productosTable tbody');
         const pagination = document.getElementById('paginationContainer');
 
+        tbody.innerHTML = '';
         let contador = 0;
-        let numeroVisible = 1;
 
-        rows.forEach(row => {
-        const esFilaVacia = row.cells.length === 1 && row.cells[0].colSpan;
+        const filtrados = todosLosProductos.filter(p => {
+            const nombre = p.nombre.toLowerCase();
+            const codigo = p.codigo.toLowerCase();
+            const categoria = p.categoria.toLowerCase();
 
-        if (!esFilaVacia) {
-        const nombre = row.cells[1].textContent.toLowerCase();
-        const marca = row.cells[2].textContent.toLowerCase();
-        const proveedor = row.cells.length > 4 ? row.cells[4].textContent.toLowerCase() : ''; // por si no hay proveedor
-        const coincide = nombre.includes(filter) || marca.includes(filter) || proveedor.includes(filter);
+            const coincideNombre = nombre.includes(filter) || codigo.includes(filter);
+            const coincideCategoria = categoriaFilter === '' || categoria.includes(categoriaFilter);
 
-        if (coincide) {
-        row.style.display = '';
-        row.cells[0].textContent = numeroVisible++;
-        contador++;
-    } else {
-        row.style.display = 'none';
-    }
-    } else {
-        row.style.display = (filter && contador === 0) ? '' : 'none';
-    }
-    });
+            return coincideNombre && coincideCategoria;
+        });
 
-        if (filter === '') {
-        resultadosTexto.style.display = 'none';
-        if (pagination) pagination.style.display = '';
-    } else {
-        resultadosTexto.style.display = 'block';
-        if (pagination) pagination.style.display = 'none';
+        filtrados.forEach((producto, index) => {
+            contador++;
+            tbody.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>
+                    ${producto.imagen ? `<img src="/storage/${producto.imagen}" alt="${producto.nombre}" class="product-image">`
+                : `<div class="no-image"><i class="fas fa-image"></i></div>`}
+                </td>
+                <td>${producto.nombre}</td>
+                <td>${producto.codigo}</td>
+                <td>${producto.categoria.charAt(0).toUpperCase() + producto.categoria.slice(1)}</td>
+                <td class="action-buttons">
+                    <a href="/productos/${producto.id}" class="btn btn-beauty btn-secondary-beauty btn-sm">Ver</a>
+                    <a href="/productos/${producto.id}/edit" class="btn btn-beauty btn-warning-beauty btn-sm">Editar</a>
+                </td>
+            </tr>
+        `;
+        });
+
+        if (filter === '' && categoriaFilter === '') {
+            resultadosTexto.style.display = 'none';
+            if (pagination) pagination.style.display = '';
+             // recarga para volver a mostrar la paginación original
+        } else {
+            resultadosTexto.style.display = 'block';
+            if (pagination) pagination.style.display = 'none';
 
             if (contador === 0) {
-                contadorResultados.textContent = 'No se encontraron resultados.';
+                contadorResultados.textContent = 'No se encontraron resultados';
+                contadorResultados.style.color = '#dc3545';
             } else if (contador === 1) {
-                contadorResultados.textContent = '1 resultado encontrado.';
+                contadorResultados.textContent = 'Se encontró 1 resultado';
+                contadorResultados.style.color = '#28a745';
             } else {
-                contadorResultados.textContent = `${contador} resultados encontrados.`;
+                contadorResultados.textContent = `Se encontraron ${contador} resultados`;
+                contadorResultados.style.color = '#28a745';
             }
-            document.getElementById('filaResultados').style.display = filter ? '' : 'none';
-
         }
+    });
+
+    // Filtro por categoría
+    document.getElementById('categoriaFilter').addEventListener('change', function () {
+        // Trigger the search function when category changes
+        document.getElementById('searchInput').dispatchEvent(new Event('keyup'));
     });
 </script>
 </body>

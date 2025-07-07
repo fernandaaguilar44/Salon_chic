@@ -297,17 +297,10 @@
 
 <div class="form-container">
     <!-- Breadcrumb -->
-    <div class="breadcrumb-container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="fas fa-boxes"></i> Productos</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Editar Producto</li>
-            </ol>
-        </nav>
-    </div>
+
 
     <div class="beauty-header">
-        <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+        <h3><i class="fas fa-edit"></i> Editar un producto</h3>
     </div>
 
     <!-- Mensaje de éxito (ejemplo) -->
@@ -329,26 +322,42 @@
     <form method="POST" action="{{ route('productos.update', $producto->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <div class="section-title"><i class="fas fa-info-circle"></i> Información del Producto</div>
+        <div class="section-title"><i class="fas fa-info-circle"></i> Información del producto</div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="nombre"><i class="fas fa-tag"></i> Nombre del producto</label>
                 <input type="text" name="nombre" id="nombre" class="form-control"
-                       value="{{ old('nombre', $producto->nombre) }}" maxlength="100" required />
+                       value="{{ old('nombre', $producto->nombre) }}" maxlength="50" required />
             </div>
             <div class="col-md-6">
                 <label for="codigo"><i class="fas fa-barcode"></i> Código</label>
-                <input type="text" name="codigo" id="codigo" class="form-control"
-                       value="{{ old('codigo', $producto->codigo) }}" maxlength="9" required />
+                <input
+                        type="text"
+                        name="codigo"
+                        id="codigo"
+                        class="form-control @error('codigo') is-invalid @enderror"
+                        value="{{ old('codigo', $producto->codigo) }}"
+                        maxlength="9"
+                        required
+                        oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '')"
+                />
+                @error('codigo')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="categoria"><i class="fas fa-layer-group"></i> Categoría</label>
-                <input type="text" name="categoria" id="categoria" class="form-control"
-                       value="{{ old('categoria', $producto->categoria) }}" maxlength="50" required />
+                <select name="categoria" id="categoria" class="form-control" required>
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Cabello" {{ old('categoria', $producto->categoria) == 'Cabello' ? 'selected' : '' }}>Cabello</option>
+                    <option value="Manicura" {{ old('categoria', $producto->categoria) == 'Manicura' ? 'selected' : '' }}>Manicura</option>
+                    <option value="Pedicura" {{ old('categoria', $producto->categoria) == 'Pedicura' ? 'selected' : '' }}>Pedicura</option>
+                </select>
             </div>
             <div class="col-md-6">
                 <label for="marca"><i class="fas fa-certificate"></i> Marca</label>
@@ -358,13 +367,13 @@
         </div>
 
 
+
         <div class="mb-3">
-            <label for="descripcion"><i class="fas fa-align-left"></i> Descripción (opcional)</label>
-            <textarea name="descripcion" id="descripcion" class="form-control" maxlength="500">{{ old('descripcion', $producto->descripcion) }}
-            </textarea>
+            <label for="descripcion"><i class="fas fa-align-left"></i> Descripción</label>
+            <textarea name="descripcion" id="descripcion" class="form-control" maxlength="500">{{ old('descripcion', $producto->descripcion) }}</textarea>
         </div>
 
-        <div class="section-title"><i class="fas fa-image"></i> Imagen del Producto</div>
+        <div class="section-title"><i class="fas fa-image"></i> Imagen del producto</div>
 
         <!-- Imagen actual -->
         @if($producto->imagen)
@@ -408,7 +417,7 @@
             <i class="fas fa-arrow-left"></i> Cancelar
             </a>
             <button type="submit" class="btn-beauty btn-primary-beauty">
-                <i class="fas fa-save"></i> Actualizar Producto
+                <i class="fas fa-save"></i> Actualizar producto
             </button>
         </div>
     </form>

@@ -60,3 +60,4 @@ Route::post('/productos', [ProductoController::class, 'store'])->name('productos
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->name('productos.show');
 Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
 Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
+Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
