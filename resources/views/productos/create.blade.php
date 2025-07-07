@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Crear Producto</title>
+    <title>Crear producto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -184,7 +184,7 @@
 <body>
 
 <div class="form-container">
-    <h2><i class="fas fa-box"></i> Registrar nuevo producto</h2>
+    <h2><i class="fas fa-box"></i> Registrar un nuevo producto</h2>
     <form id="formProducto" method="POST" action="{{ route('productos.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
 
@@ -195,7 +195,7 @@
                 <label for="nombre" class="form-label"><i class="fas fa-tag"></i> Nombre del producto</label>
                 <input type="text" name="nombre" id="nombre"
                        class="form-control @error('nombre') is-invalid @enderror"
-                       value="{{ old('nombre') }}" maxlength="100"
+                       value="{{ old('nombre') }}" maxlength="50"
                        placeholder="Ej: Crema hidratante"
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s0-9]+$" required />
                 @error('nombre')
@@ -207,22 +207,28 @@
                 <label for="codigo" class="form-label"><i class="fas fa-barcode"></i> Código</label>
                 <input type="text" name="codigo" id="codigo"
                        class="form-control @error('codigo') is-invalid @enderror"
-                       value="{{ old('codigo') }}" maxlength="9" inputmode="numeric"
-                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
+                       value="{{ old('codigo') }}" maxlength="9"
+                       placeholder="Ej: ABC-123"
+                       pattern="^[A-Z0-9\-]+$"
+                       required
+                       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '')" />
                 @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="categoria" class="form-label"><i class="fas fa-list"></i> Categoría</label>
-                <input type="text" name="categoria" id="categoria"
-                       class="form-control @error('categoria') is-invalid @enderror"
-                       value="{{ old('categoria') }}" maxlength="50"
-                       placeholder="Ej: Cuidado facial, Maquillaje, etc."
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
+                <select name="categoria" id="categoria"
+                        class="form-control @error('categoria') is-invalid @enderror" required>
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Cabello" {{ old('categoria') == 'Cabello' ? 'selected' : '' }}>Cabello</option>
+                    <option value="Manicura" {{ old('categoria') == 'Manicura' ? 'selected' : '' }}>Manicura</option>
+                    <option value="Pedicura" {{ old('categoria') == 'Pedicura' ? 'selected' : '' }}>Pedicura</option>
+                </select>
                 @error('categoria')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -234,12 +240,13 @@
                        class="form-control @error('marca') is-invalid @enderror"
                        value="{{ old('marca') }}" maxlength="50"
                        placeholder="Ej: L'Oréal, Maybelline, etc."
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" required />
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s´,']+$" required />
                 @error('marca')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
         </div>
+
 
         <div class="mb-3">
             <label for="descripcion" class="form-label"><i class="fas fa-align-left"></i> Descripción</label>
@@ -318,35 +325,32 @@
             mostrarError(nombre, 'El nombre del producto es obligatorio.');
         } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombre.value)) {
             mostrarError(nombre, 'Solo se permiten letras, números y espacios.');
-        } else if (nombre.value.length > 100) {
-            mostrarError(nombre, 'Máximo 100 caracteres permitidos.');
+        } else if (nombre.value.length > 50) {
+            mostrarError(nombre, 'Máximo 50 caracteres permitidos.');
         }
 
         // Validación código
         const codigo = form.codigo;
         if (!codigo.value.trim()) {
             mostrarError(codigo, 'El código del producto es obligatorio.');
-        } else if (!/^\d+$/.test(codigo.value)) {
-            mostrarError(codigo, 'El código solo puede contener números.');
+        } else if (!/^[A-Z0-9\-]+$/.test(codigo.value)) {
+            mostrarError(codigo, 'El código solo puede contener letras mayúsculas, números y guion (-).');
         } else if (codigo.value.length > 9) {
             mostrarError(codigo, 'Máximo 9 caracteres permitidos.');
         }
 
+
         // Validación categoría
-        const categoria = form.categoria;
-        if (!categoria.value.trim()) {
-            mostrarError(categoria, 'La categoría es obligatoria.');
-        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(categoria.value)) {
-            mostrarError(categoria, 'Solo se permiten letras y espacios.');
-        } else if (categoria.value.length > 50) {
-            mostrarError(categoria, 'Máximo 50 caracteres permitidos.');
+        if (!categoria.value) {
+            mostrarError(categoria, 'Debe seleccionar una categoría.');
         }
+
 
         // Validación marca
         const marca = form.marca;
         if (!marca.value.trim()) {
             mostrarError(marca, 'La marca es obligatoria.');
-        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(marca.value)) {
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s´,']+$/.test(marca.value)) {
             mostrarError(marca, 'Solo se permiten letras y espacios.');
         } else if (marca.value.length > 50) {
             mostrarError(marca, 'Máximo 50 caracteres permitidos.');

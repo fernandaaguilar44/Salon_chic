@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');                        // Nombre del producto
             $table->string('categoria');
-            $table->string('descripcion'); // Categoría o tipo
+            $table->text('descripcion');// Categoría o tipo
             $table->string('marca')->nullable();             // Marca (opcional)
             $table->string('codigo')->unique();              // Código único
             $table->date('fecha_ingreso')->useCurrent();                   // Fecha de ingreso
