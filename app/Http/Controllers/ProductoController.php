@@ -65,28 +65,15 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
-        // Convertir código a mayúsculas antes de validar
-        $request->merge([
-            'codigo' => strtoupper($request->codigo),
-        ]);
-
         $request->validate([
             'nombre' => ['required', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'categoria' => ['required', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'marca' => ['required', 'max:50', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
             'codigo' => [
                 'required',
-
-                'string',
-                'max:8',
-                'min:5',
-                'unique:productos,codigo',
-                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
-
                 'max:9',
                 'regex:/^[A-Z0-9\-]+$/',
-                'unique:productos,codigo'git add app/Http/Controllers/ProductoController.php,
-
+                'unique:productos,codigo',
             ],
             'descripcion' => 'required|max:200',
             'imagen' => 'nullable|image|max:2048',
@@ -121,26 +108,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
 
-        // Convertir código a mayúsculas antes de validar
-        $request->merge([
-            'codigo' => strtoupper($request->codigo),
-        ]);
-
         $request->validate([
-            'nombre' => 'required|string|max:100',
-            'categoria' => 'required|string|max:50',
-            'marca' => 'required|string|max:50',
-            'codigo' => [
-                'required',
-                'string',
-                'max:8',
-                'min:5',
-                'unique:productos,codigo,' . $producto->id, // Para ignorar el código actual en unique
-                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*-)[A-Z0-9-]{5,8}$/'
-            ],
-            'descripcion' => 'nullable|string|max:500',
-            'imagen' => 'nullable|image|max:2048',
-
             'nombre' => 'required|string|max:50|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
             'categoria' => 'required|string|max:50|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
             'marca' => 'required|string|max:50|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
@@ -149,20 +117,15 @@ class ProductoController extends Controller
                 'max:9',
                 'regex:/^[A-Z0-9\-]+$/',
                 'unique:productos,codigo,' . $producto->id,
-             [
-            'codigo.required' => 'El código del producto es obligatorio.',
-            'codigo.max' => 'El código no puede tener más de 9 caracteres.',
-            'codigo.regex' => 'El código solo puede contener letras mayúsculas, números y guion (-).',
-            'codigo.unique' => 'El código ya está en uso, por favor elige otro.',
-            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
-            'categoria.regex' => 'La categoría solo puede contener letras y espacios.',
-
-            'marca.regex' => 'La marca solo puede contener letras y espacios.',
-
-
-            'marca.regex' => 'La marca solo puede contener letras y espacios.',]
-        ]
-
+                [
+                    'codigo.required' => 'El código del producto es obligatorio.',
+                    'codigo.max' => 'El código no puede tener más de 9 caracteres.',
+                    'codigo.regex' => 'El código solo puede contener letras mayúsculas, números y guion (-).',
+                    'codigo.unique' => 'El código ya está en uso, por favor elige otro.',
+                    'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+                    'categoria.regex' => 'La categoría solo puede contener letras y espacios.',
+                    'marca.regex' => 'La marca solo puede contener letras y espacios.',]
+            ]
         ]);
 
         $producto->nombre = $request->nombre;
@@ -171,7 +134,9 @@ class ProductoController extends Controller
         $producto->codigo = $request->codigo;
         $producto->descripcion = $request->descripcion;
 
+        // Si hay nueva imagen
         if ($request->hasFile('imagen')) {
+            // Opcional: borrar imagen vieja
             if ($producto->imagen && Storage::exists('public/' . $producto->imagen)) {
                 Storage::delete('public/' . $producto->imagen);
             }
