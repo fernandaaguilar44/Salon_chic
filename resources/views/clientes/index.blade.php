@@ -1,13 +1,14 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Servicios</title>
+    <title>Listado de Clientes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Estilos y fuentes -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-
 
     <style>
         body {
@@ -82,8 +83,6 @@
             box-shadow: 0 4px 15px rgba(123, 42, 141, 0.3);
             transform: translateY(-1px);
         }
-
-
 
         .filters-container {
             background: rgba(123, 42, 141, 0.05);
@@ -174,8 +173,6 @@
             border: 1px solid rgba(255, 193, 7, 0.5); /* Borde sutil */
         }
 
-
-
         .btn-beauty {
             padding: 0.7rem 1.5rem;
             border-radius: 25px;
@@ -200,7 +197,6 @@
             color: white;
         }
 
-
         .btn-secondary-beauty {
             background: linear-gradient(135deg, #9017b8 0%, #521396 100%);
             color: white;
@@ -223,7 +219,6 @@
             color: #212529;
         }
 
-
         .acciones-btns {
             display: flex;
             flex-direction: row;
@@ -231,7 +226,6 @@
             gap: 0.5rem;
             flex-wrap: nowrap; /* ← Evita que se coloquen uno debajo del otro */
         }
-
 
         .pagination-container {
             display: flex;
@@ -242,7 +236,6 @@
             padding-top: 1rem;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
         }
-
 
         .pagination {
             display: flex;
@@ -312,7 +305,6 @@
                 font-weight: 600;
                 white-space: nowrap;
             }
-
         }
 
         @media (max-width: 576px) {
@@ -327,13 +319,11 @@
                 display: none !important;
             }
 
-
             div[role="status"] {
                 display: none !important;
             }
-
-
         }
+
         /* Ocultar específicamente elementos con role="status" */
         div[role="status"] {
             display: none !important;
@@ -362,19 +352,45 @@
         .pagination-container > *:not(.pagination):not(.pagination-info):not(nav) {
             display: none !important;
         }
+
+        /* Estilos para íconos de sexo */
+        .text-pink {
+            color: #E4007C !important;
+        }
+
+        .text-blue {
+            color: #007bff !important;
+        }
+
+        /* Estilos para enlaces de teléfono */
+        a[href^="tel:"] {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        a[href^="tel:"]:hover {
+            color: #218838;
+            text-decoration: underline !important;
+        }
+
+        /* Mejoras para badges */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+            border-radius: 8px;
+        }
     </style>
-
-
 </head>
+
 <body>
 <div class="container">
     <div class="beauty-header">
-        <h2><i class="fas fa-concierge-bell"></i> Listado de servicios</h2>
+        <h2><i class="fas fa-users"></i> Listado de clientes</h2>
     </div>
 
     @if (session('mensaje'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong><i class="fas fa-check-circle"></i> Felicidades:</strong> {{ session('mensaje') }}
+            <strong><i class="fas fa-check-circle"></i> Éxito:</strong> {{ session('mensaje') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
         </div>
     @endif
@@ -386,82 +402,70 @@
         </div>
     @endif
 
-
+    <!-- Filtros -->
     <div class="filters-container">
         <div class="row align-items-end">
-            <div class="col-md-4 mb-3 mb-md-0">
+            <div class="col-md-6 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
-                    <i class="fas fa-search"></i> Buscar por nombre
+                    <i class="fas fa-search"></i> Buscar por nombre o teléfono
                 </label>
-                <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre o código " autocomplete="off">
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre o teléfono" autocomplete="off">
             </div>
-            <div class="col-md-4 mb-3 mb-md-0">
+
+            <div class="col-md-6 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
-                    <i class="fas fa-layer-group"></i> Filtrar por categoría
+                    <i class="fas fa-venus-mars"></i> Filtrar por sexo
                 </label>
-                <select id="categoria" class="form-select">
-                    <option value="">Todas las categorías</option>
-                    <option value="basico">Básico</option>
-                    <option value="intermedio">Intermedio</option>
-                    <option value="avanzado">Avanzado</option>
-                </select>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-                <label class="form-label fw-semibold text-muted">
-                    <i class="fas fa-filter"></i> Filtrar por estado
-                </label>
-                <select id="estado" class="form-select">
-                    <option value="">Todos los estados</option>
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                    <option value="temporalmente_suspendido">Suspendido temporalmente</option>
+                <select id="sexo" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="masculino">Masculino</option>
                 </select>
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-md-12 text-end">
-                <a href="{{ route('servicios.create') }}" class="btn btn-beauty btn-primary-beauty">
-                    <i class="fas fa-plus-circle"></i> Crear un servicio
+                <a href="{{ route('clientes.create') }}" class="btn btn-beauty btn-primary-beauty">
+                    <i class="fas fa-user-plus"></i> Registrar un nuevo cliente
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- Tabla -->
     <div class="table-container">
         <div id="tabla-container">
-            @include('servicios.partials.tabla')
+            @include('clientes.partials.tabla') <!-- Aquí va la tabla -->
         </div>
     </div>
 </div>
+
+<!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-    // Búsqueda completa con retraso
     let searchTimeout;
-    $('#buscar').on('input', function() {
+    $('#buscar').on('input', function () {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => filtrarServicios(1), 300);
+        searchTimeout = setTimeout(() => filtrarClientes(1), 300);
     });
 
-    $('#categoria, #estado').on('change', () => filtrarServicios(1));
+    $('#sexo').on('change', () => filtrarClientes(1));
 
-    function filtrarServicios(page = 1) {
+    function filtrarClientes(page = 1) {
         const buscar = $('#buscar').val();
-        const categoria = $('#categoria').val();
-        const estado = $('#estado').val();
+        const sexo = $('#sexo').val();
 
         $.ajax({
-            url: "{{ route('servicios.buscar') }}?page=" + page,
+            url: "{{ route('clientes.buscar') }}?page=" + page,
             type: 'GET',
-            data: { buscar, categoria, estado },
-            success: function(data) {
+            data: { buscar, sexo },
+            success: function (data) {
                 $('#tabla-container').html(data.tabla);
 
                 const totalFiltrados = data.totalFiltrado;
-                const totalGeneral = data.totalGeneral;  // <--- Agrega esta línea
-
-                const estaFiltrando = buscar !== '' || categoria !== '' || estado !== '';
+                const totalGeneral = data.totalGeneral;
+                const estaFiltrando = buscar !== '' || sexo !== '';
 
                 const filaMensaje = $('#fila-mensaje');
                 const celdaMensaje = filaMensaje.find('td');
@@ -473,17 +477,14 @@
 
                     if (totalFiltrados > 0) {
                         celdaMensaje.html(`
-                <div class="alert alert-info text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #ffeef8, #f3e6f9); color: #7B2A8D;">
-                    <i class="fas fa-info-circle"></i> ${totalFiltrados} resultado${totalFiltrados > 1 ? 's' : ''} de ${totalGeneral} registrado${totalGeneral > 1 ? 's' : ''}.
-                </div>
-            `);
+                            <div class="alert alert-info text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #ffeef8, #f3e6f9); color: #7B2A8D;">
+                                <i class="fas fa-info-circle"></i> ${totalFiltrados} resultado${totalFiltrados > 1 ? 's' : ''} de ${totalGeneral} cliente${totalGeneral > 1 ? 's' : ''}.
+                            </div>`);
                     } else {
                         celdaMensaje.html(`
-                <div class="alert alert-warning text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #fff3cd, #fae9b5); color: #856404;">
-                    <i class="fas fa-exclamation-circle"></i> No se encontraron servicios.
-
-                </div>
-            `);
+                            <div class="alert alert-warning text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #fff3cd, #fae9b5); color: #856404;">
+                                <i class="fas fa-exclamation-circle"></i> No se encontraron clientes.
+                            </div>`);
                     }
 
                 } else {
@@ -495,18 +496,17 @@
 
                 ocultarTextoInglesPaginacion();
             },
-
-            error: function() {
-                alert('Error al filtrar los servicios');
+            error: function () {
+                alert('Error al filtrar los clientes');
             }
         });
     }
 
-    $(document).on('click', '.pagination a', function(e) {
+    $(document).on('click', '.pagination a', function (e) {
         e.preventDefault();
         const url = new URL($(this).attr('href'), window.location.origin);
         const page = url.searchParams.get('page');
-        filtrarServicios(page);
+        filtrarClientes(page);
     });
 
     function ocultarTextoInglesPaginacion() {
@@ -517,15 +517,16 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         ocultarTextoInglesPaginacion();
-        filtrarServicios(1);
+        filtrarClientes(1);
     });
 
-    $(document).on('click', '.pagination a', function() {
+    $(document).on('click', '.pagination a', function () {
         setTimeout(ocultarTextoInglesPaginacion, 100);
     });
-
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

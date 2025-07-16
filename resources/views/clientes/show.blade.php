@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Detalles del Servicio - Salón de Belleza</title>
+    <title>Detalles del Cliente - Salón de Belleza</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -11,22 +11,26 @@
         body {
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            padding: 0.5rem 0;
+            height: 100vh;
+            padding: 0.3rem 0;
             color: #333;
             margin: 0;
+            overflow: hidden;
         }
 
         .container {
             max-width: 800px;
             background: rgba(255, 255, 255, 0.95);
             margin: 0 auto;
-            padding: 1.2rem;
+            padding: 0.8rem;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: slideInUp 0.6s ease-out;
+            height: calc(100vh - 0.6rem);
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes slideInUp {
@@ -42,25 +46,25 @@
 
         .beauty-header {
             text-align: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.8rem;
             position: relative;
         }
 
         .beauty-header h2 {
             color: #7B2A8D;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .beauty-header h2 i {
             color: #E4007C;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             animation: bounce 2s infinite;
         }
 
@@ -79,21 +83,23 @@
         .beauty-header::after {
             content: '';
             display: block;
-            width: 100px;
+            width: 80px;
             height: 2px;
             background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            margin: 10px auto;
+            margin: 6px auto;
             border-radius: 2px;
         }
 
-        /* Card de información del servicio */
-        .service-details {
+        /* Card de información del cliente */
+        .client-details {
             background: linear-gradient(135deg, rgba(123, 42, 141, 0.05), rgba(228, 0, 124, 0.02));
             border: 2px solid rgba(228, 0, 124, 0.1);
             border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
             animation: slideInDown 0.8s ease-out;
+            flex: 1;
+            overflow-y: auto;
         }
 
         @keyframes slideInDown {
@@ -113,9 +119,9 @@
             font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             margin-bottom: 5px;
-            padding-left: 0.25rem; /* Ajuste menor padding horizontal */
+            padding-left: 0.25rem;
             padding-right: 0.25rem;
         }
 
@@ -135,94 +141,70 @@
             background: rgba(255, 255, 255, 0.7);
             border-radius: 6px;
             border-left: 3px solid #E4007C;
-            padding-left: 0.25rem; /* Ajuste menor padding horizontal */
+            padding-left: 0.25rem;
             padding-right: 0.25rem;
-        }
-
-        /* Estilo especial para el nombre del servicio */
-        .service-name {
+            min-height: 35px;
             display: flex;
             align-items: center;
-            gap: 8px;
+        }
+
+        /* Estilo especial para el nombre del cliente - SIN ICONO INTERNO */
+        .client-name {
             font-size: 0.9rem;
             font-weight: 600;
-            color: #7B2A8D;
-            background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.05));
-            padding: 0.6rem 0.8rem;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 0.8rem;
             border-radius: 8px;
             border: 1px solid rgba(228, 0, 124, 0.2);
             margin: 0;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
         }
 
-        .service-name i {
-            color: #E4007C;
-            font-size: 0.9rem;
-            animation: sparkle 2s infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
-        }
-
-        /* Elementos especiales para duración */
-        .duration-container {
+        /* Elementos especiales para edad */
+        .age-container {
             background: linear-gradient(135deg, #fff8fc 0%, #f8f0ff 100%);
             border: 2px solid rgba(228, 0, 124, 0.2);
             border-radius: 8px;
-            padding: 0.8rem;
+            padding: 0.6rem;
             margin: 0;
-        }
-
-        .duration-display {
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
+            gap: 10px;
+            min-height: 50px;
         }
 
-        .duration-primary {
-            font-size: 0.9rem;
+        .age-icon {
+            background: linear-gradient(135deg, #E4007C, #7B2A8D);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 12px rgba(228, 0, 124, 0.3);
+        }
+
+        .age-info {
+            flex: 1;
+        }
+
+        .age-primary {
+            font-size: 1rem;
             font-weight: 700;
             color: #7B2A8D;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            margin-bottom: 2px;
         }
 
-        .duration-formatted {
+        .age-category {
             font-size: 0.75rem;
-            color: #444;
-            background: rgba(123, 42, 141, 0.12);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .duration-bar {
-            height: 4px;
-            background: rgba(123, 42, 141, 0.15);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .duration-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            border-radius: 2px;
-            transition: width 1.5s ease-out;
-            animation: progressFill 2s ease-out;
-        }
-
-        @keyframes progressFill {
-            from { width: 0%; }
+            color: #666;
+            font-weight: 500;
+            font-style: italic;
         }
 
         textarea[readonly] {
@@ -237,6 +219,7 @@
             font-size: 0.8rem;
             transition: all 0.3s ease;
             width: 100%;
+            min-height: 60px;
         }
 
         textarea[readonly]:focus {
@@ -245,34 +228,29 @@
             background: white;
         }
 
-        /* Estados especiales */
-        .status-badge {
+        /* Estados especiales para sexo */
+        .sex-badge {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 0.25rem 0.6rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 12px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
+            min-height: 32px;
         }
 
-        .status-activo {
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.05));
-            color: #155724;
-            border: 1px solid rgba(40, 167, 69, 0.3);
+        .sex-femenino {
+            background: linear-gradient(135deg, rgba(228, 0, 124, 0.15), rgba(228, 0, 124, 0.05));
+            color: #7B2A8D;
+            border: 1px solid rgba(228, 0, 124, 0.3);
         }
 
-        .status-inactivo {
-            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.05));
-            color: #721c24;
-            border: 1px solid rgba(220, 53, 69, 0.3);
-        }
-
-        .status-temporalmente_suspendido {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05));
-            color: #856404;
-            border: 1px solid rgba(255, 193, 7, 0.3);
+        .sex-masculino {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.15), rgba(0, 123, 255, 0.05));
+            color: #0056b3;
+            border: 1px solid rgba(0, 123, 255, 0.3);
         }
 
         /* Grupo de botones */
@@ -281,9 +259,10 @@
             gap: 0.7rem;
             flex-wrap: wrap;
             justify-content: flex-start;
-            margin-top: 1.2rem;
-            padding-top: 1.2rem;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
+            flex-shrink: 0;
         }
 
         .btn-beauty {
@@ -317,6 +296,19 @@
 
         .btn-beauty:hover::before {
             left: 100%;
+        }
+
+        /* Botón primario - Editar */
+        .btn-primary-beauty {
+            background: linear-gradient(135deg, #7B2A8D 0%, #E4007C 100%);
+            color: white;
+        }
+
+        .btn-primary-beauty:hover {
+            background: linear-gradient(135deg, #6a267f 0%, #c3006a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(228, 0, 124, 0.4);
+            color: white;
         }
 
         /* Botón secundario - Volver */
@@ -355,26 +347,32 @@
                 min-width: auto;
             }
 
-            .service-details {
+            .client-details {
                 padding: 0.8rem;
             }
 
             dt {
-                font-size: 0.75rem;
-            }
-
-            dd {
                 font-size: 0.8rem;
             }
 
-            .duration-display {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+            dd {
+                font-size: 0.85rem;
             }
 
-            .service-name {
-                font-size: 0.85rem;
+            .age-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .age-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .client-name {
+                font-size: 0.9rem;
             }
         }
 
@@ -394,8 +392,8 @@
                 padding: 0.8rem;
             }
 
-            .service-name {
-                font-size: 0.8rem;
+            .client-name {
+                font-size: 0.85rem;
             }
         }
 
@@ -413,7 +411,7 @@
                 margin-bottom: 0.8rem;
             }
 
-            .service-details {
+            .client-details {
                 margin-bottom: 0.8rem;
             }
 
@@ -435,102 +433,106 @@
 
 <div class="container">
     <div class="beauty-header">
-        <h2><i class="fas fa-cut"></i> Detalles del Servicio</h2>
+        <h2><i class="fas fa-user-circle"></i> Detalles del Cliente</h2>
     </div>
 
-    <div class="service-details">
-        <dl class="row gx-1 align-items-center">  <!-- Cambié gx-2 a gx-1 para menos espacio -->
+    <div class="client-details">
+        <dl class="row gx-1 align-items-center">
+            <!-- Nombre del cliente -->
             <dt class="col-sm-3">
-                <i class="fas fa-hashtag"></i>
-                Código:
-            </dt>
-            <dd class="col-sm-9">{{ $servicio->codigo_servicio }}</dd>
-
-            <dt class="col-sm-3">
-                <i class="fas fa-tag"></i>
+                <i class="fas fa-user"></i>
                 Nombre:
             </dt>
-            <dd class="col-sm-9">{{ $servicio->nombre_servicio }}</dd>
+            <dd class="col-sm-9">
+                <div class="client-name">
+                    {{ $cliente->nombre ?? 'María Elena González' }}
+                </div>
+            </dd>
 
+            <!-- Teléfono -->
             <dt class="col-sm-3">
-                <i class="fas fa-list"></i>
-                Tipo:
+                <i class="fas fa-phone"></i>
+                Teléfono:
             </dt>
-            <dd class="col-sm-9">{{ ucfirst($servicio->tipo_servicio) }}</dd>
+            <dd class="col-sm-9">{{ $cliente->telefono ?? '98765432' }}</dd>
 
+            <!-- Identidad -->
             <dt class="col-sm-3">
-                <i class="fas fa-layer-group"></i>
-                Categoría:
+                <i class="fas fa-id-card"></i>
+                Identidad:
             </dt>
-            <dd class="col-sm-9">{{ ucfirst($servicio->categoria_servicio) }}</dd>
+            <dd class="col-sm-9">{{ $cliente->identidad ?? '0801199012345' }}</dd>
 
+            <!-- Correo -->
             <dt class="col-sm-3">
-                <i class="fas fa-money-bill-wave"></i>
-                Precio:
+                <i class="fas fa-envelope"></i>
+                Correo:
             </dt>
-            <dd class="col-sm-9">L. {{ number_format($servicio->precio_base, 2) }}</dd>
+            <dd class="col-sm-9">{{ $cliente->correo ?? 'maria.gonzalez@gmail.com' }}</dd>
 
+            <!-- Fecha de nacimiento y edad -->
             @php
-                $totalMin = $servicio->duracion_estimada;
-                $horas = intdiv($totalMin, 60);
-                $minutos = $totalMin % 60;
-
-                $formatoHorasMin = '';
-                if ($horas > 0) {
-                    $formatoHorasMin .= $horas . 'h';
-                }
-                if ($minutos > 0) {
-                    $formatoHorasMin .= ($horas > 0 ? ' ' : '') . $minutos . 'min';
-                }
-                if ($horas == 0 && $minutos == 0) {
-                    $formatoHorasMin = '0min';
-                }
+                $fechaNacimiento = $cliente->fecha_nacimiento ?? '1990-05-15';
+                $edad = \Carbon\Carbon::parse($fechaNacimiento)->age;
             @endphp
 
+                    <!-- Fecha de nacimiento -->
             <dt class="col-sm-3">
-                <i class="fas fa-clock"></i>
-                Duración:
+                <i class="fas fa-birthday-cake"></i>
+                Fecha de nacimiento:
+            </dt>
+            <dd class="col-sm-9">{{ \Carbon\Carbon::parse($fechaNacimiento)->format('d/m/Y') }}</dd>
+
+            <!-- Edad -->
+            <dt class="col-sm-3">
+                <i class="fas fa-hourglass-half"></i>
+                Edad:
             </dt>
             <dd class="col-sm-9">
-                <div class="duration-container">
-                    <div class="duration-display">
-                    <span class="duration-primary">
-                        <i class="fas fa-stopwatch"></i>
-                        {{ $totalMin }} minutos
-                    </span>
-                        @if($totalMin >= 60)
-                            <span class="duration-formatted">{{ $formatoHorasMin }}</span>
-                        @endif
+                <div class="age-container">
+                    <div class="age-icon">
+                        <i class="fas fa-birthday-cake"></i>
                     </div>
-                    <div class="duration-bar">
-                        <div class="duration-progress" style="width: {{ min(($totalMin / 180) * 100, 100) }}%"></div>
+                    <div class="age-info">
+                        <div class="age-primary">{{ $edad }} años</div>
+                        <div class="age-category">
+                            @if($edad < 18)
+                                Menor de edad
+                            @elseif($edad >= 18 && $edad < 65)
+                                Adulto
+                            @else
+                                Adulto mayor
+                            @endif
+                        </div>
                     </div>
                 </div>
             </dd>
 
+            <!-- Sexo -->
             <dt class="col-sm-3">
-                <i class="fas fa-toggle-on"></i>
-                Estado:
+                <i class="fas fa-venus-mars"></i>
+                Sexo:
             </dt>
             <dd class="col-sm-9">
-            <span class="status-badge status-{{ $servicio->estado }}">
-                <i class="fas fa-circle"></i>
-                {{ ucfirst($servicio->estado) }}
-            </span>
+                <span class="sex-badge sex-{{ $cliente->sexo ?? 'femenino' }}">
+                    <i class="fas fa-{{ ($cliente->sexo ?? 'femenino') == 'femenino' ? 'venus' : 'mars' }}"></i>
+                    {{ ucfirst($cliente->sexo ?? 'Femenino') }}
+                </span>
             </dd>
 
+            <!-- Dirección -->
             <dt class="col-sm-3">
-                <i class="fas fa-align-left"></i>
-                Descripción:
+                <i class="fas fa-map-marker-alt"></i>
+                Dirección:
             </dt>
             <dd class="col-sm-9">
-                <textarea readonly class="form-control" rows="3">{{ $servicio->descripcion }}</textarea>
+                <textarea readonly class="form-control" rows="3">{{ $cliente->direccion ?? 'Col. Miraflores, Tegucigalpa, Honduras' }}</textarea>
             </dd>
         </dl>
     </div>
 
     <div class="button-group">
-        <a href="{{ route('servicios.index') }}" class="btn btn-beauty btn-secondary-beauty">
+        <a href="{{ route('clientes.index') }}" class="btn btn-beauty btn-secondary-beauty">
             <i class="fas fa-arrow-left"></i>
             Volver al listado
         </a>
