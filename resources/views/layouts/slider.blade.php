@@ -67,6 +67,32 @@
         </div>
 
         <div class="accordion-item">
+            <h2 class="accordion-header" id="headingClientes">
+                <button
+                        class="accordion-button {{ request()->routeIs('clientes.*') ? '' : 'collapsed' }}"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#clientesMenu"
+                        aria-expanded="{{ request()->routeIs('clientes.*') ? 'true' : 'false' }}"
+                        aria-controls="clientesMenu">
+                    <i class="bi bi-people me-2"></i> clientes
+                </button>
+            </h2>
+            <div id="clientesMenu" class="accordion-collapse collapse {{ request()->routeIs('clientes.*') ? 'show' : '' }}" aria-labelledby="headingClientes" data-bs-parent="#sidebarAccordion">
+                <ul class="nav flex-column ps-3 mb-0">
+                    <li class="nav-item">
+                        <a href="{{ route('clientes.index') }}" class="nav-link {{ request()->routeIs('clientes.index') ? 'active' : '' }}">
+                            Listado
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('clientes.create') }}" class="nav-link {{ request()->routeIs('clientes.create') ? 'active' : '' }}">
+                            Registrar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-item">
             <h2 class="accordion-header" id="headingProveedores">
                 <button
                     class="accordion-button {{ request()->routeIs('proveedores.*') ? '' : 'collapsed' }}"
