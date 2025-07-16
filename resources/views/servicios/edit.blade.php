@@ -37,6 +37,9 @@
         .form-label {
             color: #7B2A8D;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .form-control,
@@ -50,6 +53,10 @@
         .form-select:focus {
             border-color: #E4007C;
             box-shadow: 0 0 0 0.2rem rgba(228, 0, 124, 0.25);
+        }
+
+        .input-group {
+            position: relative;
         }
 
         .btn-primary,
@@ -121,7 +128,7 @@
     <div class="row justify-content-center">
         <div class="col-12 col-xl-8">
             <div class="form-container">
-                <h2>Editar servicio</h2>
+                <h2><i class="fas fa-edit"></i> Editar servicio</h2>
                 <form id="servicioForm" method="POST" action="{{ route('servicios.update', $servicio->id) }}">
                     @csrf
                     @method('PUT')
@@ -129,11 +136,15 @@
                     <div class="row g-3">
                         <!-- Código del servicio -->
                         <div class="col-md-6">
-                            <label for="codigo_servicio" class="form-label">Código del servicio</label>
-                            <input type="text" id="codigo_servicio" name="codigo_servicio" oninput="this.value = this.value.toUpperCase()" maxlength="7"
-                                   class="form-control @error('codigo_servicio') is-invalid @enderror"
-                                   value="{{ old('codigo_servicio', $servicio->codigo_servicio) }}"
-                                   placeholder="Código único" />
+                            <label for="codigo_servicio" class="form-label">
+                                <i class="fas fa-barcode"></i> Código del servicio
+                            </label>
+                            <div class="input-group">
+                                <input type="text" id="codigo_servicio" name="codigo_servicio" oninput="this.value = this.value.toUpperCase()" maxlength="7"
+                                       class="form-control @error('codigo_servicio') is-invalid @enderror"
+                                       value="{{ old('codigo_servicio', $servicio->codigo_servicio) }}"
+                                       placeholder="Ej: ABC-123" />
+                            </div>
                             @error('codigo_servicio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -141,11 +152,15 @@
 
                         <!-- Nombre del servicio -->
                         <div class="col-md-6">
-                            <label for="nombre_servicio" class="form-label">Nombre del servicio</label>
-                            <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="50"
-                                   class="form-control @error('nombre_servicio') is-invalid @enderror"
-                                   value="{{ old('nombre_servicio', $servicio->nombre_servicio) }}"
-                                   placeholder="Ingrese el nombre del servicio" />
+                            <label for="nombre_servicio" class="form-label">
+                                <i class="fas fa-spa"></i> Nombre del servicio
+                            </label>
+                            <div class="input-group">
+                                <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="50"
+                                       class="form-control @error('nombre_servicio') is-invalid @enderror"
+                                       value="{{ old('nombre_servicio', $servicio->nombre_servicio) }}"
+                                       placeholder="Ej: Corte en capas"/>
+                            </div>
                             @error('nombre_servicio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -153,13 +168,17 @@
 
                         <!-- Tipo de servicio -->
                         <div class="col-md-6">
-                            <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-                            <select id="tipo_servicio" name="tipo_servicio" class="form-select @error('tipo_servicio') is-invalid @enderror">
-                                <option value="">Seleccione tipo de servicio</option>
-                                <option value="manicura" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'manicura' ? 'selected' : '' }}>Manicura</option>
-                                <option value="pedicura" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'pedicura' ? 'selected' : '' }}>Pedicura</option>
-                                <option value="cabello" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'cabello' ? 'selected' : '' }}>Cabello</option>
-                            </select>
+                            <label for="tipo_servicio" class="form-label">
+                                <i class="fas fa-cut"></i> Tipo de servicio
+                            </label>
+                            <div class="input-group">
+                                <select id="tipo_servicio" name="tipo_servicio" class="form-select @error('tipo_servicio') is-invalid @enderror">
+                                    <option value="">Seleccione tipo de servicio</option>
+                                    <option value="manicura" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'manicura' ? 'selected' : '' }}>Manicura</option>
+                                    <option value="pedicura" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'pedicura' ? 'selected' : '' }}>Pedicura</option>
+                                    <option value="cabello" {{ old('tipo_servicio', $servicio->tipo_servicio) == 'cabello' ? 'selected' : '' }}>Cabello</option>
+                                </select>
+                            </div>
                             @error('tipo_servicio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -167,13 +186,17 @@
 
                         <!-- Categoría del servicio -->
                         <div class="col-md-6">
-                            <label for="categoria_servicio" class="form-label">Categoría del servicio</label>
-                            <select id="categoria_servicio" name="categoria_servicio" class="form-select @error('categoria_servicio') is-invalid @enderror">
-                                <option value="">Seleccione categoría</option>
-                                <option value="basico" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'basico' ? 'selected' : '' }}>Básico</option>
-                                <option value="intermedio" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'intermedio' ? 'selected' : '' }}>Intermedio</option>
-                                <option value="avanzado" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'avanzado' ? 'selected' : '' }}>Avanzado</option>
-                            </select>
+                            <label for="categoria_servicio" class="form-label">
+                                <i class="fas fa-layer-group"></i> Categoría del servicio
+                            </label>
+                            <div class="input-group">
+                                <select id="categoria_servicio" name="categoria_servicio" class="form-select @error('categoria_servicio') is-invalid @enderror">
+                                    <option value="">Seleccione categoría</option>
+                                    <option value="basico" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'basico' ? 'selected' : '' }}>Básico</option>
+                                    <option value="intermedio" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'intermedio' ? 'selected' : '' }}>Intermedio</option>
+                                    <option value="avanzado" {{ old('categoria_servicio', $servicio->categoria_servicio) == 'avanzado' ? 'selected' : '' }}>Avanzado</option>
+                                </select>
+                            </div>
                             @error('categoria_servicio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -181,15 +204,19 @@
 
                         <!-- Precio base -->
                         <div class="col-md-3">
-                            <label for="precio_base" class="form-label">Precio (Lps)</label>
-                            <input type="text"
-                                   id="precio_base"
-                                   name="precio_base"
-                                   maxlength="4"
-                                   inputmode="numeric"
-                                   class="form-control @error('precio_base') is-invalid @enderror"
-                                   value="{{ old('precio_base', $servicio->precio_base) }}"
-                                   placeholder="Precio en Lempiras" />
+                            <label for="precio_base" class="form-label">
+                                <i class="fas fa-dollar-sign"></i> Precio (Lps)
+                            </label>
+                            <div class="input-group">
+                                <input type="text"
+                                       id="precio_base"
+                                       name="precio_base"
+                                       maxlength="4"
+                                       inputmode="numeric"
+                                       class="form-control @error('precio_base') is-invalid @enderror"
+                                       value="{{ old('precio_base', $servicio->precio_base) }}"
+                                       placeholder="Ej: 350" />
+                            </div>
                             @error('precio_base')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -197,30 +224,37 @@
 
                         <!-- Duración estimada -->
                         <div class="col-md-3">
-                            <label for="duracion_estimada" class="form-label">Duración (min)</label>
-                            <input type="text"
-                                   id="duracion_estimada"
-                                   name="duracion_estimada"
-                                   maxlength="3"
-                                   inputmode="numeric"
-                                   class="form-control @error('duracion_estimada') is-invalid @enderror"
-                                   value="{{ old('duracion_estimada', $servicio->duracion_estimada) }}"
-                                   placeholder="Duración en minutos" />
+                            <label for="duracion_estimada" class="form-label">
+                                <i class="fas fa-clock"></i> Duración (min)
+                            </label>
+                            <div class="input-group">
+                                <input type="text"
+                                       id="duracion_estimada"
+                                       name="duracion_estimada"
+                                       maxlength="3"
+                                       inputmode="numeric"
+                                       class="form-control @error('duracion_estimada') is-invalid @enderror"
+                                       value="{{ old('duracion_estimada', $servicio->duracion_estimada) }}"
+                                       placeholder="Ej: 45 " />
+                            </div>
                             @error('duracion_estimada')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-
                         <!-- Estado -->
                         <div class="col-md-6">
-                            <label for="estado" class="form-label">Estado del servicio</label>
-                            <select id="estado" name="estado" class="form-select @error('estado') is-invalid @enderror">
-                                <option value="">Seleccione estado</option>
-                                <option value="activo" {{ old('estado', $servicio->estado) == 'activo' ? 'selected' : '' }}>Activo</option>
-                                <option value="inactivo" {{ old('estado', $servicio->estado) == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
-                                <option value="temporalmente_suspendido" {{ old('estado', $servicio->estado) == 'temporalmente_suspendido' ? 'selected' : '' }}>Suspendido temporalmente</option>
-                            </select>
+                            <label for="estado" class="form-label">
+                                <i class="fas fa-toggle-on"></i> Estado del servicio
+                            </label>
+                            <div class="input-group">
+                                <select id="estado" name="estado" class="form-select @error('estado') is-invalid @enderror">
+                                    <option value="">Seleccione estado</option>
+                                    <option value="activo" {{ old('estado', $servicio->estado) == 'activo' ? 'selected' : '' }}>Activo</option>
+                                    <option value="inactivo" {{ old('estado', $servicio->estado) == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                                    <option value="temporalmente_suspendido" {{ old('estado', $servicio->estado) == 'temporalmente_suspendido' ? 'selected' : '' }}>Suspendido temporalmente</option>
+                                </select>
+                            </div>
                             @error('estado')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -228,10 +262,14 @@
 
                         <!-- Descripción -->
                         <div class="col-12">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea id="descripcion" name="descripcion" rows="4" maxlength="200"
-                                      class="form-control @error('descripcion') is-invalid @enderror"
-                                      placeholder="Describe el servicio">{{ old('descripcion', $servicio->descripcion) }}</textarea>
+                            <label for="descripcion" class="form-label">
+                                <i class="fas fa-align-left"></i> Descripción
+                            </label>
+                            <div class="input-group">
+                                <textarea id="descripcion" name="descripcion" rows="4" maxlength="200"
+                                          class="form-control @error('descripcion') is-invalid @enderror"
+                                          placeholder="Ej: Corte moderno con técnica en capas ideal para cabello largo.">{{ old('descripcion', $servicio->descripcion) }}</textarea>
+                            </div>
                             @error('descripcion')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

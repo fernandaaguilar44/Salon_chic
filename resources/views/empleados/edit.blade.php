@@ -126,14 +126,14 @@
     <div class="row justify-content-center">
         <div class="col-12 col-xl-10">
             <div class="form-container">
-                <h2>Editar empleado</h2>
+                <h2><i class="fas fa-user-edit"></i> Editar empleado</h2>
                 <form id="empleadoForm" method="POST" action="{{ route('empleados.update', $empleado->id) }}">
                     @csrf
                     @method('PUT')
 
                     <div class="row g-3">
                         <div class="col-12 col-md-4">
-                            <label for="nombre_empleado" class="form-label">Nombre del empleado</label>
+                            <label for="nombre_empleado" class="form-label"><i class="fas fa-user"></i> Nombre del empleado</label>
                             <input type="text" id="nombre_empleado" name="nombre_empleado" maxlength="50"
                                    class="form-control @error('nombre_empleado') is-invalid @enderror"
                                    value="{{ old('nombre_empleado', $empleado->nombre_empleado) }}"
@@ -144,7 +144,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="numero_identidad" class="form-label">Número de identidad</label>
+                            <label for="numero_identidad" class="form-label"><i class="fas fa-id-card"></i> Número de identidad</label>
                             <input type="tel" id="numero_identidad" name="numero_identidad"
                                    class="form-control @error('numero_identidad') is-invalid @enderror"
                                    value="{{ old('numero_identidad', $empleado->numero_identidad) }}"
@@ -156,7 +156,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="telefono" class="form-label">Teléfono</label>
+                            <label for="telefono" class="form-label"><i class="fas fa-phone"></i> Teléfono</label>
                             <input type="tel" id="telefono" name="telefono" maxlength="8"
                                    class="form-control @error('telefono') is-invalid @enderror"
                                    value="{{ old('telefono', $empleado->telefono) }}"
@@ -167,7 +167,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="salario" class="form-label">Salario</label>
+                            <label for="salario" class="form-label"><i class="fas fa-dollar-sign"></i> Salario</label>
                             <input type="text" id="salario" name="salario"
                                    class="form-control @error('salario') is-invalid @enderror"
                                    value="{{ old('salario', $empleado->salario) }}"
@@ -179,7 +179,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="contacto_emergencia_nombre" class="form-label">Nombre del contacto de emergencia</label>
+                            <label for="contacto_emergencia_nombre" class="form-label"><i class="fas fa-user-friends"></i> Nombre del contacto de emergencia</label>
                             <input type="text" id="contacto_emergencia_nombre" name="contacto_emergencia_nombre" maxlength="50"
                                    class="form-control @error('contacto_emergencia_nombre') is-invalid @enderror"
                                    value="{{ old('contacto_emergencia_nombre', $empleado->contacto_emergencia_nombre) }}"
@@ -190,7 +190,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="contacto_emergencia" class="form-label">Teléfono de emergencia</label>
+                            <label for="contacto_emergencia" class="form-label"><i class="fas fa-phone-alt"></i> Teléfono de emergencia</label>
                             <input type="tel" id="contacto_emergencia" name="contacto_emergencia" maxlength="8"
                                    class="form-control @error('contacto_emergencia') is-invalid @enderror"
                                    value="{{ old('contacto_emergencia', $empleado->contacto_emergencia) }}"
@@ -201,7 +201,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="correo" class="form-label">Correo electrónico</label>
+                            <label for="correo" class="form-label"><i class="fas fa-envelope"></i> Correo electrónico</label>
                             <input type="email" id="correo" name="correo" maxlength="50"
                                    class="form-control @error('correo') is-invalid @enderror"
                                    value="{{ old('correo', $empleado->correo) }}"
@@ -212,7 +212,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="cargo" class="form-label">Cargo</label>
+                            <label for="cargo" class="form-label"><i class="fas fa-briefcase"></i> Cargo</label>
                             <select id="cargo" name="cargo"
                                     class="form-select @error('cargo') is-invalid @enderror">
                                 <option value="">Seleccione un cargo</option>
@@ -225,7 +225,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="fecha_ingreso" class="form-label">Fecha de ingreso</label>
+                            <label for="fecha_ingreso" class="form-label"><i class="fas fa-calendar-alt"></i> Fecha de ingreso</label>
                             <input type="date" id="fecha_ingreso" name="fecha_ingreso"
                                    class="form-control @error('fecha_ingreso') is-invalid @enderror"
                                    value="{{ old('fecha_ingreso', $empleado->fecha_ingreso) }}" />
@@ -235,7 +235,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="estado" class="form-label">Estado</label>
+                            <label for="estado" class="form-label"><i class="fas fa-toggle-on"></i> Estado</label>
                             <select id="estado" name="estado" class="form-select @error('estado') is-invalid @enderror">
                                 <option value="">Seleccione estado</option>
                                 <option value="activo" {{ old('estado', $empleado->estado) == 'activo' ? 'selected' : '' }}>Activo</option>
@@ -247,7 +247,7 @@
                         </div>
 
                         <div class="col-12 col-md-4">
-                            <label for="direccion" class="form-label">Dirección</label>
+                            <label for="direccion" class="form-label"><i class="fas fa-map-marker-alt"></i> Dirección</label>
                             <textarea id="direccion" name="direccion" maxlength="200"
                                       class="form-control @error('direccion') is-invalid @enderror"
                                       rows="4"

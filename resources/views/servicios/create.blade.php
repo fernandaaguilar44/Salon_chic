@@ -126,7 +126,7 @@
                         <label for="codigo_servicio" class="form-label">
                             <i class="fas fa-barcode"></i> Código del servicio
                         </label>
-                        <input type="text" id="codigo_servicio" name="codigo_servicio" oninput="this.value = this.value.toUpperCase()" maxlength="7"  class="form-control @error('codigo_servicio') is-invalid @enderror" value="{{ old('codigo_servicio') }}" placeholder="Código único" />
+                        <input type="text" id="codigo_servicio" name="codigo_servicio" oninput="this.value = this.value.toUpperCase()" maxlength="7"  class="form-control @error('codigo_servicio') is-invalid @enderror" value="{{ old('codigo_servicio') }}" placeholder="Ej: ABC-123"/>
                         @error('codigo_servicio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
@@ -135,7 +135,7 @@
                             <label for="nombre_servicio" class="form-label">
                                 <i class="fas fa-tag"></i> Nombre del servicio
                             </label>
-                            <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="50"  class="form-control @error('nombre_servicio') is-invalid @enderror" value="{{ old('nombre_servicio') }}" placeholder="Nombre del servicio" />
+                            <input type="text" id="nombre_servicio" name="nombre_servicio" maxlength="50"  class="form-control @error('nombre_servicio') is-invalid @enderror" value="{{ old('nombre_servicio') }}" placeholder="Ej: Corte en capas" />
                             @error('nombre_servicio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
@@ -178,7 +178,7 @@
                                 <i class="fas fa-dollar-sign"></i> Precio base
                             </label>
                             <input type="text"  id="precio_base" name="precio_base" class="form-control @error('precio_base') is-invalid @enderror" value="{{ old('precio_base') }}"
-                                   placeholder="Precio en Lempiras"  maxlength="4" inputmode="numeric" />
+                                   placeholder="Ej: 350"  maxlength="4" inputmode="numeric" />
                             @error('precio_base') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
@@ -187,7 +187,7 @@
                                 <i class="fas fa-clock"></i> Duración estimada (minutos)
                             </label>
                             <input type="text" min="0" id="duracion_estimada" name="duracion_estimada" class="form-control @error('duracion_estimada') is-invalid @enderror" value="{{ old('duracion_estimada') }}"
-                                   placeholder="Duración en minutos"  maxlength="3" inputmode="numeric"  />
+                                   placeholder="Ej: 45 "  maxlength="3" inputmode="numeric"  />
                             @error('duracion_estimada') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
@@ -198,7 +198,7 @@
                             <label for="descripcion" class="form-label">
                                 <i class="fas fa-align-left"></i> Descripción
                             </label>
-                            <textarea id="descripcion" name="descripcion" maxlength="200" rows="4" class="form-control @error('descripcion') is-invalid @enderror" placeholder="Descripción detallada">{{ old('descripcion') }}</textarea>
+                            <textarea id="descripcion" name="descripcion" maxlength="200" rows="4" class="form-control @error('descripcion') is-invalid @enderror" placeholder="Ej: Corte moderno con técnica en capas ideal para cabello largo.">{{ old('descripcion') }}</textarea>
                             @error('descripcion') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 

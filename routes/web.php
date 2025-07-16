@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\ClienteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,6 +54,7 @@ Route::controller(ServicioController::class)->group(function () {
     Route::get('/servicios/{servicio}', 'show')->name('servicios.show');
 });
 
+
 Route::resource('productos', ProductoController::class);
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
@@ -61,3 +63,19 @@ Route::get('/productos/{producto}', [ProductoController::class, 'show'])->name('
 Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
 Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
 Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
+
+
+
+
+Route::controller(ClienteController::class)->group(function () {
+    Route::get('/clientes', 'index')->name('clientes.index');           // ✔ Listado principal
+    Route::get('/clientes/buscar', 'buscar')->name('clientes.buscar');  // ❗ Filtro AJAX (te faltaba)
+    Route::get('/clientes/create', 'create')->name('clientes.create');  // ✔ Formulario crear
+    Route::post('/clientes', 'store')->name('clientes.store');          // ✔ Guardar nuevo cliente
+
+    Route::get('/clientes/{cliente}', 'show')->name('clientes.show');   // ❗ Ver detalles
+    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit'); // ❗ Formulario editar
+    Route::put('/clientes/{cliente}', 'update')->name('clientes.update');  // ❗ Guardar cambios
+
+});
+
