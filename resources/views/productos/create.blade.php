@@ -213,11 +213,11 @@
                 <label for="codigo" class="form-label"><i class="fas fa-barcode"></i> Código</label>
                 <input type="text" name="codigo" id="codigo"
                        class="form-control @error('codigo') is-invalid @enderror"
-                       value="{{ old('codigo') }}" maxlength="9"
+                       value="{{ old('codigo') }}" maxlength="7"
                        placeholder="Ej: ABC-123"
-                       pattern="^[A-Z0-9\-]+$"
+                       pattern="^[A-Z]{3}-\d{3}$"
                        required
-                       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '')" />
+                       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-7\-]/g, '')" />
                 @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -339,11 +339,13 @@
         const codigo = form.codigo;
         if (!codigo.value.trim()) {
             mostrarError(codigo, 'El código del producto es obligatorio.');
-        } else if (!/^[A-Z0-9\-]+$/.test(codigo.value)) {
+        } else if (!/^[A-Z]{3}-\d{3}$/.test(codigo.value)) {
             mostrarError(codigo, 'El código solo puede contener letras mayúsculas, números y guion (-).');
-        } else if (codigo.value.length > 9) {
-            mostrarError(codigo, 'Máximo 9 caracteres permitidos.');
-        }
+        } else if (codigo.value.length > 7) {
+            mostrarError(codigo, 'Máximo 7 caracteres permitidos.');
+        } else if (!/^[A-Z]{3}-\d{3}$/.test(codigo.value)) {
+        mostrarError(codigo, 'El código debe tener el formato AAA-123.');
+    }
 
 
         // Validación categoría

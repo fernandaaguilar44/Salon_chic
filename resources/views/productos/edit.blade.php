@@ -338,14 +338,15 @@
                         id="codigo"
                         class="form-control @error('codigo') is-invalid @enderror"
                         value="{{ old('codigo', $producto->codigo) }}"
-                        maxlength="9"
+                        maxlength="7"
                         required
-                        oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '')"
+                        placeholder="Ej: ABC-123"
                 />
                 @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
 
         </div>
 
@@ -474,6 +475,58 @@
             successAlert.classList.add('d-none');
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const codigoInput = document.getElementById('codigo');
+
+        // Función para mostrar error en frontend
+        function mostrarErrorFrontend(input, mensaje) {
+            // Quitar error anterior si existe
+            let errorDiv = input.nextElementSibling;
+            if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+                errorDiv.remove();
+                input.classList.remove('is-invalid');
+            }
+
+            // Crear mensaje de error y añadirlo
+            errorDiv = document.createElement('div');
+            errorDiv.classList.add('invalid-feedback');
+            errorDiv.innerText = mensaje;
+
+            input.classList.add('is-invalid');
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+        }
+
+        // Eliminar error si el usuario corrige el campo
+        codigoInput.addEventListener('input', () => {
+            if (codigoInput.classList.contains('is-invalid')) {
+                codigoInput.classList.remove('is-invalid');
+                let errorDiv = codigoInput.nextElementSibling;
+                if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+                    errorDiv.remove();
+                }
+            }
+
+            // Ya que estamos aquí, aplica mayúsculas y guion automático
+            let raw = codigoInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (raw.length > 6) raw = raw.slice(0, 6);
+            if (raw.length > 3) {
+                codigoInput.value = raw.slice(0, 3) + '-' + raw.slice(3);
+            } else {
+                codigoInput.value = raw;
+            }
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!codigoInput.value.trim()) {
+                e.preventDefault();
+                mostrarErrorFrontend(codigoInput, 'El código es obligatorio.');
+                codigoInput.focus();
+            }
+        });
+    });
+
 
 </script>
 

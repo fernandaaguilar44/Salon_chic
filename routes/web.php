@@ -2,10 +2,14 @@
 <?php
 
 
+
+
+use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\ProductoController;
+
 use App\Http\Controllers\ProveedorController;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
@@ -66,7 +70,6 @@ Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('pro
 
 
 
-
 Route::controller(ClienteController::class)->group(function () {
     Route::get('/clientes', 'index')->name('clientes.index');           // ✔ Listado principal
     Route::get('/clientes/buscar', 'buscar')->name('clientes.buscar');  // ❗ Filtro AJAX (te faltaba)
@@ -78,4 +81,8 @@ Route::controller(ClienteController::class)->group(function () {
     Route::put('/clientes/{cliente}', 'update')->name('clientes.update');  // ❗ Guardar cambios
 
 });
+
+Route::resource('facturas', FacturaController::class);
+Route::get('facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
+
 
