@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\FacturadeCompraController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +18,6 @@ Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit']
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
 
 Route::resource('productos', ProductoController::class);
-
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
@@ -24,3 +25,7 @@ Route::get('/productos/{producto}', [ProductoController::class, 'show'])->name('
 Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
 Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
 Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
+
+Route::resource('facturas', FacturaController::class);
+Route::get('facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
+

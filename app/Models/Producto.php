@@ -23,4 +23,11 @@ class Producto extends Model
     {
         return $this->belongsTo(Proveedor::class);
     }
+
+    public function facturas()
+    {
+        return $this->belongsToMany(Factura::class, 'factura_producto')
+            ->withPivot('cantidad', 'precio_unitario', 'subtotal');
+    }
+
 }

@@ -478,6 +478,3 @@
 </script>
 </body>
 </html>
-
-
-quiero que analices el formato del diseño VISUAL de esta vista, te mandare otra para que me la hagas igual, con todo lo que es el diseño visual, el filtro de buscar, la paginacion

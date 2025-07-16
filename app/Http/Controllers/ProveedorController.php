@@ -112,8 +112,8 @@ class ProveedorController extends Controller
             'telefono_empleado_encargado' => $request->telefono_empleado_encargado,
             'imagen' => $imagenPath,
         ]);
+        return redirect()->route('facturas.create')->with('success', 'El proveedor ha sido registrado correctamente. Ahora puede registrar una factura.');
 
-        return redirect()->route('proveedores.index')->with('success', 'El proveedor ha sido registrado correctamente.');
     }
 
     public function show(Proveedor $proveedor)

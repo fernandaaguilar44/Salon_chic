@@ -4,12 +4,12 @@
 <table id="tabla-productos" class="table table-bordered table-hover align-middle text-center" style="table-layout: fixed; width: 100%;">
     <thead>
     <tr>
-        <th style="width: 3%; white-space: nowrap;">#</th>
-        <th style="width: 10%; white-space: nowrap;">Imagen</th>
-        <th style="min-width: 150px; white-space: normal;">Nombre</th>
-        <th style="min-width: 100px; white-space: normal;">Código</th>
-        <th style="min-width: 100px; white-space: normal;">Categoría</th>
-        <th style="min-width: 150px; white-space: normal;">Acciones</th>
+        <th style="width: 1%;">#</th>
+        <th style="width: 12%;">Imagen</th>
+        <th style="width: 15%;">Nombre</th>
+        <th style="width: 10%;">Código</th>
+        <th style="width: 10%;">Categoría</th>
+        <th style="width: 15%;">Acciones</th>
     </tr>
     </thead>
 
