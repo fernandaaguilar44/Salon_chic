@@ -1,4 +1,3 @@
-<!-- resources/views/facturas/index.blade.php -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -294,6 +293,7 @@
 </head>
 <body>
 
+
 <div class="container py-5">
     <div class="beauty-header">
         <h2><i class="fas fa-file-invoice"></i> Listado de Facturas de Compra</h2>
@@ -377,7 +377,7 @@
                 @forelse ($facturas as $factura)
                     <tr>
                         <td>{{ $factura->id }}</td>
-                        <td>{{ $factura->proveedor->nombre }}</td>
+                        <td>{{ $factura->proveedor->nombre_proveedor }}</td> {{-- Ajustado a nombre_proveedor --}}
                         <td>{{ $factura->numero_factura }}</td>
                         <td>{{ \Carbon\Carbon::parse($factura->fecha)->format('d/m/Y') }}</td>
                         <td>{{ number_format($factura->total, 2) }}</td>
@@ -407,89 +407,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('formFactura'); // Asume que tu formulario tiene este id, ajústalo si es otro
-        const inputProveedor = document.getElementById('proveedor');
-        const inputNumFactura = document.getElementById('numeroFactura'); // Cambia si tu input tiene otro id
-        const inputProductos = document.getElementById('productosComprados'); // Cambia según tu input
-
-        // Mostrar mensajes
-        function mostrarError(input, mensaje) {
-            let error = input.nextElementSibling;
-            if (!error || !error.classList.contains('error-text')) {
-                error = document.createElement('div');
-                error.classList.add('error-text');
-                error.style.color = 'red';
-                error.style.fontSize = '0.85rem';
-                error.style.marginTop = '0.25rem';
-                input.parentNode.insertBefore(error, input.nextSibling);
-            }
-            error.textContent = mensaje;
-            input.classList.add('is-invalid');
-        }
-
-        function limpiarError(input) {
-            let error = input.nextElementSibling;
-            if (error && error.classList.contains('error-text')) {
-                error.remove();
-            }
-            input.classList.remove('is-invalid');
-        }
-
-        // Validar formato número factura y forzar mayúsculas y guion automático
-        inputNumFactura.addEventListener('input', () => {
-            let val = inputNumFactura.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-
-            // Forzar 3 letras mayúsculas
-            let letras = val.slice(0, 3).replace(/[^A-Z]/g, '');
-
-            // Forzar guion después de las 3 letras
-            let numeros = val.slice(3, 6).replace(/[^0-9]/g, '');
-
-            let nuevoValor = letras;
-            if (letras.length === 3) {
-                nuevoValor += '-';
-            }
-            nuevoValor += numeros;
-
-            inputNumFactura.value = nuevoValor;
-        });
-
-        form.addEventListener('submit', (e) => {
-            let valid = true;
-
-            // Limpiar errores previos
-            limpiarError(inputProveedor);
-            limpiarError(inputNumFactura);
-            limpiarError(inputProductos);
-
-            // Validar proveedor (no vacío)
-            if (inputProveedor.value.trim() === '') {
-                mostrarError(inputProveedor, 'El proveedor es obligatorio.');
-                valid = false;
-            }
-
-            // Validar número factura (formato ABC-123)
-            const regexNumFactura = /^[A-Z]{3}-\d{3}$/;
-            if (inputNumFactura.value.trim() === '') {
-                mostrarError(inputNumFactura, 'El número de factura es obligatorio.');
-                valid = false;
-            } else if (!regexNumFactura.test(inputNumFactura.value.trim())) {
-                mostrarError(inputNumFactura, 'El número de factura debe tener el formato ABC-123.');
-                valid = false;
-            }
-
-            // Validar productos comprados (no vacío)
-            if (inputProductos.value.trim() === '') {
-                mostrarError(inputProductos, 'Debe seleccionar al menos un producto.');
-                valid = false;
-            }
-
-            if (!valid) {
-                e.preventDefault(); // Evitar envío si hay errores
-            }
-        });
-    });
     const form = document.getElementById('filtroFacturas');
     let timeout = null;
 

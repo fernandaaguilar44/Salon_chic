@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('proveedor_id')->constrained()->onDelete('cascade'); // Relación con proveedores
-            $table->string('numero_factura', 20)->unique();
-            $table->date('fecha');
-            $table->decimal('total', 10, 2); // Total de la factura
+            $table->integer('proveedor_id')->nullable();
+            $table->string('numero_factura', 7)->unique(); // Ajustado a 7 caracteres para LLL-NNN
+            $table->date('fecha')->useCurrent();
+            $table->decimal('total', 10, 2); // Este es el 'gran_total'
+            $table->decimal('importe_exonerado', 10, 2)->default(0); // NUEVO
+            $table->decimal('importe_exento', 10, 2)->default(0);    // NUEVO
+            $table->decimal('importe_gravado_15', 10, 2)->default(0); // NUEVO
+            $table->decimal('isv_15', 10, 2)->default(0);            // NUEVO
             $table->text('notas')->nullable(); // Comentarios opcionales
             $table->timestamps();
         });

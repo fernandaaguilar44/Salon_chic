@@ -83,6 +83,13 @@ Route::controller(ClienteController::class)->group(function () {
 });
 
 Route::resource('facturas', FacturaController::class);
+Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
+Route::get('/facturas/create', [FacturaController::class, 'create'])->name('facturas.create');
+Route::post('/facturas', [FacturaController::class, 'store'])->name('facturas.store');
 Route::get('facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
+Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])
+    ->name('facturas.checkUniqueNumeroFactura');
+Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
+
 
 
