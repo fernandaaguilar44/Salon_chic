@@ -9,9 +9,28 @@ class DetalleFactura extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['factura_id', 'producto', 'cantidad', 'precio_unitario', 'subtotal'];
+    // Si el nombre de tu tabla es distinto de 'detalle_facturas', descomenta y ajusta:
+    // protected $table = 'detalles_de_factura';
 
-    public function factura() {
-        return $this->belongsTo(Factura::class);
+    protected $fillable = [
+        'factura_id',
+        'producto_id',
+        'nombre_producto_manual', // Mantener si hay un caso de uso para productos no registrados
+        'tipo_impuesto',         // ¡CAMBIO CLAVE! Añadir este campo
+        'cantidad',
+        'precio_unitario',
+        'subtotal',
+    ];
+
+    // Un detalle de factura pertenece a una factura
+    public function factura()
+    {
+        return $this->belongsTo(Factura::class, 'factura_id');
+    }
+
+    // Un detalle de factura se refiere a un producto
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class, 'producto_id');
     }
 }
