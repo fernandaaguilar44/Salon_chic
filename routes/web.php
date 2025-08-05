@@ -43,6 +43,7 @@ Route::post('/proveedores', [ProveedorController::class, 'store'])->name('provee
 Route::get('/proveedores/{proveedor}', [ProveedorController::class, 'show'])->name('proveedores.show');
 Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
+
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
 
 
@@ -57,6 +58,7 @@ Route::controller(ServicioController::class)->group(function () {
     Route::put('servicios/{servicio}', [ServicioController::class, 'update'])->name('servicios.update');
     Route::get('/servicios/{servicio}', 'show')->name('servicios.show');
 });
+Route::get('/api/buscar-proveedores', [ProveedorController::class, 'buscarProveedores'])->name('api.buscar-proveedores');
 
 
 Route::resource('productos', ProductoController::class);
@@ -65,10 +67,7 @@ Route::get('/productos/create', [ProductoController::class, 'create'])->name('pr
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
 Route::get('/productos/{producto}', [ProductoController::class, 'show'])->name('productos.show');
 Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
-Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
-Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
-
-
+Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
 Route::controller(ClienteController::class)->group(function () {
     Route::get('/clientes', 'index')->name('clientes.index');           // ✔ Listado principal
@@ -91,5 +90,7 @@ Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, '
     ->name('facturas.checkUniqueNumeroFactura');
 Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
 
-
+Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
+Route::get('/facturas/checkUniqueNumeroFactura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
+Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name('proveedores.buscar');
 

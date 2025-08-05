@@ -194,7 +194,6 @@
     <form id="formProducto" method="POST" action="{{ route('productos.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
 
-        <!-- Información básica del producto -->
         <h5><i class="fas fa-info-circle"></i> Información básica</h5>
         <div class="row mb-3">
             <div class="col-md-6">
@@ -253,6 +252,21 @@
             </div>
         </div>
 
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="tipo_impuesto" class="form-label"><i class="fas fa-hand-holding-usd"></i> Tipo de Impuesto</label>
+                <select name="tipo_impuesto" id="tipo_impuesto"
+                        class="form-control @error('tipo_impuesto') is-invalid @enderror" required>
+                    <option value="">Seleccione un tipo de impuesto</option>
+                    <option value="gravado15" {{ old('tipo_impuesto') == 'gravado15' ? 'selected' : '' }}>Gravado 15%</option>
+                    <option value="exento" {{ old('tipo_impuesto') == 'exento' ? 'selected' : '' }}>Exento</option>
+                    <option value="exonerado" {{ old('tipo_impuesto') == 'exonerado' ? 'selected' : '' }}>Exonerado</option>
+                </select>
+                @error('tipo_impuesto')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
 
         <div class="mb-3">
             <label for="descripcion" class="form-label"><i class="fas fa-align-left"></i> Descripción</label>
@@ -260,7 +274,7 @@
                       class="form-control @error('descripcion') is-invalid @enderror"
                       maxlength="200" rows="3"
                       placeholder="Describe las características principales del producto..."
-                      required {{ old('descripcion') }} ></textarea>
+                      required >{{ old('descripcion') }}</textarea>
             @error('descripcion')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -278,7 +292,6 @@
             </div>
         </div>
 
-        <!-- Botones -->
         <div class="btn-group-left">
             <a href="{{ route('productos.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Cancelar
@@ -344,15 +357,20 @@
         } else if (codigo.value.length > 7) {
             mostrarError(codigo, 'Máximo 7 caracteres permitidos.');
         } else if (!/^[A-Z]{3}-\d{3}$/.test(codigo.value)) {
-        mostrarError(codigo, 'El código debe tener el formato AAA-123.');
-    }
-
+            mostrarError(codigo, 'El código debe tener el formato AAA-123.');
+        }
 
         // Validación categoría
+        const categoria = form.categoria;
         if (!categoria.value) {
             mostrarError(categoria, 'Debe seleccionar una categoría.');
         }
 
+        // ✅ Validación del nuevo campo tipo de impuesto
+        const tipo_impuesto = form.tipo_impuesto;
+        if (!tipo_impuesto.value) {
+            mostrarError(tipo_impuesto, 'Debe seleccionar un tipo de impuesto.');
+        }
 
         // Validación marca
         const marca = form.marca;
@@ -392,19 +410,16 @@
         if (valid) {
             form.submit();
         }
-        document.getElementById('btnLimpiar').addEventListener('click', () => {
-            const inputs = document.querySelectorAll('#formProducto input, #formProducto textarea, #formProducto select');
+    });
 
-            inputs.forEach(input => {
-                input.classList.remove('is-invalid');
-                // Quitar mensajes de error si existen
-                const feedback = input.parentNode.querySelector('.invalid-feedback');
-                if (feedback) feedback.remove();
-            });
+    document.getElementById('btnLimpiar').addEventListener('click', () => {
+        const inputs = document.querySelectorAll('#formProducto input, #formProducto textarea, #formProducto select');
+
+        inputs.forEach(input => {
+            input.classList.remove('is-invalid');
+            // Quitar mensajes de error si existen
+            const feedback = input.parentNode.querySelector('.invalid-feedback');
+            if (feedback) feedback.remove();
         });
-
     });
 </script>
-
-</body>
-</html>

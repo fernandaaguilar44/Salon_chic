@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <style>
         body {
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
@@ -63,7 +65,6 @@
             border-radius: 2px;
         }
 
-        /* Header de acciones mejorado */
         .header-actions {
             background: rgba(123, 42, 141, 0.05);
             border: 2px solid rgba(228, 0, 124, 0.1);
@@ -105,7 +106,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Tabla mejorada */
         .table-container {
             border-radius: 15px;
             overflow: hidden;
@@ -164,7 +164,6 @@
             transform: scale(1.01);
         }
 
-        /* Botones mejorados */
         .btn-beauty {
             padding: 0.7rem 1.5rem;
             border-radius: 25px;
@@ -200,6 +199,12 @@
             color: white;
         }
 
+        .btn-beauty.active {
+            background: #E4007C;
+            box-shadow: 0 0 10px rgba(228, 0, 124, 0.5);
+            transform: scale(1.01);
+        }
+
         .action-buttons {
             display: flex;
             gap: 0.5rem;
@@ -213,7 +218,6 @@
             border-radius: 8px;
         }
 
-        /* Alertas mejoradas */
         .alert {
             border-radius: 15px;
             border: none;
@@ -226,7 +230,6 @@
             border-left: 4px solid #28a745;
         }
 
-        /* Mensaje de resultados */
         #mensajeResultados {
             background: rgba(123, 42, 141, 0.05);
             border: 2px solid rgba(228, 0, 124, 0.1);
@@ -239,7 +242,6 @@
             animation: slideInUp 0.5s ease-out;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 margin: 0 0.5rem;
@@ -307,11 +309,7 @@
     @endif
 
     <div class="header-actions">
-        <div class="row align-items-end">
-
-        </div>
-
-        <form id="filtroFacturas" method="GET" action="{{ route('facturas.index') }}" class="row g-3">
+        <form id="filtroFacturas" method="GET" action="{{ route('facturas.index') }}" class="row g-3 align-items-end">
             <div class="col-md-4">
                 <label for="proveedor" class="form-label">
                     <i class="fas fa-truck"></i> Proveedor
@@ -320,43 +318,24 @@
                        placeholder="Nombre proveedor..." value="{{ request('proveedor') }}">
             </div>
 
-            <div class="col-md-3">
-                <label for="anio" class="form-label">
-                    <i class="fas fa-calendar"></i> Año
+            <div class="col-md-5">
+                <label for="fecha_rango" class="form-label">
+                    <i class="fas fa-calendar-alt"></i> Rango de Fechas
                 </label>
-                <select id="anio" name="anio" class="form-select">
-                    <option value="">-- Todos --</option>
-                    @php
-                        $currentYear = date('Y');
-                        $startYear = $currentYear - 10;
-                    @endphp
-                    @for ($year = $currentYear; $year >= $startYear; $year--)
-                        <option value="{{ $year }}" {{ request('anio') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                    @endfor
-                </select>
+                <div class="d-flex gap-2 flex-wrap">
+                    <input type="text" id="fecha_rango" name="fecha_rango" class="form-control flex-grow-1"
+                           placeholder="Seleccionar rango de fechas..." value="{{ request('fecha_rango') }}">
+                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="semana">Semana</button>
+                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="mes">Mes</button>
+                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="anio">Año</button>
+                </div>
             </div>
 
-            <div class="col-md-3">
-                <label for="mes" class="form-label">
-                    <i class="fas fa-calendar-alt"></i> Mes
-                </label>
-                <select id="mes" name="mes" class="form-select">
-                    <option value="">-- Todos --</option>
-                    @foreach ([
-                        1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-                        5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-                        9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
-                    ] as $num => $nombre)
-                        <option value="{{ $num }}" {{ request('mes') == $num ? 'selected' : '' }}>{{ $nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-2 text-end mt-5">
+            <div class="col-md-3 text-end">
                 <a href="{{ route('facturas.create') }}" class="btn btn-beauty btn-primary-beauty w-100">
                     <i class="fas fa-plus"></i> Nueva Factura
                 </a>
             </div>
-
         </form>
     </div>
 
@@ -377,9 +356,9 @@
                 @forelse ($facturas as $factura)
                     <tr>
                         <td>{{ $factura->id }}</td>
-                        <td>{{ $factura->proveedor->nombre_proveedor }}</td> {{-- Ajustado a nombre_proveedor --}}
+                        <td>{{ $factura->proveedor->nombre_empresa }}</td>
                         <td>{{ $factura->numero_factura }}</td>
-                        <td>{{ \Carbon\Carbon::parse($factura->fecha)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($factura->fecha_emision)->format('d/m/Y') }}</td>
                         <td>{{ number_format($factura->total, 2) }}</td>
                         <td class="action-buttons">
                             <a href="{{ route('facturas.show', $factura->id) }}" class="btn btn-beauty btn-secondary-beauty">
@@ -396,7 +375,7 @@
             </table>
         </div>
 
-        @if(!is_null($totalResultados))
+        @if(isset($totalResultados))
             <div id="mensajeResultados">
                 <i class="fas fa-info-circle"></i>
                 {{ $totalResultados }} resultado{{ $totalResultados !== 1 ? 's' : '' }} encontrado{{ $totalResultados !== 1 ? 's' : '' }}.
@@ -406,36 +385,73 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 <script>
     const form = document.getElementById('filtroFacturas');
     let timeout = null;
 
     function submitForm() {
-        // Envía el formulario (GET) para recargar la vista con los filtros
         form.submit();
     }
 
     function debounceSubmit() {
         clearTimeout(timeout);
-        timeout = setTimeout(submitForm, 700); // Espera 700ms tras última tecla/cambio
+        timeout = setTimeout(submitForm, 700);
     }
 
-    // Detecta escritura en el input proveedor
-    document.getElementById('proveedor').addEventListener('input', debounceSubmit);
+    // Inicializa Flatpickr con las nuevas restricciones
+    const fechaRangoInput = document.getElementById('fecha_rango');
+    const fp = flatpickr(fechaRangoInput, {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        locale: "es",
+        maxDate: "today",      // No permite fechas futuras
+        minDate: "2000-01-01", // No permite fechas anteriores al 1 de enero del 2000
+        onClose: function(selectedDates, dateStr, instance) {
+            submitForm();
+        }
+    });
 
-    // Detecta cambios en selects de año y mes
-    document.getElementById('anio').addEventListener('change', submitForm);
-    document.getElementById('mes').addEventListener('change', submitForm);
+    // Lógica para botones de filtro rápido
+    document.querySelectorAll('.btn-filtro-rapido').forEach(button => {
+        button.addEventListener('click', function() {
+            const rango = this.getAttribute('data-rango');
+            const hoy = new Date();
+            let fechaInicio;
+            let fechaFin;
+
+            if (rango === 'semana') {
+                fechaFin = new Date();
+                fechaInicio = new Date();
+                fechaInicio.setDate(hoy.getDate() - 7);
+            } else if (rango === 'mes') {
+                fechaFin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
+                fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            } else if (rango === 'anio') {
+                fechaFin = new Date(hoy.getFullYear(), 11, 31);
+                fechaInicio = new Date(hoy.getFullYear(), 0, 1);
+            }
+
+            // Asegurarse de que las fechas no excedan los límites
+            if (fechaInicio < new Date("2000-01-01")) {
+                fechaInicio = new Date("2000-01-01");
+            }
+
+            fp.setDate([fechaInicio, fechaFin]);
+            submitForm();
+        });
+    });
+
+    document.getElementById('proveedor').addEventListener('input', debounceSubmit);
 
     document.addEventListener('DOMContentLoaded', () => {
         const filtroProveedor = document.getElementById('proveedor');
-        const filtroMes = document.getElementById('mes');
-        const filtroAnio = document.getElementById('anio');
         const mensajeResultados = document.getElementById('mensajeResultados');
 
         function actualizarMensajeResultados() {
-            if (filtroProveedor && filtroMes && filtroAnio && mensajeResultados) {
-                if (filtroProveedor.value.trim() === '' && filtroMes.value === '' && filtroAnio.value === '') {
+            if (filtroProveedor && mensajeResultados) {
+                if (filtroProveedor.value.trim() === '' && fechaRangoInput.value === '') {
                     mensajeResultados.style.display = 'none';
                 } else {
                     mensajeResultados.style.display = 'block';
@@ -444,14 +460,8 @@
         }
 
         actualizarMensajeResultados();
-
-        [filtroProveedor, filtroMes, filtroAnio].forEach(el => {
-            if (el) {
-                el.addEventListener('input', () => {
-                    actualizarMensajeResultados();
-                });
-            }
-        });
+        filtroProveedor.addEventListener('input', actualizarMensajeResultados);
+        fechaRangoInput.addEventListener('change', actualizarMensajeResultados);
     });
 </script>
 </body>
