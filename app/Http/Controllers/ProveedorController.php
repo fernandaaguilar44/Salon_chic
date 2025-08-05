@@ -6,6 +6,7 @@ use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log; // Importa la fachada Log para depuración
 
 class ProveedorController extends Controller
 {
@@ -35,6 +36,31 @@ class ProveedorController extends Controller
 
         return view('proveedores.index', compact('proveedores'));
     }
+
+    // --- INICIO: Nuevo método para la búsqueda de proveedores para el auto-completado ---
+    public function buscarProveedores(Request $request)
+    {
+        $query = $request->input('query'); // El término de búsqueda del JavaScript
+
+        // Opcional: Para depuración, puedes registrar la consulta
+        // Log::info('API de búsqueda de proveedores - Query recibida: ' . $query);
+
+        if (empty($query)) {
+            return response()->json([]); // Si no hay query, devuelve un array vacío
+        }
+
+        $proveedores = Proveedor::where('nombre_empresa', 'like', '%' . $query . '%')
+            ->orWhere('nombre_proveedor', 'like', '%' . $query . '%') // También puedes buscar por nombre de contacto si lo deseas
+            ->select('id', 'nombre_empresa') // Selecciona solo los campos que necesitas en el frontend
+            ->limit(10) // Limita el número de resultados para mejor rendimiento
+            ->get();
+
+        // Opcional: Para depuración, puedes registrar los resultados
+        // Log::info('API de búsqueda de proveedores - Resultados encontrados: ' . $proveedores->toJson());
+
+        return response()->json($proveedores);
+    }
+    // --- FIN: Nuevo método ---
 
     public function create()
     {

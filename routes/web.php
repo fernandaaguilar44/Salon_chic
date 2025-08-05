@@ -16,6 +16,7 @@ Route::post('/proveedores', [ProveedorController::class, 'store'])->name('provee
 Route::get('/proveedores/{proveedor}', [ProveedorController::class, 'show'])->name('proveedores.show');
 Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
 Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
+Route::get('/api/buscar-proveedores', [ProveedorController::class, 'buscarProveedores'])->name('api.buscar-proveedores');
 
 Route::resource('productos', ProductoController::class);
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
@@ -26,13 +27,6 @@ Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->n
 Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
 Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
-Route::resource('facturas', FacturaController::class);
-Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
-Route::get('/facturas/create', [FacturaController::class, 'create'])->name('facturas.create');
-Route::post('/facturas', [FacturaController::class, 'store'])->name('facturas.store');
-Route::get('facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
-Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])
-    ->name('facturas.checkUniqueNumeroFactura');
-Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
-
-
+Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
+Route::get('/facturas/checkUniqueNumeroFactura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
+Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name('proveedores.buscar');

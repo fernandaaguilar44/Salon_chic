@@ -26,7 +26,7 @@ class Factura extends Model
         return $this->belongsTo(Proveedor::class);
     }
 
-    public function detallesFactura(): HasMany
+    public function detalles(): HasMany
     {
         return $this->hasMany(DetalleFactura::class);
     }
