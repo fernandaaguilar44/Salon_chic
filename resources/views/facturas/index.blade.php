@@ -199,6 +199,17 @@
             color: white;
         }
 
+        .btn-danger-beauty {
+            background: linear-gradient(135deg, #dc3545 0%, #a42a3a 100%);
+            color: white;
+        }
+
+        .btn-danger-beauty:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+
         .btn-beauty.active {
             background: #E4007C;
             box-shadow: 0 0 10px rgba(228, 0, 124, 0.5);
@@ -308,9 +319,15 @@
         </div>
     @endif
 
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('facturas.create') }}" class="btn btn-beauty btn-primary-beauty">
+            <i class="fas fa-plus"></i> Nueva Factura
+        </a>
+    </div>
+
     <div class="header-actions">
         <form id="filtroFacturas" method="GET" action="{{ route('facturas.index') }}" class="row g-3 align-items-end">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <label for="proveedor" class="form-label">
                     <i class="fas fa-truck"></i> Proveedor
                 </label>
@@ -322,19 +339,14 @@
                 <label for="fecha_rango" class="form-label">
                     <i class="fas fa-calendar-alt"></i> Rango de Fechas
                 </label>
-                <div class="d-flex gap-2 flex-wrap">
-                    <input type="text" id="fecha_rango" name="fecha_rango" class="form-control flex-grow-1"
-                           placeholder="Seleccionar rango de fechas..." value="{{ request('fecha_rango') }}">
-                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="semana">Semana</button>
-                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="mes">Mes</button>
-                    <button type="button" class="btn btn-beauty btn-secondary-beauty btn-filtro-rapido" data-rango="anio">Año</button>
-                </div>
+                <input type="text" id="fecha_rango" name="fecha_rango" class="form-control"
+                       placeholder="Seleccionar rango de fechas..." value="{{ request('fecha_rango') }}">
             </div>
 
-            <div class="col-md-3 text-end">
-                <a href="{{ route('facturas.create') }}" class="btn btn-beauty btn-primary-beauty w-100">
-                    <i class="fas fa-plus"></i> Nueva Factura
-                </a>
+            <div class="col-md-2 text-md-end text-start">
+                <button type="button" class="btn btn-beauty btn-danger-beauty w-100" id="btn-recargar">
+                    <i class="fas fa-sync-alt"></i> Recargar
+                </button>
             </div>
         </form>
     </div>
@@ -413,34 +425,12 @@
         }
     });
 
-    // Lógica para botones de filtro rápido
-    document.querySelectorAll('.btn-filtro-rapido').forEach(button => {
-        button.addEventListener('click', function() {
-            const rango = this.getAttribute('data-rango');
-            const hoy = new Date();
-            let fechaInicio;
-            let fechaFin;
-
-            if (rango === 'semana') {
-                fechaFin = new Date();
-                fechaInicio = new Date();
-                fechaInicio.setDate(hoy.getDate() - 7);
-            } else if (rango === 'mes') {
-                fechaFin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
-                fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-            } else if (rango === 'anio') {
-                fechaFin = new Date(hoy.getFullYear(), 11, 31);
-                fechaInicio = new Date(hoy.getFullYear(), 0, 1);
-            }
-
-            // Asegurarse de que las fechas no excedan los límites
-            if (fechaInicio < new Date("2000-01-01")) {
-                fechaInicio = new Date("2000-01-01");
-            }
-
-            fp.setDate([fechaInicio, fechaFin]);
-            submitForm();
-        });
+    // Lógica para el nuevo botón "Recargar"
+    document.getElementById('btn-recargar').addEventListener('click', function() {
+        // Reinicia los campos del formulario
+        document.getElementById('proveedor').value = '';
+        fp.clear(); // Limpia la selección de fechas
+        submitForm();
     });
 
     document.getElementById('proveedor').addEventListener('input', debounceSubmit);
