@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Detalle de la Factura</title>
+    <title>Detalle de la Factura de Compra</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -11,19 +11,19 @@
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding: 1rem 0;
+            padding: 20px;
         }
 
-        .container {
+        .invoice-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 2rem;
             color: black;
-            max-width: 1000px;
+            max-width: 900px;
+            margin: 0 auto;
             box-shadow: 0 15px 35px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: 2rem;
             animation: slideInUp 0.6s ease-out;
         }
 
@@ -38,140 +38,182 @@
             }
         }
 
-        .beauty-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            background: rgba(123, 42, 141, 0.05);
+            border: 2px solid rgba(228, 0, 124, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            animation: slideInDown 0.8s ease-out;
         }
 
-        .beauty-header h2 {
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .company-info, .invoice-meta {
+            flex-basis: 48%;
+        }
+
+        .invoice-title {
+            text-align: right;
+            font-size: 2em;
+            font-weight: bold;
             color: #7B2A8D;
-            font-weight: 700;
-            font-size: 1.8rem;
-            margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
         }
 
-        .beauty-header::after {
-            content: '';
-            display: block;
-            width: 120px;
-            height: 3px;
-            background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-
-        .unified-details {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 8px 20px rgba(123, 42, 141, 0.1);
-            border: 1px solid rgba(228, 0, 124, 0.1);
-        }
-
-        .section-divider {
-            border-top: 2px solid rgba(228, 0, 124, 0.1);
-            margin: 2rem 0;
+        .section-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #7B2A8D;
+            margin-bottom: 10px;
             position: relative;
         }
 
-        .section-divider::before {
+        .section-title::after {
             content: '';
-            position: absolute;
-            top: -1px;
-            left: 50%;
-            transform: translateX(-50%);
+            display: block;
             width: 50px;
             height: 2px;
             background: linear-gradient(90deg, #E4007C, #7B2A8D);
+            margin: 8px 0;
+            border-radius: 2px;
         }
 
-        .subsection-title {
-            color: #E4007C;
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
         }
 
-        .subsection-title i {
-            margin-right: 10px;
-            color: #7B2A8D;
-        }
-
-        dl.row dt {
-            font-weight: 600;
-            color: #7B2A8D;
-            margin-bottom: 0.7rem;
-            padding-left: 1rem;
-        }
-
-        dl.row dd {
-            margin-bottom: 0.7rem;
+        .details-grid div {
             color: #333;
+            font-size: 0.95rem;
         }
 
-        dl.row dd i {
-            margin-right: 8px;
-            color: #E4007C;
+        .details-grid strong {
+            color: #7B2A8D;
         }
 
-        .product-list-item {
-            padding: 1rem;
-            border: 1px solid rgba(228, 0, 124, 0.1);
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            background: rgba(255, 255, 255, 0.5);
+        .client-info {
+            background: rgba(123, 42, 141, 0.05);
+            border: 2px solid rgba(228, 0, 124, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .table-responsive {
+            margin-top: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(123, 42, 141, 0.1);
+        }
+
+        .invoice-table {
+            margin-bottom: 0;
+        }
+
+        .invoice-table th {
+            background: linear-gradient(135deg, #7B2A8D 0%, #E4007C 100%);
+            color: white;
+            border: none;
+            padding: 1rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .invoice-table th:first-child {
+            text-align: left;
+        }
+
+        .invoice-table td {
+            padding: 0.875rem 0.75rem;
+            vertical-align: middle;
+            border-color: rgba(228, 0, 124, 0.1);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .invoice-table td:first-child {
+            text-align: left;
+        }
+
+        .invoice-table tbody tr {
             transition: all 0.3s ease;
         }
 
-        .product-list-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(123, 42, 141, 0.1);
+        .invoice-table tbody tr:hover {
+            background-color: rgba(228, 0, 124, 0.05);
+            transform: scale(1.005);
         }
 
-        .product-list-item p {
-            margin-bottom: 0.5rem;
+        .invoice-table tbody tr:nth-child(odd) {
+            background-color: rgba(248, 249, 250, 0.8);
         }
 
-        .product-list-item p strong {
+        .invoice-table tfoot th {
+            background: linear-gradient(135deg, #7B2A8D 0%, #E4007C 100%);
+            color: white;
+            border: none;
+            padding: 1rem 0.75rem;
+            font-weight: 600;
+        }
+
+        .totals-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .totals-table {
+            width: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(123, 42, 141, 0.1);
+        }
+
+        .totals-table th, .totals-table td {
+            padding: 12px;
+            border-color: rgba(228, 0, 124, 0.1);
+        }
+
+        .totals-table th {
+            background: rgba(123, 42, 141, 0.1);
             color: #7B2A8D;
             font-weight: 600;
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .totals-table td {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-weight: 500;
         }
 
-        .summary-card {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid rgba(228, 0, 124, 0.1);
-        }
-
-        .summary-card h5 {
-            color: #7B2A8D;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .summary-card p {
-            color: #E4007C;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin: 0;
+        .totals-table tr:last-child th,
+        .totals-table tr:last-child td {
+            font-size: 1.2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7B2A8D 0%, #E4007C 100%);
+            color: white;
+            border-top: 2px solid rgba(228, 0, 124, 0.3);
         }
 
         .button-group {
+            margin-top: 30px;
             text-align: center;
-            margin-top: 2rem;
         }
 
         .btn-beauty {
@@ -198,121 +240,150 @@
             color: white;
         }
 
-        .badge {
-            font-size: 0.8rem;
-            padding: 0.4rem 0.8rem;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .unified-details {
+            .invoice-container {
+                margin: 0 0.5rem;
                 padding: 1.5rem;
             }
 
-            dl.row dt,
-            dl.row dd {
-                padding-left: 0.5rem;
+            .invoice-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .company-info, .invoice-meta {
+                flex-basis: 100%;
+            }
+
+            .invoice-title {
+                text-align: left;
+                font-size: 1.5rem;
+            }
+
+            .totals-container {
+                justify-content: center;
+            }
+
+            .totals-table {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .invoice-title {
+                font-size: 1.3rem;
+            }
+
+            .invoice-table th, .invoice-table td {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.3rem;
+            }
+
+            .totals-table th, .totals-table td {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+
+            .client-info,
+            .invoice-header {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="beauty-header">
-        <h2><i class="fas fa-receipt"></i> Detalle de la Factura</h2>
+
+<div class="invoice-container">
+    <!-- Encabezado -->
+    <div class="invoice-header">
+        <div class="company-info">
+            <h5 class="section-title"><i class="fas fa-truck"></i> Proveedor</h5>
+            <div class="details-grid">
+                <div><strong>Nombre:</strong> {{ $factura->proveedor->nombre_empresa }}</div>
+            </div>
+        </div>
+
+        <div class="invoice-meta">
+            <h2 class="invoice-title"><i class="fas fa-file-invoice"></i> FACTURA DE COMPRA</h2>
+            <div class="details-grid" style="text-align: right;">
+                <div><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($factura->fecha_emision)->format('d/m/Y') }}</div>
+                <div><strong>Número:</strong> {{ $factura->numero_factura }}</div>
+            </div>
+        </div>
     </div>
 
-    <div class="unified-details">
-        <!-- Información General -->
-        <div class="subsection-title">
-            <i class="fas fa-info-circle"></i> Información General
+    <div class="client-info">
+        <h5 class="section-title"><i class="fas fa-building"></i> Comprador</h5>
+        <div class="details-grid">
+            <div><strong>Nombre:</strong> Salon Chic</div>
         </div>
-        <dl class="row">
-            <dt class="col-sm-4"><i class="fas fa-file-invoice"></i> Número de Factura:</dt>
-            <dd class="col-sm-8">{{ $factura->numero_factura }}</dd>
+    </div>
 
-            <dt class="col-sm-4"><i class="fas fa-user-tie"></i> Proveedor:</dt>
-            <dd class="col-sm-8">{{ $factura->proveedor->nombre_empresa }}</dd>
+    <!-- Tabla de productos -->
+    <div class="table-responsive">
+        <table class="table invoice-table">
+            <thead>
+            <tr>
+                <th>CONCEPTO</th>
+                <th>CANTIDAD</th>
+                <th>PRECIO COMPRA</th>
+                <th>PRECIO VENTA</th>
+                <th>TOTAL</th>
+            </tr>
+            </thead>
+            <tbody>
+            @forelse($factura->detalles as $detalle)
+                <tr>
+                    <td>{{ $detalle->producto->nombre }}</td>
+                    <td>{{ $detalle->cantidad }}</td>
+                    <td>L {{ number_format($detalle->precio_compra, 2) }}</td>
+                    <td>L {{ number_format($detalle->precio_unitario, 2) }}</td>
+                    <td>L {{ number_format($detalle->subtotal, 2) }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay productos en esta factura.</td>
+                </tr>
+            @endforelse
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="4" class="text-end">SUBTOTAL</th>
+                <th>L {{ number_format($factura->detalles->sum('subtotal'), 2) }}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 
-            <dt class="col-sm-4"><i class="fas fa-calendar-alt"></i> Fecha de Emisión:</dt>
-            <dd class="col-sm-8">{{ \Carbon\Carbon::parse($factura->fecha_emision)->format('d/m/Y') }}</dd>
-
-            <dt class="col-sm-4"><i class="fas fa-clipboard-list"></i> Cantidad de Ítems:</dt>
-            <dd class="col-sm-8">{{ $factura->detalles->count() }}</dd>
-
-            @if($factura->notas)
-                <dt class="col-sm-4"><i class="fas fa-sticky-note"></i> Notas:</dt>
-                <dd class="col-sm-8">{{ $factura->notas }}</dd>
-            @endif
-        </dl>
-
-        <div class="section-divider"></div>
-
-        <!-- Productos -->
-        <div class="subsection-title">
-            <i class="fas fa-boxes"></i> Productos Comprados
-        </div>
-        @forelse($factura->detalles as $detalle)
-            <div class="product-list-item">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Producto:</strong> {{ $detalle->producto->nombre }}</p>
-                        <p><strong>Cantidad:</strong> {{ $detalle->cantidad }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Precio Unitario:</strong> L {{ number_format($detalle->precio_unitario, 2) }}</p>
-                        <p><strong>Subtotal:</strong> L {{ number_format($detalle->subtotal, 2) }}</p>
-                    </div>
-                </div>
-                <p>
-                    <strong>Tipo de Impuesto:</strong>
-                    <span class="badge {{ $detalle->tipo_impuesto === 'exonerado' ? 'bg-info' : ($detalle->tipo_impuesto === 'exento' ? 'bg-secondary' : 'bg-success') }}">
-                        {{ ucfirst($detalle->tipo_impuesto) }}
-                    </span>
-                </p>
-            </div>
-        @empty
-            <div class="text-center text-muted p-4">
-                <i class="fas fa-box-open fa-2x mb-2"></i>
-                <p>No hay productos en esta factura.</p>
-            </div>
-        @endforelse
-
-        <div class="section-divider"></div>
-
-        <!-- Totales -->
-        <div class="subsection-title">
-            <i class="fas fa-calculator"></i> Resumen de Totales
-        </div>
-
-        <div class="summary-grid">
-            <div class="summary-card">
-                <h5>Importe Exonerado</h5>
-                <p>L {{ number_format($factura->importe_exonerado, 2) }}</p>
-            </div>
-            <div class="summary-card">
-                <h5>Importe Exento</h5>
-                <p>L {{ number_format($factura->importe_exento, 2) }}</p>
-            </div>
-            <div class="summary-card">
-                <h5>Importe Gravado (15%)</h5>
-                <p>L {{ number_format($factura->importeGravado15, 2) }}</p>
-            </div>
-            <div class="summary-card">
-                <h5>ISV (15%)</h5>
-                <p>L {{ number_format($factura->isv15, 2) }}</p>
-            </div>
-        </div>
-
-        <div class="section-divider"></div>
-
-        <dl class="row">
-            <dt class="col-sm-6"><i class="fas fa-dollar-sign"></i> <strong>GRAN TOTAL:</strong></dt>
-            <dd class="col-sm-6"><strong style="color: #E4007C; font-size: 1.3rem;">L {{ number_format($factura->total, 2) }}</strong></dd>
-        </dl>
+    <!-- Totales con impuestos exonerados/exentos -->
+    <div class="totals-container">
+        <table class="table totals-table">
+            <tbody>
+            <tr>
+                <th>SUBTOTAL</th>
+                <td>L {{ number_format($factura->detalles->sum('subtotal'), 2) }}</td>
+            </tr>
+            <tr>
+                <th>IVA (21%)</th>
+                <td>L {{ number_format($factura->detalles->sum('subtotal') * 0.21, 2) }}</td>
+            </tr>
+            <tr>
+                <th>EXONERADO</th>
+                <td>L {{ number_format($factura->exonerado ?? 0, 2) }}</td>
+            </tr>
+            <tr>
+                <th>EXENTO</th>
+                <td>L {{ number_format($factura->exento ?? 0, 2) }}</td>
+            </tr>
+            <tr>
+                <th>TOTAL COMPRA</th>
+                <td>L {{ number_format($factura->total, 2) }}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="button-group">
