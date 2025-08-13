@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Detalles del Cliente - Salón de Belleza</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Cliente - Salón de Belleza</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
-            padding: 0.3rem 0;
+            padding: 1rem;
             color: #333;
-            margin: 0;
             overflow: hidden;
         }
 
         .container {
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0.8rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.2rem;
+            box-shadow: 0 15px 35px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideInUp 0.6s ease-out;
-            height: calc(100vh - 0.6rem);
             display: flex;
             flex-direction: column;
+            height: calc(100vh - 2rem);
+            overflow: hidden;
+            position: relative;
         }
 
         @keyframes slideInUp {
@@ -44,62 +48,51 @@
             }
         }
 
+        /* Header */
         .beauty-header {
             text-align: center;
-            margin-bottom: 0.8rem;
-            position: relative;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid rgba(228, 0, 124, 0.1);
+            flex-shrink: 0;
         }
 
         .beauty-header h2 {
             color: #7B2A8D;
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .beauty-header h2 i {
             color: #E4007C;
-            font-size: 1.1rem;
-            animation: bounce 2s infinite;
+            font-size: 1.6rem;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-8px);
-            }
-            60% {
-                transform: translateY(-4px);
-            }
-        }
-
-        .beauty-header::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            margin: 6px auto;
-            border-radius: 2px;
-        }
-
-        /* Card de información del cliente */
-        .client-details {
-            background: linear-gradient(135deg, rgba(123, 42, 141, 0.05), rgba(228, 0, 124, 0.02));
-            border: 2px solid rgba(228, 0, 124, 0.1);
-            border-radius: 12px;
-            padding: 0.8rem;
-            margin-bottom: 0.8rem;
-            animation: slideInDown 0.8s ease-out;
+        /* Main Content */
+        .profile-content {
             flex: 1;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* Client Header */
+        .client-header {
+            background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
+            border: 2px solid rgba(228, 0, 124, 0.15);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            animation: slideInDown 0.8s ease-out;
+            flex-shrink: 0;
         }
 
         @keyframes slideInDown {
@@ -113,432 +106,621 @@
             }
         }
 
-        dt {
-            font-weight: 700;
-            color: #7B2A8D;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 5px;
-            padding-left: 0.25rem;
-            padding-right: 0.25rem;
-        }
-
-        dt i {
-            color: #E4007C;
-            font-size: 0.75rem;
-            width: 14px;
-            text-align: center;
-        }
-
-        dd {
-            color: #444;
-            font-weight: 500;
-            font-size: 0.85rem;
-            margin-bottom: 0.6rem;
-            padding: 0.4rem 0.6rem;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 6px;
-            border-left: 3px solid #E4007C;
-            padding-left: 0.25rem;
-            padding-right: 0.25rem;
-            min-height: 35px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Estilo especial para el nombre del cliente - SIN ICONO INTERNO */
-        .client-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #333;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
-            border: 1px solid rgba(228, 0, 124, 0.2);
-            margin: 0;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Elementos especiales para edad */
-        .age-container {
-            background: linear-gradient(135deg, #fff8fc 0%, #f8f0ff 100%);
-            border: 2px solid rgba(228, 0, 124, 0.2);
-            border-radius: 8px;
-            padding: 0.6rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-height: 50px;
-        }
-
-        .age-icon {
-            background: linear-gradient(135deg, #E4007C, #7B2A8D);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+        .client-info {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 12px rgba(228, 0, 124, 0.3);
+            gap: 1.5rem;
         }
 
-        .age-info {
-            flex: 1;
-        }
-
-        .age-primary {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #7B2A8D;
-            margin-bottom: 2px;
-        }
-
-        .age-category {
-            font-size: 0.75rem;
-            color: #666;
-            font-weight: 500;
-            font-style: italic;
-        }
-
-        textarea[readonly] {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(228, 0, 124, 0.2);
-            border-radius: 8px;
-            padding: 0.5rem 0.7rem;
-            resize: none;
-            font-family: inherit;
-            color: #444;
-            font-weight: 500;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            min-height: 60px;
-        }
-
-        textarea[readonly]:focus {
-            border-color: #E4007C;
-            box-shadow: 0 0 0 0.2rem rgba(228, 0, 124, 0.15);
-            background: white;
-        }
-
-        /* Estados especiales para sexo */
-        .sex-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0.3rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            min-height: 32px;
-        }
-
-        .sex-femenino {
-            background: linear-gradient(135deg, rgba(228, 0, 124, 0.15), rgba(228, 0, 124, 0.05));
-            color: #7B2A8D;
-            border: 1px solid rgba(228, 0, 124, 0.3);
-        }
-
-        .sex-masculino {
-            background: linear-gradient(135deg, rgba(0, 123, 255, 0.15), rgba(0, 123, 255, 0.05));
-            color: #0056b3;
-            border: 1px solid rgba(0, 123, 255, 0.3);
-        }
-
-        /* Grupo de botones */
-        .button-group {
+        .client-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E4007C, #7B2A8D);
             display: flex;
-            gap: 0.7rem;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-top: 0.8rem;
-            padding-top: 0.8rem;
-            border-top: 2px solid rgba(228, 0, 124, 0.1);
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(228, 0, 124, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
             flex-shrink: 0;
         }
 
-        .btn-beauty {
-            padding: 0.5rem 1.2rem;
-            font-size: 0.8rem;
-            border-radius: 20px;
-            font-weight: 600;
-            min-width: 140px;
+        .client-avatar i {
+            color: white;
+            font-size: 1.6rem;
+        }
+
+        .client-details {
+            text-align: left;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .client-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
             text-align: center;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            display: block;
+        }
+
+        @media (min-width: 500px) {
+            .client-name {
+                text-align: center;
+            }
+        }
+
+        .client-name.long-name {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            text-align: left;
+        }
+
+
+        /* Info Grid */
+        .info-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            min-height: 0;
             overflow: hidden;
         }
 
-        .btn-beauty::before {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 1rem;
+            border-left: 4px solid #E4007C;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: fit-content;
+        }
+
+        .info-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E4007C, #7B2A8D);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
 
-        .btn-beauty:hover::before {
-            left: 100%;
+        .info-card:hover::before {
+            transform: translateX(0);
         }
 
-        /* Botón primario - Editar */
-        .btn-primary-beauty {
-            background: linear-gradient(135deg, #7B2A8D 0%, #E4007C 100%);
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(228, 0, 124, 0.2);
+            flex-shrink: 0;
+        }
+
+        .card-icon i {
+            color: #E4007C;
+            font-size: 1rem;
+        }
+
+        .card-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            text-transform: none;
+            letter-spacing: 0.3px;
+        }
+
+        .card-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.3;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* Special Cards */
+        .age-card .card-value {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .age-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #d97706;
+        }
+
+        .age-text {
+            color: #92400e;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .age-category {
+            background: linear-gradient(135deg, #fef3c7, #fcd34d);
+            color: #92400e;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: none;
+            border: 1px solid #f59e0b;
+        }
+
+        .gender-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+        }
+
+        .gender-female {
+            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+            color: #be185d;
+            border: 2px solid #f9a8d4;
+        }
+
+        .gender-male {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1d4ed8;
+            border: 2px solid #93c5fd;
+        }
+
+        /* Address Card */
+        .address-card {
+            grid-column: 1 / -1;
+        }
+
+        .address-value {
+            background: rgba(248, 250, 252, 0.9);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-style: italic;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Phone Link */
+        a[href^="tel:"] {
+            color: #059669;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 1rem;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        a[href^="tel:"]:hover {
+            color: #047857;
+            transform: scale(1.02);
+        }
+
+        /* Actions */
+        .actions-section {
+            display: flex;
+            justify-content: flex-start;
+            padding: 0.8rem 0;
+            border-top: 2px solid rgba(228, 0, 124, 0.1);
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 15px 15px;
+            margin: 0 -1.2rem -1.2rem -1.2rem;
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
+        }
+
+        .btn-beauty {
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #9017b8 0%, #521396 100%);
             color: white;
+            box-shadow: 0 6px 20px rgba(144, 23, 184, 0.3);
+            text-transform: none;
+            letter-spacing: 0.3px;
+            position: relative;
+            z-index: 10;
         }
 
-        .btn-primary-beauty:hover {
-            background: linear-gradient(135deg, #6a267f 0%, #c3006a 100%);
+        .btn-beauty:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(228, 0, 124, 0.4);
+            box-shadow: 0 8px 25px rgba(144, 23, 184, 0.5);
             color: white;
         }
 
-        /* Botón secundario - Volver */
-        .btn-secondary-beauty {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            color: white;
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        .btn-secondary-beauty:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #3d4043 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
-            color: white;
-        }
-
-        /* Responsive mejorado */
         @media (max-width: 768px) {
+            html {
+                overflow: auto !important;
+            }
+
+            body {
+                overflow-y: auto !important;
+            }
+
             .container {
-                margin: 0 0.25rem;
-                padding: 1rem;
+                height: auto;
+                min-height: calc(100vh - 2rem);
+                overflow: visible;
             }
 
             .beauty-header h2 {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
 
-            .button-group {
+            .client-info {
                 flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .btn-beauty {
-                width: 100%;
-                max-width: 250px;
-                min-width: auto;
+                gap: 0.8rem;
             }
 
             .client-details {
-                padding: 0.8rem;
-            }
-
-            dt {
-                font-size: 0.8rem;
-            }
-
-            dd {
-                font-size: 0.85rem;
-            }
-
-            .age-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .age-icon {
-                width: 35px;
-                height: 35px;
-                font-size: 0.9rem;
+                text-align: center;
             }
 
             .client-name {
-                font-size: 0.9rem;
+                font-size: 1.4rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                overflow-y: visible;
+                overflow-y: visible;
+            }
+
+            .age-card .card-value {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+
+            .actions-section {
+                justify-content: center;
+            }
+
+            .card-label {
+                font-size: 0.95rem;
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 480px) {
             .beauty-header h2 {
                 font-size: 1.2rem;
                 flex-direction: column;
                 gap: 5px;
             }
 
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.4rem;
+            }
+
             .btn-beauty {
-                padding: 0.45rem 1rem;
-                font-size: 0.75rem;
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 1.5rem;
+                font-size: 0.8rem;
             }
 
-            .container {
-                padding: 0.8rem;
-            }
-
-            .client-name {
-                font-size: 0.85rem;
+            .card-label {
+                font-size: 0.9rem;
             }
         }
 
-        /* Ajuste para pantallas muy pequeñas en altura */
-        @media (max-height: 700px) {
-            body {
-                padding: 0.25rem 0;
-            }
-
-            .container {
-                padding: 0.8rem;
-            }
-
-            .beauty-header {
-                margin-bottom: 0.8rem;
-            }
-
-            .client-details {
-                margin-bottom: 0.8rem;
-            }
-
-            .button-group {
-                margin-top: 0.8rem;
-                padding-top: 0.8rem;
-            }
+        /* Loading animations */
+        .info-card {
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+            opacity: 0;
         }
 
-        /* Ajuste para que dt y dd estén más cerca horizontalmente */
-        dl.row.gx-1,
-        dl.row.gx-1 > * {
-            padding-left: 0.25rem !important;
-            padding-right: 0.25rem !important;
+        .info-card:nth-child(1) { animation-delay: 0.1s; }
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.3s; }
+        .info-card:nth-child(4) { animation-delay: 0.4s; }
+        .info-card:nth-child(5) { animation-delay: 0.5s; }
+        .info-card:nth-child(6) { animation-delay: 0.6s; }
+        .info-card:nth-child(7) { animation-delay: 0.7s; }
+
+        /* Accessibility */
+        .btn-beauty:focus {
+            outline: 3px solid rgba(144, 23, 184, 0.5);
+            outline-offset: 2px;
+        }
+
+        .info-card:focus-within {
+            outline: 2px solid rgba(228, 0, 124, 0.5);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
+    <!-- Header -->
     <div class="beauty-header">
-        <h2><i class="fas fa-user-circle"></i> Detalles del Cliente</h2>
+        <h2>
+            <i class="fas fa-user-circle"></i>
+            Perfil del cliente
+        </h2>
     </div>
 
-    <div class="client-details">
-        <dl class="row gx-1 align-items-center">
-            <!-- Nombre del cliente -->
-            <dt class="col-sm-3">
-                <i class="fas fa-user"></i>
-                Nombre:
-            </dt>
-            <dd class="col-sm-9">
-                <div class="client-name">
-                    {{ $cliente->nombre ?? 'María Elena González' }}
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <!-- Client Header -->
+        <div class="client-header">
+            <div class="client-info">
+                <div class="client-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-            </dd>
+                <div class="client-details">
+                    <div class="client-name">{{ $cliente->nombre ?? 'María González' }}</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Info Grid -->
+        <div class="info-grid">
             <!-- Teléfono -->
-            <dt class="col-sm-3">
-                <i class="fas fa-phone"></i>
-                Teléfono:
-            </dt>
-            <dd class="col-sm-9">{{ $cliente->telefono ?? '98765432' }}</dd>
-
-            <!-- Identidad -->
-            <dt class="col-sm-3">
-                <i class="fas fa-id-card"></i>
-                Identidad:
-            </dt>
-            <dd class="col-sm-9">{{ $cliente->identidad ?? '0801199012345' }}</dd>
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="card-label">Teléfono</div>
+                </div>
+                <div class="card-value">
+                    @if($cliente->telefono ?? false)
+                        <a href="tel:{{ $cliente->telefono }}">
+                            <i class="fas fa-phone"></i>
+                            {{ $cliente->telefono }}
+                        </a>
+                    @else
+                        <a href="tel:+504-9876-5432">
+                            <i class="fas fa-phone"></i>
+                            +504-9876-5432
+                        </a>
+                    @endif
+                </div>
+            </div>
 
             <!-- Correo -->
-            <dt class="col-sm-3">
-                <i class="fas fa-envelope"></i>
-                Correo:
-            </dt>
-            <dd class="col-sm-9">{{ $cliente->correo ?? 'maria.gonzalez@gmail.com' }}</dd>
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-at"></i>
+                    </div>
+                    <div class="card-label">Correo electrónico</div>
+                </div>
+                <div class="card-value">{{ $cliente->correo ?? 'maria.gonzalez@email.com' }}</div>
+            </div>
 
-            <!-- Fecha de nacimiento y edad -->
-            @php
-                $fechaNacimiento = $cliente->fecha_nacimiento ?? '1990-05-15';
-                $edad = \Carbon\Carbon::parse($fechaNacimiento)->age;
-            @endphp
+            <!-- Identidad -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="card-label">Identidad</div>
+                </div>
+                <div class="card-value">{{ $cliente->identidad ?? '0801-1990-12345' }}</div>
+            </div>
 
-                    <!-- Fecha de nacimiento -->
-            <dt class="col-sm-3">
-                <i class="fas fa-birthday-cake"></i>
-                Fecha de nacimiento:
-            </dt>
-            <dd class="col-sm-9">{{ \Carbon\Carbon::parse($fechaNacimiento)->format('d/m/Y') }}</dd>
+            <!-- Fecha de Nacimiento -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="card-label">Fecha de Nacimiento</div>
+                </div>
+                <div class="card-value">
+                    @if($cliente->fecha_nacimiento ?? false)
+                        {{ \Carbon\Carbon::parse($cliente->fecha_nacimiento)->format('d/m/Y') }}
+                    @else
+                        15/03/1990
+                    @endif
+                </div>
+            </div>
 
             <!-- Edad -->
-            <dt class="col-sm-3">
-                <i class="fas fa-hourglass-half"></i>
-                Edad:
-            </dt>
-            <dd class="col-sm-9">
-                <div class="age-container">
-                    <div class="age-icon">
+            <div class="info-card age-card">
+                <div class="card-header">
+                    <div class="card-icon">
                         <i class="fas fa-birthday-cake"></i>
                     </div>
-                    <div class="age-info">
-                        <div class="age-primary">{{ $edad }} años</div>
-                        <div class="age-category">
+                    <div class="card-label">Edad</div>
+                </div>
+                <div class="card-value">
+                    @if($cliente->fecha_nacimiento ?? false)
+                        @php
+                            $fechaNacimiento = \Carbon\Carbon::parse($cliente->fecha_nacimiento);
+                            $hoy = \Carbon\Carbon::now();
+                            $edad = $fechaNacimiento->age;
+                            $diasTotales = floor($fechaNacimiento->diffInDays($hoy));
+                            $mesesTotales = floor($fechaNacimiento->diffInMonths($hoy));
+                        @endphp
+                        @if($diasTotales < 30)
+                            <span class="age-number">{{ $diasTotales }}</span>
+                            <span class="age-text">{{ $diasTotales == 1 ? 'día' : 'días' }}</span>
+                        @elseif($edad == 0)
+                            <span class="age-number">{{ $mesesTotales }}</span>
+                            <span class="age-text">{{ $mesesTotales == 1 ? 'mes' : 'meses' }}</span>
+                        @else
+                            <span class="age-number">{{ $edad }}</span>
+                            <span class="age-text">{{ $edad == 1 ? 'año' : 'años' }}</span>
+                        @endif
+                        <span class="age-category">
                             @if($edad < 18)
                                 Menor de edad
-                            @elseif($edad >= 18 && $edad < 65)
+                            @elseif($edad < 65)
                                 Adulto
                             @else
                                 Adulto mayor
                             @endif
-                        </div>
-                    </div>
+                        </span>
+                    @else
+                        <span class="age-number">34</span>
+                        <span class="age-text">años</span>
+                        <span class="age-category">Adulto</span>
+                    @endif
                 </div>
-            </dd>
+            </div>
 
-            <!-- Sexo -->
-            <dt class="col-sm-3">
-                <i class="fas fa-venus-mars"></i>
-                Sexo:
-            </dt>
-            <dd class="col-sm-9">
-                <span class="sex-badge sex-{{ $cliente->sexo ?? 'femenino' }}">
-                    <i class="fas fa-{{ ($cliente->sexo ?? 'femenino') == 'femenino' ? 'venus' : 'mars' }}"></i>
-                    {{ ucfirst($cliente->sexo ?? 'Femenino') }}
-                </span>
-            </dd>
+            <!-- Género -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-venus-mars"></i>
+                    </div>
+                    <div class="card-label">Género</div>
+                </div>
+                <div class="card-value">
+                    @if($cliente->sexo ?? false)
+                        <div class="gender-badge gender-{{ strtolower($cliente->sexo) == 'femenino' ? 'female' : 'male' }}">
+                            <i class="fas fa-{{ strtolower($cliente->sexo) == 'femenino' ? 'venus' : 'mars' }}"></i>
+                            {{ ucfirst($cliente->sexo) }}
+                        </div>
+                    @else
+                        <div class="gender-badge gender-female">
+                            <i class="fas fa-venus"></i>
+                            Femenino
+                        </div>
+                    @endif
+                </div>
+            </div>
 
             <!-- Dirección -->
-            <dt class="col-sm-3">
-                <i class="fas fa-map-marker-alt"></i>
-                Dirección:
-            </dt>
-            <dd class="col-sm-9">
-                <textarea readonly class="form-control" rows="3">{{ $cliente->direccion ?? 'Col. Miraflores, Tegucigalpa, Honduras' }}</textarea>
-            </dd>
-        </dl>
-    </div>
+            <div class="info-card address-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="card-label">Dirección</div>
+                </div>
+                <div class="address-value">
+                    {{ $cliente->direccion ?? 'Colonia Los Profesionales, Bloque M, Casa #25, Tegucigalpa, Francisco Morazán, Honduras. Referencia: Frente al parque central, portón color azul.' }}
+                </div>
+            </div>
+        </div>
 
-    <div class="button-group">
-        <a href="{{ route('clientes.index') }}" class="btn btn-beauty btn-secondary-beauty">
-            <i class="fas fa-arrow-left"></i>
-            Volver al listado
-        </a>
+        <!-- Actions -->
+        <div class="actions-section">
+            <a href="{{ route('clientes.index') }}" class="btn-beauty">
+                <i class="fas fa-arrow-left"></i>
+                Volver al listado
+            </a>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const clientNameElement = document.querySelector('.client-name');
+        if (clientNameElement) {
+            const nameLength = clientNameElement.textContent.trim().length;
+            if (nameLength > 25) {
+                clientNameElement.classList.add('long-name');
+            }
+        }
+
+
+// Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Simular volver al listado
+                console.log('Volver al listado');
+            }
+        });
+
+        document.querySelectorAll('.btn-beauty').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.opacity = '0.8';
+                setTimeout(() => this.style.opacity = '1', 200);
+            });
+        });
+
+
+        // Add hover effects to cards
+        document.querySelectorAll('.info-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.01)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+</script>
 </body>
 </html>

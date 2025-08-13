@@ -1,58 +1,62 @@
-<table class="table table-bordered table-hover align-middle text-center">
+
+<div id="first-item" data-value="{{ $empleados->firstItem() }}" style="display:none;"></div>
+
+<table id="tabla-empleados" class="table table-bordered table-hover align-middle text-center" style="table-layout: fixed; width: 100%;">
     <thead>
     <tr>
-        <th>#</th>
-        <th>Nombre</th>
-        <th>Cargo</th>
-        <th>Estado</th>
-        <th>Fecha de Ingreso</th>
-        <th>Acciones</th>
+        <th style="width: 5%;">#</th>
+        <th style="width: 30%;">Nombre</th>
+        <th style="width: 20%;">Cargo</th>
+        <th style="width: 12%;">Estado</th>
+        <th style="width: 18%;">Fecha de Ingreso</th>
+        <th style="width: 15%;">Acciones</th>
     </tr>
     </thead>
     <tbody>
     @forelse($empleados as $index => $empleado)
-        <tr class="{{ strtolower(trim($empleado->estado)) === 'inactivo' ? 'inactivo' : '' }}">
+        <tr
+                class="{{ strtolower(trim($empleado->estado)) !== 'activo' ? 'inactivo' : '' }}"
+                data-estado="{{ strtolower($empleado->estado) }}"
+                data-nombre="{{ strtolower($empleado->nombre_empleado) }}"
+                data-cargo="{{ strtolower($empleado->cargo) }}"
+                style="cursor: default;"
+        >
             <td>{{ $empleados->firstItem() + $index }}</td>
-            <td>{{ $empleado->nombre_empleado }}</td>
-            <td>{{ $empleado->cargo }}</td>
-            <td>{{ ucfirst($empleado->estado) }}</td>
+            <td class="text-truncate" style="max-width: 250px;" title="{{ $empleado->nombre_empleado }}">
+                {{ $empleado->nombre_empleado }}
+            </td>
+            <td class="text-truncate" title="{{ $empleado->cargo }}">{{ ucfirst($empleado->cargo) }}</td>
+            <td>
+                @if ($empleado->estado == 'activo')
+                    <span class="badge bg-success">Activo</span>
+                @else
+                    <span class="badge bg-secondary">Inactivo</span>
+                @endif
+            </td>
             <td>{{ \Carbon\Carbon::parse($empleado->fecha_ingreso)->format('d/m/Y') }}</td>
-            <td class="acciones-btns">
-                <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn-editar">Editar</a>
-                <a href="{{ route('empleados.show', $empleado->id) }}" class="btn-ver">Ver</a>
-
-
+            <td>
+                <div class="acciones-btns">
+                    <a href="{{ route('empleados.show', $empleado->id) }}" class="btn-ver">Ver</a>
+                    <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn-editar">Editar</a>
+                </div>
             </td>
         </tr>
     @empty
-        <!-- Mensaje dinámico para filtros -->
-        <tr id="fila-mensaje" style="display:none;">
-            <td colspan="6" class="text-center text-muted" style="font-style: italic;"></td>
-        </tr>
-
     @endforelse
+
+    <!-- Mensaje dinámico para filtros -->
+    <tr id="fila-mensaje" style="display:none;">
+        <td colspan="6" class="text-center text-muted" style="font-style: italic;"></td>
+    </tr>
     </tbody>
 </table>
 
-@if ($empleados->hasPages())
-    <div class="d-flex flex-column align-items-center mt-4">
-        <div class="text-muted small mb-2">
-            Mostrando {{ $empleados->firstItem() }} a {{ $empleados->lastItem() }} de {{ $empleados->total() }} resultados
+<div class="pagination-container" id="paginacion">
+    @if($empleados->hasPages())
+        <div class="pagination-info mb-2 text-center">
+            Mostrando del {{ $empleados->firstItem() }} al {{ $empleados->lastItem() }} de {{ $empleados->total() }} empleados
         </div>
-        <nav>
-            <ul class="pagination justify-content-center m-0">
-                <li class="page-item {{ $empleados->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $empleados->previousPageUrl() }}" aria-label="Anterior">Anterior</a>
-                </li>
-                @foreach ($empleados->getUrlRange(1, $empleados->lastPage()) as $page => $url)
-                    <li class="page-item {{ $page == $empleados->currentPage() ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                    </li>
-                @endforeach
-                <li class="page-item {{ !$empleados->hasMorePages() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $empleados->nextPageUrl() }}" aria-label="Siguiente">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-@endif
+    @endif
+
+    {{ $empleados->appends(request()->query())->links('pagination::bootstrap-5') }}
+</div>

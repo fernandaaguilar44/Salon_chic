@@ -15,6 +15,7 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CitaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,6 +82,7 @@ Route::controller(ClienteController::class)->group(function () {
 
 });
 
+
 Route::resource('facturas', FacturaController::class);
 Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
 Route::get('/facturas/create', [FacturaController::class, 'create'])->name('facturas.create');
@@ -93,4 +95,23 @@ Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, '
 Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
 Route::get('/facturas/checkUniqueNumeroFactura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
 Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name('proveedores.buscar');
+
+
+// Agregar estas rutas a tu archivo web.php
+
+Route::controller(CitaController::class)->group(function () {
+    Route::get('/citas', 'index')->name('citas.index');           // ✔ Listado principal
+    Route::get('/citas/buscar', 'buscar')->name('citas.buscar');  // ✔ Filtro AJAX
+    Route::get('/citas/create', 'create')->name('citas.create');  // ✔ Formulario crear
+    Route::post('/citas', 'store')->name('citas.store');          // ✔ Guardar nueva cita
+
+    Route::get('/citas/{cita}', 'show')->name('citas.show');      // ✔ Ver detalles
+    Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit'); // ✔ Formulario editar
+    Route::put('/citas/{cita}', 'update')->name('citas.update');  // ✔ Guardar cambios
+
+
+// ✅ Opción 1: Ruta específica
+    Route::get('/citas-disponibilidad', [App\Http\Controllers\CitaController::class, 'disponibilidad'])->name('citas.disponibilidad');
+
+});
 
