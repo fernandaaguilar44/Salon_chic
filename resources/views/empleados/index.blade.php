@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Listado de Empleados</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
     <style>
         body {
@@ -13,6 +14,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             padding: 1rem 0;
+            overflow-x: hidden;
         }
 
         .container {
@@ -62,48 +64,27 @@
             margin: 15px auto;
             border-radius: 2px;
         }
-        .btn-editar {
+
+        .btn-editar, .btn-ver {
             background: linear-gradient(135deg, #7B2A8D, #FF69B4);
             color: white;
             border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .btn-editar:hover {
+        .btn-editar:hover, .btn-ver:hover {
             background: linear-gradient(135deg, #6a217f, #f955a9);
-            box-shadow: 0 8px 20px rgba(123, 42, 141, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn-ver {
-            background: linear-gradient(135deg, #7B2A8D, #FF69B4);
+            box-shadow: 0 4px 15px rgba(123, 42, 141, 0.3);
+            transform: translateY(-1px);
             color: white;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
         }
 
-        .btn-ver:hover {
-            background: linear-gradient(135deg, #6a217f, #f955a9);
-            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn-ver:hover {
-            background: linear-gradient(135deg, #9963d0, #653bb7);
-            box-shadow: 0 8px 20px rgba(138, 82, 204, 0.4);
-            transform: translateY(-2px);
-        }
-
-
-        /* Filtros mejorados */
         .filters-container {
             background: rgba(123, 42, 141, 0.05);
             border: 2px solid rgba(228, 0, 124, 0.1);
@@ -139,21 +120,6 @@
             background: white;
         }
 
-        /* Estilo para el contador de resultados */
-        .results-counter {
-            font-size: 0.75rem;
-            color: #28a745;
-            margin-top: 0.25rem;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .results-counter.show {
-            opacity: 1;
-        }
-
-        /* Tabla mejorada */
         .table-container {
             border-radius: 15px;
             overflow: hidden;
@@ -174,15 +140,6 @@
             font-weight: 600;
             font-size: 0.9rem;
             text-align: center;
-            position: relative;
-        }
-
-        .table thead th:first-child {
-            border-top-left-radius: 0;
-        }
-
-        .table thead th:last-child {
-            border-top-right-radius: 0;
         }
 
         .table tbody td {
@@ -191,10 +148,6 @@
             border-color: rgba(228, 0, 124, 0.1);
             font-size: 0.9rem;
             text-align: center;
-        }
-
-        .table tbody tr {
-            transition: all 0.3s ease;
         }
 
         .table tbody tr:hover {
@@ -211,7 +164,6 @@
             color: #6c757d;
         }
 
-        /* Botones mejorados */
         .btn-beauty {
             padding: 0.7rem 1.5rem;
             border-radius: 25px;
@@ -236,53 +188,29 @@
             color: white;
         }
 
-        .btn-secondary-beauty {
-            background: linear-gradient(135deg, #9017b8 0%, #521396 100%);
-            color: white;
-        }
-
-        .btn-secondary-beauty:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
-            color: white;
-        }
-
-        .btn-warning-beauty {
-            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-            color: #212529;
-        }
-
-        .btn-warning-beauty:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
-            color: #212529;
-        }
-
         .acciones-btns {
             display: flex;
-            gap: 0.5rem;
+            flex-direction: row;
             justify-content: center;
-            flex-wrap: wrap;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
         }
 
-        .acciones-btns a {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-        }
-
-        /* Paginación mejorada y centrada */
         .pagination-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            gap: 0.25rem;
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
         }
 
         .pagination {
-            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
             gap: 4px;
+            margin: 0;
         }
 
         .pagination .page-item .page-link {
@@ -318,7 +246,6 @@
             pointer-events: none;
         }
 
-        /* Alertas mejoradas */
         .alert {
             border-radius: 15px;
             border: none;
@@ -331,43 +258,21 @@
             border-left: 4px solid #28a745;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                margin: 0 0.5rem;
-                padding: 1.5rem;
-            }
-
-            .filters-container {
-                padding: 1rem;
-            }
-
-            .beauty-header h2 {
-                font-size: 1.5rem;
-            }
-
-            .table-responsive {
-                border-radius: 15px;
-            }
-
             .acciones-btns {
-                flex-direction: column;
-                gap: 0.25rem;
+                display: flex;
+                gap: 0.4rem;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: nowrap;
             }
 
             .acciones-btns a {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .pagination {
-                flex-wrap: wrap;
-                gap: 2px;
-            }
-
-            .pagination .page-link {
-                padding: 0.4rem 0.6rem;
+                padding: 0.4rem 1rem;
                 font-size: 0.8rem;
+                border-radius: 15px;
+                font-weight: 600;
+                white-space: nowrap;
             }
         }
 
@@ -379,6 +284,43 @@
             .filters-container .row > div {
                 margin-bottom: 1rem;
             }
+
+            .pagination-container + div[role="status"] {
+                display: none !important;
+            }
+
+            div[role="status"] {
+                display: none !important;
+            }
+        }
+
+        /* Ocultar específicamente elementos con role="status" */
+        div[role="status"] {
+            display: none !important;
+        }
+
+        /* Ocultar divs automáticos de Laravel que no sean nuestra paginación personalizada */
+        .pagination-container > div:not(.pagination):not(.pagination-info):not(nav) {
+            display: none !important;
+        }
+
+        /* Ocultar párrafos y spans automáticos que no sean de nuestra paginación */
+        .pagination-container p:not(.pagination-info),
+        .pagination-container span:not(.page-link):not(.badge):not(.pagination-info *) {
+            display: none !important;
+        }
+
+        /* Específicamente para elementos que contengan "Showing" */
+        .pagination-container [class*="showing"],
+        .pagination-container [class*="results"],
+        .pagination-container [id*="showing"],
+        .pagination-container [id*="results"] {
+            display: none !important;
+        }
+
+        /* Ocultar texto que aparezca fuera de los elementos de paginación */
+        .pagination-container > *:not(.pagination):not(.pagination-info):not(nav) {
+            display: none !important;
         }
     </style>
 </head>
@@ -395,84 +337,140 @@
         </div>
     @endif
 
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><i class="fas fa-check-circle"></i> ¡Éxito!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    @endif
+
+    <!-- Botón registrar nuevo empleado -->
+    <div class="row mb-3">
+        <div class="col-12 text-end">
+            <a href="{{ route('empleados.create') }}" class="btn btn-beauty btn-primary-beauty">
+                <i class="fas fa-user-plus"></i> Registrar un nuevo empleado
+            </a>
+        </div>
+    </div>
+
     <div class="filters-container">
         <div class="row align-items-end">
-            <div class="col-md-4 mb-3 mb-md-0">
+            <div class="col-md-6 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-search"></i> Buscar empleado
                 </label>
-                <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre o cargo...">
-
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre o cargo..." autocomplete="off">
             </div>
-            <div class="col-md-4 mb-3 mb-md-0">
+            <div class="col-md-6 mb-3 mb-md-0">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-filter"></i> Filtrar por estado
                 </label>
                 <select id="estado" class="form-select">
                     <option value="">Todos los estados</option>
-                    <option value="activo">Empleados activos</option>
-                    <option value="inactivo">Empleados inactivos</option>
+                    <option value="activo">Activos</option>
+                    <option value="inactivo">Inactivos</option>
                 </select>
-            </div>
-            <div class="col-md-4 text-end">
-                <a href="{{ route('empleados.create') }}" class="btn btn-beauty btn-primary-beauty">
-                    <i class="fas fa-user-plus"></i> Registrar un nuevo empleado
-                </a>
             </div>
         </div>
     </div>
 
     <div class="table-container">
-        <div id="tabla-empleados">
+        <div id="tabla-container">
             @include('empleados.partials.tabla')
         </div>
     </div>
-</div><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function buscarEmpleados() {
-        let buscar = $('#buscar').val();
-        let estado = $('#estado').val();
-
-        $.ajax({
-            url: '{{ route('empleados.buscar') }}',
-            type: 'GET',
-            data: { buscar: buscar, estado: estado },
-            success: function(data) {
-                $('#tabla-empleados').html(data);
-                mostrarMensajeResultados();
-            }
-        });
-    }
-
-    function mostrarMensajeResultados() {
-        let filas = $('#tabla-empleados table tbody tr');
-        let filaMensaje = $('#fila-mensaje');
-        let totalFilas = 0;
-
-        // Contar solo filas visibles (evitar contar la fila del mensaje si está)
-        filas.each(function () {
-            if (!$(this).is('#fila-mensaje')) {
-                totalFilas++;
-            }
-        });
-
-        if (totalFilas === 0) {
-            filaMensaje.find('td').text('No se encontraron empleados.');
-            filaMensaje.show();
-        } else {
-            filaMensaje.find('td').text(`${totalFilas} ${totalFilas === 1 ? 'empleado encontrado' : 'empleados encontrados'}.`);
-            filaMensaje.show();
-        }
-    }
-
+    // Búsqueda completa con retraso
     let searchTimeout;
-    $('#buscar').on('input', function () {
+    $('#buscar').on('input', function() {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(buscarEmpleados, 500);
+        searchTimeout = setTimeout(() => filtrarEmpleados(1), 300);
     });
 
-    $('#estado').on('change', buscarEmpleados);
+    $('#estado').on('change', () => filtrarEmpleados(1));
+
+    function filtrarEmpleados(page = 1) {
+        const buscar = $('#buscar').val();
+        const estado = $('#estado').val();
+
+        $.ajax({
+            url: "{{ route('empleados.buscar') }}?page=" + page,
+            type: 'GET',
+            data: { buscar, estado },
+            success: function(data) {
+                $('#tabla-container').html(data.tabla);
+
+                const totalFiltrados = data.totalFiltrado;
+                const totalGeneral = data.totalGeneral;
+
+                const estaFiltrando = buscar !== '' || estado !== '';
+
+                const filaMensaje = $('#fila-mensaje');
+                const celdaMensaje = filaMensaje.find('td');
+
+                if (estaFiltrando) {
+                    filaMensaje.show();
+                    $('#paginacion').hide();
+                    $('div[role="status"], .pagination-info').hide();
+
+                    if (totalFiltrados > 0) {
+                        celdaMensaje.html(`
+                            <div class="alert alert-info text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #ffeef8, #f3e6f9); color: #7B2A8D;">
+                                <i class="fas fa-info-circle"></i> ${totalFiltrados} resultado${totalFiltrados > 1 ? 's' : ''} de ${totalGeneral} empleado${totalGeneral > 1 ? 's' : ''}.
+                            </div>
+                        `);
+                    } else {
+                        celdaMensaje.html(`
+                            <div class="alert alert-warning text-center mb-0 p-2 rounded-pill" role="alert" style="background: linear-gradient(135deg, #fff3cd, #fae9b5); color: #856404;">
+                                <i class="fas fa-exclamation-circle"></i> No se encontraron empleados.
+                            </div>
+                        `);
+                    }
+
+                } else {
+                    filaMensaje.hide();
+                    celdaMensaje.text('');
+                    $('#paginacion').show();
+                    $('div[role="status"], .pagination-info').show();
+                }
+
+                ocultarTextoInglesPaginacion();
+            },
+
+            error: function() {
+                alert('Error al filtrar los empleados');
+            }
+        });
+    }
+
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        const url = new URL($(this).attr('href'), window.location.origin);
+        const page = url.searchParams.get('page');
+        filtrarEmpleados(page);
+    });
+
+    function ocultarTextoInglesPaginacion() {
+        document.querySelectorAll('div[role="status"]').forEach(div => {
+            if (/Showing \d+ to \d+ of \d+ results/.test(div.textContent)) {
+                div.style.display = 'none';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        ocultarTextoInglesPaginacion();
+        filtrarEmpleados(1);
+    });
+
+    $(document).on('click', '.pagination a', function() {
+        setTimeout(ocultarTextoInglesPaginacion, 100);
+    });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -14,31 +14,16 @@ return new class extends Migration
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
 
-            // Datos básicos del servicio
+
             $table->string('nombre_servicio', 50);
             $table->text('descripcion');
             $table->string('codigo_servicio', 7)->unique();
-
-            // Clasificación clara según cargo y tipo
             $table->enum('tipo_servicio', [
                 'cabello', 'manicura', 'pedicura']);
-
             $table->enum('categoria_servicio', ['basico', 'intermedio', 'avanzado']);
-
-
-            // Información comercial
             $table->integer('precio_base');
-
-            // Duración y preparación
-            $table->integer('duracion_estimada'); // minutos
-
-
-
-            // Estado y visibilidad
+            $table->integer('duracion_estimada');
             $table->enum('estado', ['activo', 'inactivo', 'temporalmente_suspendido']);
-
-
-
             $table->timestamps();
         });
     }

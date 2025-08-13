@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil del Cliente - Salón de Belleza</title>
+    <title>Detalles de la Cita - Salón de Belleza</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -34,7 +34,6 @@
             flex-direction: column;
             height: calc(100vh - 2rem);
             overflow: hidden;
-            position: relative;
         }
 
         @keyframes slideInUp {
@@ -75,7 +74,7 @@
         }
 
         /* Main Content */
-        .profile-content {
+        .appointment-content {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -84,8 +83,8 @@
             overflow: hidden;
         }
 
-        /* Client Header */
-        .client-header {
+        /* Appointment Header */
+        .appointment-header {
             background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
             border: 2px solid rgba(228, 0, 124, 0.15);
             border-radius: 15px;
@@ -106,14 +105,14 @@
             }
         }
 
-        .client-info {
+        .appointment-info {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1.5rem;
         }
 
-        .client-avatar {
+        .appointment-icon {
             width: 65px;
             height: 65px;
             border-radius: 50%;
@@ -126,44 +125,73 @@
             flex-shrink: 0;
         }
 
-        .client-avatar i {
+        .appointment-icon i {
             color: white;
             font-size: 1.6rem;
         }
 
-        .client-details {
+        .appointment-details {
             text-align: left;
             flex: 1;
             min-width: 0;
         }
 
-        .client-name {
+        .appointment-title {
             font-size: 1.6rem;
             font-weight: 700;
             color: #7B2A8D;
             margin-bottom: 0.3rem;
             line-height: 1.2;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-            display: block;
         }
 
-        @media (min-width: 500px) {
-            .client-name {
-                text-align: center;
-            }
+        .appointment-client {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
         }
 
-        .client-name.long-name {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
-            text-align: left;
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        .status-programada {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1565c0;
+            border: 2px solid #42a5f5;
+        }
+
+        .status-confirmada {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 2px solid #66bb6a;
+        }
+
+        .status-en-proceso {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            color: #ef6c00;
+            border: 2px solid #ffb74d;
+        }
+
+        .status-completada {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            color: #7b1fa2;
+            border: 2px solid #ba68c8;
+        }
+
+        .status-cancelada {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 2px solid #ef5350;
+        }
 
         /* Info Grid */
         .info-grid {
@@ -172,12 +200,8 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 0.8rem;
             min-height: 0;
-            overflow: hidden;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            overflow-y: auto;
+            padding-right: 5px;
         }
 
         .info-card {
@@ -257,81 +281,91 @@
             word-break: break-word;
         }
 
+        /* DateTime Card */
+        .datetime-card {
+            background: linear-gradient(135deg, rgba(228, 0, 124, 0.05), rgba(123, 42, 141, 0.02));
+            border-left: 4px solid #7B2A8D;
+        }
+
+        .datetime-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-section, .time-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.6rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            flex: 1;
+        }
+
+        .date-day {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #E4007C;
+            line-height: 1;
+        }
+
+        .date-month {
+            font-size: 0.8rem;
+            color: #7B2A8D;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
+        .time-display {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
         /* Special Cards */
-        .age-card .card-value {
+        .price-card .card-value {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
+            gap: 0.3rem;
         }
 
-        .age-number {
+        .price-amount {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #d97706;
+            color: #059669;
         }
 
-        .age-text {
-            color: #92400e;
+        .price-currency {
+            color: #047857;
             font-weight: 600;
             font-size: 0.9rem;
         }
 
-        .age-category {
+        .duration-badge {
             background: linear-gradient(135deg, #fef3c7, #fcd34d);
             color: #92400e;
-            padding: 0.2rem 0.5rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 12px;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            text-transform: none;
             border: 1px solid #f59e0b;
-        }
-
-        .gender-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            padding: 0.4rem 0.7rem;
-            border-radius: 18px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: capitalize;
         }
 
-        .gender-female {
-            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
-            color: #be185d;
-            border: 2px solid #f9a8d4;
-        }
-
-        .gender-male {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            color: #1d4ed8;
-            border: 2px solid #93c5fd;
-        }
-
-        /* Address Card */
-        .address-card {
-            grid-column: 1 / -1;
-        }
-
-        .address-value {
-            background: rgba(248, 250, 252, 0.9);
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: 2px solid #e2e8f0;
-            font-style: italic;
-            line-height: 1.4;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            word-wrap: break-word;
-            word-break: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Phone Link */
+        /* Contact Link */
         a[href^="tel:"] {
             color: #059669;
             font-weight: 600;
@@ -350,6 +384,26 @@
             transform: scale(1.02);
         }
 
+        /* Notes Card */
+        .notes-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.9));
+            border-left: 4px solid #6366f1;
+        }
+
+        .notes-value {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-style: italic;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+            min-height: 50px;
+        }
+
         /* Actions */
         .actions-section {
             display: flex;
@@ -357,14 +411,6 @@
             padding: 0.8rem 0;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
-            position: sticky;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 0 0 15px 15px;
-            margin: 0 -1.2rem -1.2rem -1.2rem;
-            padding-left: 1.2rem;
-            padding-right: 1.2rem;
         }
 
         .btn-beauty {
@@ -378,18 +424,16 @@
             align-items: center;
             gap: 8px;
             text-decoration: none;
-            background: linear-gradient(135deg, #9017b8 0%, #521396 100%);
+            background: linear-gradient(135deg, #E4007C 0%, #7B2A8D 100%);
             color: white;
-            box-shadow: 0 6px 20px rgba(144, 23, 184, 0.3);
+            box-shadow: 0 6px 20px rgba(228, 0, 124, 0.3);
             text-transform: none;
             letter-spacing: 0.3px;
-            position: relative;
-            z-index: 10;
         }
 
         .btn-beauty:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(144, 23, 184, 0.5);
+            box-shadow: 0 8px 25px rgba(228, 0, 124, 0.5);
             color: white;
         }
 
@@ -419,37 +463,31 @@
                 font-size: 1.4rem;
             }
 
-            .client-info {
+            .appointment-info {
                 flex-direction: column;
                 gap: 0.8rem;
             }
 
-            .client-details {
+            .appointment-details {
                 text-align: center;
             }
 
-            .client-name {
+            .appointment-title {
                 font-size: 1.4rem;
             }
 
             .info-grid {
                 grid-template-columns: 1fr;
                 overflow-y: visible;
-                overflow-y: visible;
             }
 
-            .age-card .card-value {
+            .datetime-display {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.4rem;
+                gap: 0.5rem;
             }
 
             .actions-section {
                 justify-content: center;
-            }
-
-            .card-label {
-                font-size: 0.95rem;
             }
         }
 
@@ -472,10 +510,6 @@
                 padding: 0.7rem 1.5rem;
                 font-size: 0.8rem;
             }
-
-            .card-label {
-                font-size: 0.9rem;
-            }
         }
 
         /* Loading animations */
@@ -491,11 +525,29 @@
         .info-card:nth-child(4) { animation-delay: 0.4s; }
         .info-card:nth-child(5) { animation-delay: 0.5s; }
         .info-card:nth-child(6) { animation-delay: 0.6s; }
-        .info-card:nth-child(7) { animation-delay: 0.7s; }
+
+        /* Custom scrollbar */
+        .info-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .info-grid::-webkit-scrollbar-track {
+            background: rgba(228, 0, 124, 0.1);
+            border-radius: 3px;
+        }
+
+        .info-grid::-webkit-scrollbar-thumb {
+            background: rgba(228, 0, 124, 0.3);
+            border-radius: 3px;
+        }
+
+        .info-grid::-webkit-scrollbar-thumb:hover {
+            background: rgba(228, 0, 124, 0.5);
+        }
 
         /* Accessibility */
         .btn-beauty:focus {
-            outline: 3px solid rgba(144, 23, 184, 0.5);
+            outline: 3px solid rgba(228, 0, 124, 0.5);
             outline-offset: 2px;
         }
 
@@ -510,28 +562,131 @@
     <!-- Header -->
     <div class="beauty-header">
         <h2>
-            <i class="fas fa-user-circle"></i>
-            Perfil del cliente
+            <i class="fas fa-calendar-check"></i>
+            Detalles de la Cita
         </h2>
     </div>
 
-    <!-- Profile Content -->
-    <div class="profile-content">
-        <!-- Client Header -->
-        <div class="client-header">
-            <div class="client-info">
-                <div class="client-avatar">
-                    <i class="fas fa-user"></i>
+    <!-- Appointment Content -->
+    <div class="appointment-content">
+        <!-- Appointment Header -->
+        <div class="appointment-header">
+            <div class="appointment-info">
+                <div class="appointment-icon">
+                    <i class="fas fa-cut"></i>
                 </div>
-                <div class="client-details">
-                    <div class="client-name">{{ $cliente->nombre ?? 'María González' }}</div>
+                <div class="appointment-details">
+                    <div class="appointment-title">{{ $cita->servicio->nombre_servicio ?? 'Servicio no especificado' }}</div>
+                    <div class="appointment-client">{{ $cita->cliente->nombre ?? 'Cliente no especificado' }}</div>
+                    @php
+                        $statusConfig = [
+                            'programada' => ['class' => 'status-programada', 'icon' => 'fas fa-calendar-plus', 'text' => 'Programada'],
+                            'confirmada' => ['class' => 'status-confirmada', 'icon' => 'fas fa-check-circle', 'text' => 'Confirmada'],
+                            'en_proceso' => ['class' => 'status-en-proceso', 'icon' => 'fas fa-play-circle', 'text' => 'En Proceso'],
+                            'completada' => ['class' => 'status-completada', 'icon' => 'fas fa-check-double', 'text' => 'Completada'],
+                            'cancelada' => ['class' => 'status-cancelada', 'icon' => 'fas fa-times-circle', 'text' => 'Cancelada'],
+                        ];
+                        $currentStatus = $statusConfig[$cita->estado ?? 'programada'] ?? $statusConfig['programada'];
+                    @endphp
+                    <div class="status-badge {{ $currentStatus['class'] }}">
+                        <i class="{{ $currentStatus['icon'] }}"></i>
+                        {{ $currentStatus['text'] }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Info Grid -->
         <div class="info-grid">
-            <!-- Teléfono -->
+            <!-- Fecha y Hora -->
+            <div class="info-card datetime-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-clock"></i>
+                    </div>
+                    <div class="card-label">Fecha y Hora</div>
+                </div>
+                <div class="datetime-display">
+                    <div class="date-section">
+                        @if($cita->fecha ?? false)
+                            @php
+                                $fecha = \Carbon\Carbon::parse($cita->fecha);
+                                $meses = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+                            @endphp
+                            <div class="date-day">{{ $fecha->day }}</div>
+                            <div class="date-month">{{ $meses[$fecha->month - 1] }}</div>
+                        @else
+                            <div class="date-day">15</div>
+                            <div class="date-month">MAR</div>
+                        @endif
+                    </div>
+
+                    <div class="time-section">
+                        @if($cita->hora_inicio ?? false)
+                            @php
+                                $horaInicio = \Carbon\Carbon::parse($cita->hora_inicio);
+                            @endphp
+                            <div class="time-display">{{ $horaInicio->format('H:i') }}</div>
+                            <div class="time-label">Inicio</div>
+                        @else
+                            <div class="time-display">10:30</div>
+                            <div class="time-label">Inicio</div>
+                        @endif
+                    </div>
+
+                    <div class="time-section">
+                        @if($cita->hora_fin ?? false)
+                            @php
+                                $horaFin = \Carbon\Carbon::parse($cita->hora_fin);
+                            @endphp
+                            <div class="time-display">{{ $horaFin->format('H:i') }}</div>
+                            <div class="time-label">Fin</div>
+                        @elseif(($cita->hora_inicio ?? false) && ($cita->servicio->duracion_estimada ?? false))
+                            @php
+                                $horaInicio = \Carbon\Carbon::parse($cita->hora_inicio);
+                                $horaFin = $horaInicio->copy()->addMinutes($cita->servicio->duracion_estimada);
+                            @endphp
+                            <div class="time-display">{{ $horaFin->format('H:i') }}</div>
+                            <div class="time-label">Fin</div>
+                        @else
+                            <div class="time-display">12:00</div>
+                            <div class="time-label">Fin</div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duración -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="card-label">Duración</div>
+                </div>
+                <div class="card-value">
+                    <div class="duration-badge">
+                        <i class="fas fa-stopwatch"></i>
+                        {{ $cita->servicio->duracion_estimada ?? '90' }} min
+                    </div>
+                </div>
+            </div>
+
+            <!-- Precio -->
+            <div class="info-card price-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="card-label">Precio</div>
+                </div>
+                <div class="card-value">
+                    <span class="price-currency">L.</span>
+                    <span class="price-amount">{{ number_format($cita->precio_final ?? $cita->servicio->precio_base ?? 0, 2) }}</span>
+                </div>
+            </div>
+
+            <!-- Teléfono Cliente -->
             <div class="info-card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -540,10 +695,10 @@
                     <div class="card-label">Teléfono</div>
                 </div>
                 <div class="card-value">
-                    @if($cliente->telefono ?? false)
-                        <a href="tel:{{ $cliente->telefono }}">
+                    @if($cita->cliente->telefono ?? false)
+                        <a href="tel:{{ $cita->cliente->telefono }}">
                             <i class="fas fa-phone"></i>
-                            {{ $cliente->telefono }}
+                            {{ $cita->cliente->telefono }}
                         </a>
                     @else
                         <a href="tel:+504-9876-5432">
@@ -554,129 +709,36 @@
                 </div>
             </div>
 
-            <!-- Correo -->
+            <!-- Estilista -->
             <div class="info-card">
                 <div class="card-header">
                     <div class="card-icon">
-                        <i class="fas fa-at"></i>
+                        <i class="fas fa-user-tie"></i>
                     </div>
-                    <div class="card-label">Correo electrónico</div>
+                    <div class="card-label">Estilista</div>
                 </div>
-                <div class="card-value">{{ $cliente->correo ?? 'maria.gonzalez@email.com' }}</div>
+                <div class="card-value">{{ $cita->empleado->nombre_empleado ?? 'No asignado' }}</div>
             </div>
 
-            <!-- Identidad -->
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-id-card"></i>
-                    </div>
-                    <div class="card-label">Identidad</div>
-                </div>
-                <div class="card-value">{{ $cliente->identidad ?? '0801-1990-12345' }}</div>
-            </div>
-
-            <!-- Fecha de Nacimiento -->
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="card-label">Fecha de Nacimiento</div>
-                </div>
-                <div class="card-value">
-                    @if($cliente->fecha_nacimiento ?? false)
-                        {{ \Carbon\Carbon::parse($cliente->fecha_nacimiento)->format('d/m/Y') }}
-                    @else
-                        15/03/1990
-                    @endif
-                </div>
-            </div>
-
-            <!-- Edad -->
-            <div class="info-card age-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <div class="card-label">Edad</div>
-                </div>
-                <div class="card-value">
-                    @if($cliente->fecha_nacimiento ?? false)
-                        @php
-                            $fechaNacimiento = \Carbon\Carbon::parse($cliente->fecha_nacimiento);
-                            $hoy = \Carbon\Carbon::now();
-                            $edad = $fechaNacimiento->age;
-                            $diasTotales = floor($fechaNacimiento->diffInDays($hoy));
-                            $mesesTotales = floor($fechaNacimiento->diffInMonths($hoy));
-                        @endphp
-                        @if($diasTotales < 30)
-                            <span class="age-number">{{ $diasTotales }}</span>
-                            <span class="age-text">{{ $diasTotales == 1 ? 'día' : 'días' }}</span>
-                        @elseif($edad == 0)
-                            <span class="age-number">{{ $mesesTotales }}</span>
-                            <span class="age-text">{{ $mesesTotales == 1 ? 'mes' : 'meses' }}</span>
-                        @else
-                            <span class="age-number">{{ $edad }}</span>
-                            <span class="age-text">{{ $edad == 1 ? 'año' : 'años' }}</span>
-                        @endif
-                        <span class="age-category">
-                            @if($edad < 18)
-                                Menor de edad
-                            @elseif($edad < 65)
-                                Adulto
-                            @else
-                                Adulto mayor
-                            @endif
-                        </span>
-                    @else
-                        <span class="age-number">34</span>
-                        <span class="age-text">años</span>
-                        <span class="age-category">Adulto</span>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Género -->
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-venus-mars"></i>
-                    </div>
-                    <div class="card-label">Género</div>
-                </div>
-                <div class="card-value">
-                    @if($cliente->sexo ?? false)
-                        <div class="gender-badge gender-{{ strtolower($cliente->sexo) == 'femenino' ? 'female' : 'male' }}">
-                            <i class="fas fa-{{ strtolower($cliente->sexo) == 'femenino' ? 'venus' : 'mars' }}"></i>
-                            {{ ucfirst($cliente->sexo) }}
+            <!-- Observaciones -->
+            @if($cita->observaciones ?? false)
+                <div class="info-card notes-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-sticky-note"></i>
                         </div>
-                    @else
-                        <div class="gender-badge gender-female">
-                            <i class="fas fa-venus"></i>
-                            Femenino
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Dirección -->
-            <div class="info-card address-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="card-label">Observaciones</div>
                     </div>
-                    <div class="card-label">Dirección</div>
+                    <div class="notes-value">
+                        {{ $cita->observaciones }}
+                    </div>
                 </div>
-                <div class="address-value">
-                    {{ $cliente->direccion ?? 'Colonia Los Profesionales, Bloque M, Casa #25, Tegucigalpa, Francisco Morazán, Honduras. Referencia: Frente al parque central, portón color azul.' }}
-                </div>
-            </div>
+            @endif
         </div>
 
         <!-- Actions -->
         <div class="actions-section">
-            <a href="{{ route('clientes.index') }}" class="btn-beauty">
+            <a href="{{ route('citas.index') }}" class="btn-beauty">
                 <i class="fas fa-arrow-left"></i>
                 Volver al listado
             </a>
@@ -686,30 +748,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const clientNameElement = document.querySelector('.client-name');
-        if (clientNameElement) {
-            const nameLength = clientNameElement.textContent.trim().length;
-            if (nameLength > 25) {
-                clientNameElement.classList.add('long-name');
-            }
-        }
-
-
-// Keyboard navigation
+        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                // Simular volver al listado
-                console.log('Volver al listado');
+                window.location.href = '{{ route("citas.index") }}';
             }
         });
-
-        document.querySelectorAll('.btn-beauty').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.opacity = '0.8';
-                setTimeout(() => this.style.opacity = '1', 200);
-            });
-        });
-
 
         // Add hover effects to cards
         document.querySelectorAll('.info-card').forEach(card => {
@@ -721,6 +765,7 @@
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
+    });
 </script>
 </body>
 </html>

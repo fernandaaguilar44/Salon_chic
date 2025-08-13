@@ -386,6 +386,11 @@
         </div>
     @endif
 
+    <div class="text-end mb-4">
+        <a href="{{ route('servicios.create') }}" class="btn btn-beauty btn-primary-beauty">
+            <i class="fas fa-plus-circle"></i> Crear un servicio
+        </a>
+    </div>
 
     <div class="filters-container">
         <div class="row align-items-end">
@@ -416,14 +421,6 @@
                     <option value="inactivo">Inactivo</option>
                     <option value="temporalmente_suspendido">Suspendido temporalmente</option>
                 </select>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-md-12 text-end">
-                <a href="{{ route('servicios.create') }}" class="btn btn-beauty btn-primary-beauty">
-                    <i class="fas fa-plus-circle"></i> Crear un servicio
-                </a>
             </div>
         </div>
     </div>
@@ -529,3 +526,5 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

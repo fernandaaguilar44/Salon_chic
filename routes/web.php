@@ -7,6 +7,7 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CitaController;
 
 
 Route::get('/', function () {
@@ -56,5 +57,22 @@ Route::controller(ClienteController::class)->group(function () {
     Route::get('/clientes/{cliente}', 'show')->name('clientes.show');   // ❗ Ver detalles
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit'); // ❗ Formulario editar
     Route::put('/clientes/{cliente}', 'update')->name('clientes.update');  // ❗ Guardar cambios
+
+});
+// Agregar estas rutas a tu archivo web.php
+
+Route::controller(CitaController::class)->group(function () {
+    Route::get('/citas', 'index')->name('citas.index');           // ✔ Listado principal
+    Route::get('/citas/buscar', 'buscar')->name('citas.buscar');  // ✔ Filtro AJAX
+    Route::get('/citas/create', 'create')->name('citas.create');  // ✔ Formulario crear
+    Route::post('/citas', 'store')->name('citas.store');          // ✔ Guardar nueva cita
+
+    Route::get('/citas/{cita}', 'show')->name('citas.show');      // ✔ Ver detalles
+    Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit'); // ✔ Formulario editar
+    Route::put('/citas/{cita}', 'update')->name('citas.update');  // ✔ Guardar cambios
+
+
+// ✅ Opción 1: Ruta específica
+    Route::get('/citas-disponibilidad', [App\Http\Controllers\CitaController::class, 'disponibilidad'])->name('citas.disponibilidad');
 
 });

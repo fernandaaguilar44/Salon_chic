@@ -18,4 +18,5 @@ class Servicio extends Model
         'estado',
 
     ];
+
 }

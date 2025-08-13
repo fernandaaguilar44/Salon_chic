@@ -25,6 +25,7 @@ class Empleado extends Model
 
 
 
+
     public function llamados(){
         return $this->hasMany(LlamadoAtencion::class, 'empleado_id');
     }

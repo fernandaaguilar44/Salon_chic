@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -402,6 +400,15 @@
         </div>
     @endif
 
+    <!-- Botón registrar nuevo cliente -->
+    <div class="row mb-3">
+        <div class="col-12 text-end">
+            <a href="{{ route('clientes.create') }}" class="btn btn-beauty btn-primary-beauty">
+                <i class="fas fa-user-plus"></i> Registrar un nuevo cliente
+            </a>
+        </div>
+    </div>
+
     <!-- Filtros -->
     <div class="filters-container">
         <div class="row align-items-end">
@@ -421,14 +428,6 @@
                     <option value="femenino">Femenino</option>
                     <option value="masculino">Masculino</option>
                 </select>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-md-12 text-end">
-                <a href="{{ route('clientes.create') }}" class="btn btn-beauty btn-primary-beauty">
-                    <i class="fas fa-user-plus"></i> Registrar un nuevo cliente
-                </a>
             </div>
         </div>
     </div>

@@ -127,7 +127,7 @@ class ClienteController extends Controller
             'nombre' => ['required', 'string', 'max:50', 'regex:/^[\pL\s]+$/u'],
             'telefono' => [
                 'required',
-                'regex:/^[23789]\d{7}$/',
+                'regex:/^[2389]\d{7}$/',
                 'not_regex:/^0+$/',
                 'not_regex:/^(\d)\1{7}$/',
                 'unique:clientes,telefono'
@@ -142,8 +142,10 @@ class ClienteController extends Controller
                 'required',
                 'date',
                 'before_or_equal:today',
-                'after_or_equal:' . now()->subYears(90)->toDateString(),
+                'after_or_equal:' . now()->subYears(90)->toDateString(), // Este da formato Y-m-d
             ],
+
+
             'sexo' => ['required', 'in:masculino,femenino'],
             'correo' => [ 'required',
                 'email',
@@ -151,7 +153,14 @@ class ClienteController extends Controller
                 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 'unique:clientes,correo'
             ],
-            'direccion' => [ 'required','string', 'max:200', 'regex:/^[\pL0-9\s.,#\-]+$/u'],
+            'direccion' => [
+                'required',
+                'string',
+                'max:200',
+                'regex:/^(?=.*[a-zA-ZñÑ])[a-zA-ZñÑ0-9\s.,#\-]+$/u'
+            ]
+
+
         ];
 
         $messages = [
@@ -163,7 +172,7 @@ class ClienteController extends Controller
 
             // TELÉFONO
             'telefono.required' => 'Debe ingresar un número de teléfono.',
-            'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 7, 8 o 9 y contener 8 dígitos en total.',
+            'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 8 o 9 y contener 8 dígitos en total.',
             'telefono.not_regex' => 'El teléfono no puede ser solo ceros ni números repetidos.',
             'telefono.unique' => 'El número de teléfono ya está registrado.',
 
@@ -175,9 +184,9 @@ class ClienteController extends Controller
 
             // FECHA DE NACIMIENTO
             'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
-            'fecha_nacimiento.date' => 'La fecha de nacimiento debe ser una fecha válida.',
-            'fecha_nacimiento.before_or_equal' => 'La fecha de nacimiento no puede ser posterior a la fecha actual.',
-            'fecha_nacimiento.after_or_equal' => 'La fecha de nacimiento no puede ser anterior a hace 90 años.',
+            'fecha_nacimiento.date' => 'Ingrese una fecha válida.',
+            'fecha_nacimiento.before_or_equal' => 'La fecha no puede ser posterior a hoy.',
+            'fecha_nacimiento.after_or_equal' => 'La fecha debe ser de hace máximo 90 años.',
 
             // SEXO
             'sexo.required' => 'Debe seleccionar el sexo del cliente.',
@@ -192,9 +201,10 @@ class ClienteController extends Controller
 
             // DIRECCIÓN
             'direccion.required' => 'La dirección es obligatoria.',
-            'direccion.string' => 'La dirección debe ser texto válido.',
-            'direccion.max' => 'La dirección no puede exceder 200 caracteres.',
-            'direccion.regex' => 'La dirección contiene caracteres inválidos.',
+            'direccion.string' => 'La dirección debe ser válida.',
+            'direccion.max' => 'La dirección es demasiado larga.',
+            'direccion.regex' => 'La dirección no puede estar compuesta solo por números; debe contener letras y puede incluir algunos símbolos.',
+
         ];
 
         $validated = $request->validate($rules, $messages);
@@ -231,7 +241,7 @@ class ClienteController extends Controller
             'nombre' => ['required', 'string', 'max:50', 'regex:/^[\pL\s]+$/u'],
             'telefono' => [
                 'required',
-                'regex:/^[23789]\d{7}$/',
+                'regex:/^[2389]\d{7}$/',
                 'not_regex:/^0+$/',
                 'not_regex:/^(\d)\1{7}$/',
                 Rule::unique('clientes', 'telefono')->ignore($cliente->id)
@@ -247,7 +257,7 @@ class ClienteController extends Controller
                 'required',
                 'date',
                 'before_or_equal:today',
-                'after_or_equal:' . now()->subYears(90)->toDateString(),
+                'after_or_equal:' . now()->subYears(90)->toDateString(), // Este da formato Y-m-d
             ],
             'sexo' => ['required', 'in:masculino,femenino'],
             'correo' => [
@@ -257,7 +267,13 @@ class ClienteController extends Controller
                 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 Rule::unique('clientes', 'correo')->ignore($cliente->id)
             ],
-            'direccion' => ['required', 'string', 'max:200', 'regex:/^[\pL0-9\s.,#\-]+$/u'],
+            'direccion' => [
+                'required',
+                'string',
+                'max:200',
+                'regex:/^(?=.*[a-zA-ZñÑ])[a-zA-ZñÑ0-9\s.,#\-]+$/u'
+            ]
+
         ];
 
         $messages = [
@@ -268,7 +284,7 @@ class ClienteController extends Controller
             'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
 
             'telefono.required' => 'Debe ingresar un número de teléfono.',
-            'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 7, 8 o 9 y contener 8 dígitos en total.',
+            'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 8 o 9 y contener 8 dígitos en total.',
             'telefono.not_regex' => 'El teléfono no puede ser solo ceros ni números repetidos.',
             'telefono.unique' => 'El número de teléfono ya está registrado.',
 
@@ -279,9 +295,9 @@ class ClienteController extends Controller
 
             // FECHA DE NACIMIENTO
             'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
-            'fecha_nacimiento.date' => 'La fecha de nacimiento debe ser una fecha válida.',
-            'fecha_nacimiento.before_or_equal' => 'La fecha de nacimiento no puede ser posterior a la fecha actual.',
-            'fecha_nacimiento.after_or_equal' => 'La fecha de nacimiento no puede ser anterior a hace 100 años.',
+            'fecha_nacimiento.date' => 'Ingrese una fecha válida.',
+            'fecha_nacimiento.before_or_equal' => 'La fecha no puede ser posterior a hoy.',
+            'fecha_nacimiento.after_or_equal' => 'La fecha debe ser de hace máximo 90 años.',
 
             'sexo.required' => 'Debe seleccionar el sexo del cliente.',
             'sexo.in' => 'El sexo seleccionado no es válido.',
@@ -292,10 +308,12 @@ class ClienteController extends Controller
             'correo.regex' => 'El correo electrónico tiene un formato inválido.',
             'correo.unique' => 'El correo electrónico ya está registrado.',
 
+            // DIRECCIÓN
             'direccion.required' => 'La dirección es obligatoria.',
-            'direccion.string' => 'La dirección debe ser texto válido.',
-            'direccion.max' => 'La dirección no puede exceder 200 caracteres.',
-            'direccion.regex' => 'La dirección contiene caracteres inválidos.',
+            'direccion.string' => 'La dirección debe ser válida.',
+            'direccion.max' => 'La dirección es demasiado larga.',
+            'direccion.regex' => 'La dirección no puede estar compuesta solo por números; debe contener letras y puede incluir algunos símbolos.',
+
         ];
 
         // Validación

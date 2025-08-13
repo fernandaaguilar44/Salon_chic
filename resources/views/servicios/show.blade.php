@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Detalles del Servicio - Salón de Belleza</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Servicio - Salón de Belleza</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            padding: 0.5rem 0;
+            height: 100vh;
+            padding: 1rem;
             color: #333;
-            margin: 0;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
+            max-width: 1200px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             padding: 1.2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
+            box-shadow: 0 15px 35px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideInUp 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem);
+            overflow: hidden;
+            position: relative;
         }
 
         @keyframes slideInUp {
@@ -40,16 +48,19 @@
             }
         }
 
+        /* Header */
         .beauty-header {
             text-align: center;
-            margin-bottom: 1.2rem;
-            position: relative;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid rgba(228, 0, 124, 0.1);
+            flex-shrink: 0;
         }
 
         .beauty-header h2 {
             color: #7B2A8D;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
             display: flex;
@@ -60,40 +71,28 @@
 
         .beauty-header h2 i {
             color: #E4007C;
-            font-size: 1.3rem;
-            animation: bounce 2s infinite;
+            font-size: 1.6rem;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-8px);
-            }
-            60% {
-                transform: translateY(-4px);
-            }
+        /* Main Content */
+        .profile-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 0;
+            overflow: hidden;
         }
 
-        .beauty-header::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
-        /* Card de información del servicio */
-        .service-details {
-            background: linear-gradient(135deg, rgba(123, 42, 141, 0.05), rgba(228, 0, 124, 0.02));
-            border: 2px solid rgba(228, 0, 124, 0.1);
-            border-radius: 12px;
+        /* Service Header */
+        .service-header {
+            background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
+            border: 2px solid rgba(228, 0, 124, 0.15);
+            border-radius: 15px;
             padding: 1rem;
-            margin-bottom: 1rem;
+            text-align: center;
             animation: slideInDown 0.8s ease-out;
+            flex-shrink: 0;
         }
 
         @keyframes slideInDown {
@@ -107,436 +106,622 @@
             }
         }
 
-        dt {
-            font-weight: 700;
-            color: #7B2A8D;
-            font-size: 0.8rem;
+        .service-info {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 5px;
-            padding-left: 0.25rem; /* Ajuste menor padding horizontal */
-            padding-right: 0.25rem;
-        }
-
-        dt i {
-            color: #E4007C;
-            font-size: 0.75rem;
-            width: 14px;
-            text-align: center;
-        }
-
-        dd {
-            color: #444;
-            font-weight: 500;
-            font-size: 0.85rem;
-            margin-bottom: 0.6rem;
-            padding: 0.4rem 0.6rem;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 6px;
-            border-left: 3px solid #E4007C;
-            padding-left: 0.25rem; /* Ajuste menor padding horizontal */
-            padding-right: 0.25rem;
-        }
-
-        /* Estilo especial para el nombre del servicio */
-        .service-name {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #7B2A8D;
-            background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.05));
-            padding: 0.6rem 0.8rem;
-            border-radius: 8px;
-            border: 1px solid rgba(228, 0, 124, 0.2);
-            margin: 0;
-        }
-
-        .service-name i {
-            color: #E4007C;
-            font-size: 0.9rem;
-            animation: sparkle 2s infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
-        }
-
-        /* Elementos especiales para duración */
-        .duration-container {
-            background: linear-gradient(135deg, #fff8fc 0%, #f8f0ff 100%);
-            border: 2px solid rgba(228, 0, 124, 0.2);
-            border-radius: 8px;
-            padding: 0.8rem;
-            margin: 0;
-        }
-
-        .duration-display {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
-        }
-
-        .duration-primary {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #7B2A8D;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .duration-formatted {
-            font-size: 0.75rem;
-            color: #444;
-            background: rgba(123, 42, 141, 0.12);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .duration-bar {
-            height: 4px;
-            background: rgba(123, 42, 141, 0.15);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .duration-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #E4007C, #7B2A8D);
-            border-radius: 2px;
-            transition: width 1.5s ease-out;
-            animation: progressFill 2s ease-out;
-        }
-
-        @keyframes progressFill {
-            from { width: 0%; }
-        }
-
-        textarea[readonly] {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(228, 0, 124, 0.2);
-            border-radius: 8px;
-            padding: 0.5rem 0.7rem;
-            resize: none;
-            font-family: inherit;
-            color: #444;
-            font-weight: 500;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        textarea[readonly]:focus {
-            border-color: #E4007C;
-            box-shadow: 0 0 0 0.2rem rgba(228, 0, 124, 0.15);
-            background: white;
-        }
-
-        /* Estados especiales */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0.25rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-activo {
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.05));
-            color: #155724;
-            border: 1px solid rgba(40, 167, 69, 0.3);
-        }
-
-        .status-inactivo {
-            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.05));
-            color: #721c24;
-            border: 1px solid rgba(220, 53, 69, 0.3);
-        }
-
-        .status-temporalmente_suspendido {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05));
-            color: #856404;
-            border: 1px solid rgba(255, 193, 7, 0.3);
-        }
-
-        /* Grupo de botones */
-        .button-group {
-            display: flex;
-            gap: 0.7rem;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-top: 1.2rem;
-            padding-top: 1.2rem;
-            border-top: 2px solid rgba(228, 0, 124, 0.1);
-        }
-
-        .btn-beauty {
-            padding: 0.5rem 1.2rem;
-            font-size: 0.8rem;
-            border-radius: 20px;
-            font-weight: 600;
-            min-width: 140px;
-            text-align: center;
-            border: none;
-            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
+            gap: 1.5rem;
+        }
+
+        .service-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E4007C, #7B2A8D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(228, 0, 124, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            flex-shrink: 0;
+        }
+
+        .service-avatar i {
+            color: white;
+            font-size: 1.6rem;
+        }
+
+        .service-details {
+            text-align: left;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .service-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            display: block;
+        }
+
+        @media (min-width: 500px) {
+            .service-name {
+                text-align: center;
+            }
+        }
+
+        .service-name.long-name {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            text-align: left;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            min-height: 0;
             overflow: hidden;
         }
 
-        .btn-beauty::before {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 1rem;
+            border-left: 4px solid #E4007C;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: fit-content;
+        }
+
+        .info-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E4007C, #7B2A8D);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
 
-        .btn-beauty:hover::before {
-            left: 100%;
+        .info-card:hover::before {
+            transform: translateX(0);
         }
 
-        /* Botón secundario - Volver */
-        .btn-secondary-beauty {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(228, 0, 124, 0.2);
+            flex-shrink: 0;
+        }
+
+        .card-icon i {
+            color: #E4007C;
+            font-size: 1rem;
+        }
+
+        .card-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            text-transform: none;
+            letter-spacing: 0.3px;
+        }
+
+        .card-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.3;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* Special Cards */
+        .price-card .card-value {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .price-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .price-currency {
+            color: #047857;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .duration-card .card-value {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .duration-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #d97706;
+        }
+
+        .duration-text {
+            color: #92400e;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .duration-formatted {
+            background: linear-gradient(135deg, #fef3c7, #fcd34d);
+            color: #92400e;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: none;
+            border: 1px solid #f59e0b;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+        }
+
+        .status-activo {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            color: #065f46;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-inactivo {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+            color: #7f1d1d;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-temporalmente_suspendido {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            color: #78350f;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Type and Category badges */
+        .type-badge, .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: capitalize;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+            color: #3730a3;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Description Card */
+        .description-card {
+            grid-column: 1 / -1;
+        }
+
+        .description-value {
+            background: rgba(248, 250, 252, 0.9);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-style: italic;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        /* Actions */
+        .actions-section {
+            display: flex;
+            justify-content: flex-start;
+            padding: 0.8rem 0;
+            border-top: 2px solid rgba(228, 0, 124, 0.1);
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 15px 15px;
+            margin: 0 -1.2rem -1.2rem -1.2rem;
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
+        }
+
+        .btn-beauty {
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #9017b8 0%, #521396 100%);
             color: white;
+            box-shadow: 0 6px 20px rgba(144, 23, 184, 0.3);
+            text-transform: none;
+            letter-spacing: 0.3px;
+            position: relative;
+            z-index: 10;
         }
 
-        .btn-secondary-beauty:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #3d4043 100%);
+        .btn-beauty:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+            box-shadow: 0 8px 25px rgba(144, 23, 184, 0.5);
             color: white;
         }
 
-        /* Responsive mejorado */
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
+            html {
+                overflow: auto !important;
+            }
+
+            body {
+                overflow-y: auto !important;
+            }
+
             .container {
-                margin: 0 0.25rem;
-                padding: 1rem;
+                height: auto;
+                min-height: calc(100vh - 2rem);
+                overflow: visible;
             }
 
             .beauty-header h2 {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
 
-            .button-group {
+            .service-info {
                 flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .btn-beauty {
-                width: 100%;
-                max-width: 250px;
-                min-width: auto;
+                gap: 0.8rem;
             }
 
             .service-details {
-                padding: 0.8rem;
-            }
-
-            dt {
-                font-size: 0.75rem;
-            }
-
-            dd {
-                font-size: 0.8rem;
-            }
-
-            .duration-display {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+                text-align: center;
             }
 
             .service-name {
-                font-size: 0.85rem;
+                font-size: 1.4rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                overflow-y: visible;
+            }
+
+            .price-card .card-value, .duration-card .card-value {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+
+            .actions-section {
+                justify-content: center;
+            }
+
+            .card-label {
+                font-size: 0.95rem;
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 480px) {
             .beauty-header h2 {
                 font-size: 1.2rem;
                 flex-direction: column;
                 gap: 5px;
             }
 
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.4rem;
+            }
+
             .btn-beauty {
-                padding: 0.45rem 1rem;
-                font-size: 0.75rem;
-            }
-
-            .container {
-                padding: 0.8rem;
-            }
-
-            .service-name {
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 1.5rem;
                 font-size: 0.8rem;
             }
-        }
 
-        /* Ajuste para pantallas muy pequeñas en altura */
-        @media (max-height: 700px) {
-            body {
-                padding: 0.25rem 0;
-            }
-
-            .container {
-                padding: 0.8rem;
-            }
-
-            .beauty-header {
-                margin-bottom: 0.8rem;
-            }
-
-            .service-details {
-                margin-bottom: 0.8rem;
-            }
-
-            .button-group {
-                margin-top: 0.8rem;
-                padding-top: 0.8rem;
+            .card-label {
+                font-size: 0.9rem;
             }
         }
 
-        /* Ajuste para que dt y dd estén más cerca horizontalmente */
-        dl.row.gx-1,
-        dl.row.gx-1 > * {
-            padding-left: 0.25rem !important;
-            padding-right: 0.25rem !important;
+        /* Loading animations */
+        .info-card {
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+            opacity: 0;
+        }
+
+        .info-card:nth-child(1) { animation-delay: 0.1s; }
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.3s; }
+        .info-card:nth-child(4) { animation-delay: 0.4s; }
+        .info-card:nth-child(5) { animation-delay: 0.5s; }
+        .info-card:nth-child(6) { animation-delay: 0.6s; }
+        .info-card:nth-child(7) { animation-delay: 0.7s; }
+
+        /* Accessibility */
+        .btn-beauty:focus {
+            outline: 3px solid rgba(144, 23, 184, 0.5);
+            outline-offset: 2px;
+        }
+
+        .info-card:focus-within {
+            outline: 2px solid rgba(228, 0, 124, 0.5);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
+    <!-- Header -->
     <div class="beauty-header">
-        <h2><i class="fas fa-cut"></i> Detalles del Servicio</h2>
+        <h2>
+            <i class="fas fa-cut"></i>
+            Perfil del Servicio
+        </h2>
     </div>
 
-    <div class="service-details">
-        <dl class="row gx-1 align-items-center">  <!-- Cambié gx-2 a gx-1 para menos espacio -->
-            <dt class="col-sm-3">
-                <i class="fas fa-hashtag"></i>
-                Código:
-            </dt>
-            <dd class="col-sm-9">{{ $servicio->codigo_servicio }}</dd>
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <!-- Service Header -->
+        <div class="service-header">
+            <div class="service-info">
+                <div class="service-avatar">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="service-details">
+                    <div class="service-name">{{ $servicio->nombre_servicio ?? 'Corte y Peinado Premium' }}</div>
+                </div>
+            </div>
+        </div>
 
-            <dt class="col-sm-3">
-                <i class="fas fa-tag"></i>
-                Nombre:
-            </dt>
-            <dd class="col-sm-9">{{ $servicio->nombre_servicio }}</dd>
-
-            <dt class="col-sm-3">
-                <i class="fas fa-list"></i>
-                Tipo:
-            </dt>
-            <dd class="col-sm-9">{{ ucfirst($servicio->tipo_servicio) }}</dd>
-
-            <dt class="col-sm-3">
-                <i class="fas fa-layer-group"></i>
-                Categoría:
-            </dt>
-            <dd class="col-sm-9">{{ ucfirst($servicio->categoria_servicio) }}</dd>
-
-            <dt class="col-sm-3">
-                <i class="fas fa-money-bill-wave"></i>
-                Precio:
-            </dt>
-            <dd class="col-sm-9">L. {{ number_format($servicio->precio_base, 2) }}</dd>
-
-            @php
-                $totalMin = $servicio->duracion_estimada;
-                $horas = intdiv($totalMin, 60);
-                $minutos = $totalMin % 60;
-
-                $formatoHorasMin = '';
-                if ($horas > 0) {
-                    $formatoHorasMin .= $horas . 'h';
-                }
-                if ($minutos > 0) {
-                    $formatoHorasMin .= ($horas > 0 ? ' ' : '') . $minutos . 'min';
-                }
-                if ($horas == 0 && $minutos == 0) {
-                    $formatoHorasMin = '0min';
-                }
-            @endphp
-
-            <dt class="col-sm-3">
-                <i class="fas fa-clock"></i>
-                Duración:
-            </dt>
-            <dd class="col-sm-9">
-                <div class="duration-container">
-                    <div class="duration-display">
-                    <span class="duration-primary">
-                        <i class="fas fa-stopwatch"></i>
-                        {{ $totalMin }} minutos
-                    </span>
-                        @if($totalMin >= 60)
-                            <span class="duration-formatted">{{ $formatoHorasMin }}</span>
-                        @endif
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <!-- Código del Servicio -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-hashtag"></i>
                     </div>
-                    <div class="duration-bar">
-                        <div class="duration-progress" style="width: {{ min(($totalMin / 180) * 100, 100) }}%"></div>
+                    <div class="card-label">Código</div>
+                </div>
+                <div class="card-value">{{ $servicio->codigo_servicio ?? 'SVC-001' }}</div>
+            </div>
+
+            <!-- Tipo de Servicio -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div class="card-label">Tipo</div>
+                </div>
+                <div class="card-value">
+                    <div class="type-badge">
+                        <i class="fas fa-tag"></i>
+                        {{ ucfirst($servicio->tipo_servicio ?? 'premium') }}
                     </div>
                 </div>
-            </dd>
+            </div>
 
-            <dt class="col-sm-3">
-                <i class="fas fa-toggle-on"></i>
-                Estado:
-            </dt>
-            <dd class="col-sm-9">
-            <span class="status-badge status-{{ $servicio->estado }}">
-                <i class="fas fa-circle"></i>
-                {{ ucfirst($servicio->estado) }}
-            </span>
-            </dd>
+            <!-- Categoría -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="card-label">Categoría</div>
+                </div>
+                <div class="card-value">
+                    <div class="category-badge">
+                        <i class="fas fa-sitemap"></i>
+                        {{ ucfirst($servicio->categoria_servicio ?? 'cabello') }}
+                    </div>
+                </div>
+            </div>
 
-            <dt class="col-sm-3">
-                <i class="fas fa-align-left"></i>
-                Descripción:
-            </dt>
-            <dd class="col-sm-9">
-                <textarea readonly class="form-control" rows="3">{{ $servicio->descripcion }}</textarea>
-            </dd>
-        </dl>
-    </div>
+            <!-- Precio -->
+            <div class="info-card price-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-label">Precio</div>
+                </div>
+                <div class="card-value">
+                    <span class="price-number">L. {{ number_format($servicio->precio_base ?? 350.00, 2) }}</span>
+                    <span class="price-currency">Lempiras</span>
+                </div>
+            </div>
 
-    <div class="button-group">
-        <a href="{{ route('servicios.index') }}" class="btn btn-beauty btn-secondary-beauty">
-            <i class="fas fa-arrow-left"></i>
-            Volver al listado
-        </a>
+            <!-- Duración -->
+            <div class="info-card duration-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="card-label">Duración</div>
+                </div>
+                <div class="card-value">
+                    @php
+                        $totalMin = $servicio->duracion_estimada ?? 90;
+                        $horas = intdiv($totalMin, 60);
+                        $minutos = $totalMin % 60;
+
+                        $formatoHorasMin = '';
+                        if ($horas > 0) {
+                            $formatoHorasMin .= $horas . 'h';
+                        }
+                        if ($minutos > 0) {
+                            $formatoHorasMin .= ($horas > 0 ? ' ' : '') . $minutos . 'min';
+                        }
+                        if ($horas == 0 && $minutos == 0) {
+                            $formatoHorasMin = '0min';
+                        }
+                    @endphp
+                    @if($totalMin >= 60)
+                        <span class="duration-number">{{ $formatoHorasMin }}</span>
+                        <span class="duration-text">duración</span>
+                        <span class="duration-formatted">{{ $totalMin }} min total</span>
+                    @else
+                        <span class="duration-number">{{ $totalMin }}</span>
+                        <span class="duration-text">minutos</span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Estado -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-toggle-on"></i>
+                    </div>
+                    <div class="card-label">Estado</div>
+                </div>
+                <div class="card-value">
+                    <div class="status-badge status-{{ $servicio->estado ?? 'activo' }}">
+                        <i class="fas fa-circle"></i>
+                        {{ ucfirst(str_replace('_', ' ', $servicio->estado ?? 'activo')) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="info-card description-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-align-left"></i>
+                    </div>
+                    <div class="card-label">Descripción</div>
+                </div>
+                <div class="description-value">
+                    {{ $servicio->descripcion ?? 'Servicio premium de corte y peinado que incluye lavado con productos profesionales, corte personalizado según el tipo de rostro y cabello del cliente, peinado con técnicas modernas y acabado con productos de alta calidad para un resultado duradero y elegante.' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-section">
+            <a href="{{ route('servicios.index') }}" class="btn-beauty">
+                <i class="fas fa-arrow-left"></i>
+                Volver al listado
+            </a>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const serviceNameElement = document.querySelector('.service-name');
+        if (serviceNameElement) {
+            const nameLength = serviceNameElement.textContent.trim().length;
+            if (nameLength > 25) {
+                serviceNameElement.classList.add('long-name');
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Simular volver al listado
+                console.log('Volver al listado');
+            }
+        });
+
+        document.querySelectorAll('.btn-beauty').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.opacity = '0.8';
+                setTimeout(() => this.style.opacity = '1', 200);
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.info-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.01)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    });
+</script>
 </body>
 </html>
