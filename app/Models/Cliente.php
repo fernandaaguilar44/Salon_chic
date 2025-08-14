@@ -22,4 +22,7 @@ class Cliente extends Model
         return $this->hasMany(Venta::class);
     }
 
+
+
+
 }
