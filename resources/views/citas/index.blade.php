@@ -526,7 +526,8 @@
     </style>
 </head>
 
-<body>
+
+
 <div class="container">
     <div class="beauty-header">
         <h2><i class="fas fa-calendar-alt"></i> Listado de citas</h2>

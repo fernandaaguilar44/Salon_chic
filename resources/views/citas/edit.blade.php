@@ -248,6 +248,8 @@
     </style>
 </head>
 <body>
+
+
 <div class="container-fluid py-3">
     <div class="row justify-content-center">
         <div class="col-12 col-xl-8">
@@ -265,10 +267,11 @@
                     $faltaPoco = $fechaHoraCita->diffInHours($ahora) <= 2 && $fechaHoraCita->isFuture();
 
                     // Nuevas reglas de edición
-                    $citaFinalizada = $cita->estado === 'finalizada';
-                    $puedeEditarEmpleadoServicio = !$citaFinalizada; // Solo si NO está finalizada
-                    $puedeEditarFechaHora = !$citaFinalizada; // Solo si NO está finalizada
-                    $puedeEditarEstado = true; // El estado siempre se puede cambiar
+                   $citaFinalizada = $cita->estado === 'finalizada';
+                   $citaCancelada = $cita->estado === 'cancelada';
+                   $puedeEditarEmpleadoServicio = !$citaFinalizada && !$citaCancelada;
+                   $puedeEditarFechaHora = !$citaFinalizada && !$citaCancelada;
+                   $puedeEditarEstado = true; // El estado siempre se puede cambiar
 
                     // Información adicional para el "plus"
                     $estimadoFinCita = \Carbon\Carbon::parse($fechaCitaFormateada . ' ' . $horaInicioFormateada)
@@ -540,11 +543,7 @@
                             <i class="fas fa-save"></i> Guardar cambios
                         </button>
 
-                        @if($cita->estado === 'en_proceso')
-                            <button type="submit" name="accion" value="finalizar" class="btn btn-success">
-                                <i class="fas fa-check"></i> Finalizar cita
-                            </button>
-                        @endif
+
                     </div>
                 </form>
             </div>
@@ -592,14 +591,7 @@
         actualizarServicioInfo();
         servicioSelect.addEventListener('change', actualizarServicioInfo);
 
-        // Manejo del botón finalizar
-        const botonFinalizar = document.querySelector('[name="accion"][value="finalizar"]');
-        if (botonFinalizar) {
-            botonFinalizar.addEventListener('click', function(e) {
-                const estadoSelect = document.getElementById('estado');
-                estadoSelect.value = 'finalizada';
-            });
-        }
+
     });
 </script>
 </body>

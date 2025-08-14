@@ -250,10 +250,24 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+
+        }
+        .horario-ocupado {
+            display: inline-block;
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            padding: 0.3rem 0.6rem;
+            margin: 0.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #f1c40f;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-xl-10">
@@ -447,7 +461,6 @@
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Variables globales
@@ -474,44 +487,39 @@
         const disponibilidadEmpleado = document.getElementById('disponibilidadEmpleado');
         const loadingSpinner = document.getElementById('loadingSpinner');
 
-        // Datos filtrados del servidor (solo activos)
+        // Datos del servidor
         const clientes = @json($clientes);
         const servicios = @json($servicios);
         const empleados = @json($empleados);
 
-        // SISTEMA DE BÚSQUEDA LOCAL MEJORADO (MÁS RÁPIDO)
+        // Variables para timeouts
         let timeoutCliente, timeoutServicio, timeoutEmpleado;
 
-        // Búsqueda de clientes - Local y rápida
+        // ✅ BÚSQUEDAS LOCALES
         buscarClienteInput.addEventListener('input', function() {
             const busqueda = this.value.trim().toLowerCase();
-
             clearTimeout(timeoutCliente);
             timeoutCliente = setTimeout(() => {
                 if (busqueda.length >= 1) {
                     const resultados = clientes.filter(cliente =>
                         cliente.nombre.toLowerCase().includes(busqueda) ||
                         cliente.telefono.includes(busqueda)
-                    ).slice(0, 8); // Máximo 8 resultados para rapidez
-
+                    ).slice(0, 8);
                     mostrarResultadosCliente(resultados);
                 } else {
                     ocultarResultados(resultadosCliente);
                 }
-            }, 150); // Reducido de 300ms a 150ms
+            }, 150);
         });
 
-        // Búsqueda de servicios - Local y rápida
         buscarServicioInput.addEventListener('input', function() {
             const busqueda = this.value.trim().toLowerCase();
-
             clearTimeout(timeoutServicio);
             timeoutServicio = setTimeout(() => {
                 if (busqueda.length >= 1) {
                     const resultados = servicios.filter(servicio =>
                         servicio.nombre_servicio.toLowerCase().includes(busqueda)
                     ).slice(0, 8);
-
                     mostrarResultadosServicio(resultados);
                 } else {
                     ocultarResultados(resultadosServicio);
@@ -519,10 +527,8 @@
             }, 150);
         });
 
-        // Búsqueda de empleados - Local y rápida
         buscarEmpleadoInput.addEventListener('input', function() {
             const busqueda = this.value.trim().toLowerCase();
-
             clearTimeout(timeoutEmpleado);
             timeoutEmpleado = setTimeout(() => {
                 if (busqueda.length >= 1) {
@@ -530,7 +536,6 @@
                         empleado.nombre_empleado.toLowerCase().includes(busqueda) ||
                         (empleado.cargo && empleado.cargo.toLowerCase().includes(busqueda))
                     ).slice(0, 8);
-
                     mostrarResultadosEmpleado(resultados);
                 } else {
                     ocultarResultados(resultadosEmpleado);
@@ -538,6 +543,7 @@
             }, 150);
         });
 
+        // ✅ FUNCIONES DE MOSTRAR RESULTADOS
         function mostrarResultadosCliente(resultados) {
             if (resultados.length === 0) {
                 resultadosCliente.innerHTML = '<div class="no-results">No se encontraron clientes</div>';
@@ -562,11 +568,7 @@
                     if (duracion >= 60) {
                         const horas = Math.floor(duracion / 60);
                         const minutos = duracion % 60;
-                        if (minutos === 0) {
-                            duracionTexto = `${horas} h`;
-                        } else {
-                            duracionTexto = `${horas} h ${minutos} min`;
-                        }
+                        duracionTexto = minutos === 0 ? `${horas} h` : `${horas} h ${minutos} min`;
                     } else {
                         duracionTexto = `${duracion} min`;
                     }
@@ -595,7 +597,7 @@
             resultadosEmpleado.style.display = 'block';
         }
 
-        // MANEJO DE CLICS EN RESULTADOS
+        // ✅ MANEJO DE CLICS EN RESULTADOS
         document.addEventListener('click', function(e) {
             if (e.target.closest('.search-result-item')) {
                 const item = e.target.closest('.search-result-item');
@@ -613,34 +615,29 @@
                 }
             }
 
-            // Cerrar resultados cuando se hace clic fuera
             if (!e.target.closest('.search-container')) {
                 ocultarTodosLosResultados();
             }
         });
 
-        // FUNCIONES DE SELECCIÓN
+        // ✅ FUNCIONES DE SELECCIÓN
         function seleccionarCliente(id, nombre, telefono) {
             clienteIdInput.value = id;
             document.getElementById('nombreClienteSeleccionado').textContent = `${nombre} - ${telefono}`;
             clienteSeleccionado.style.display = 'block';
             buscarClienteInput.style.display = 'none';
             ocultarResultados(resultadosCliente);
+            limpiarYReverificar();
         }
 
         function seleccionarServicio(id, nombre, duracion, precio) {
             servicioIdInput.value = id;
 
-            // Formatear duración
             let duracionTexto;
             if (duracion >= 60) {
                 const horas = Math.floor(duracion / 60);
                 const minutos = duracion % 60;
-                if (minutos === 0) {
-                    duracionTexto = `${horas} h`;
-                } else {
-                    duracionTexto = `${horas} h ${minutos} min`;
-                }
+                duracionTexto = minutos === 0 ? `${horas} h` : `${horas} h ${minutos} min`;
             } else {
                 duracionTexto = `${duracion} min`;
             }
@@ -650,13 +647,13 @@
             buscarServicioInput.style.display = 'none';
             ocultarResultados(resultadosServicio);
 
-            // Mostrar información del servicio
             document.getElementById('duracionTexto').textContent = duracionTexto;
             document.getElementById('precioTexto').textContent = 'L. ' + precio;
             infoServicio.style.display = 'block';
 
             actualizarHoraFin();
             generarHorariosDisponibles();
+            limpiarYReverificar();
         }
 
         function seleccionarEmpleado(id, nombre, cargo) {
@@ -665,17 +662,17 @@
             empleadoSeleccionado.style.display = 'block';
             buscarEmpleadoInput.style.display = 'none';
             ocultarResultados(resultadosEmpleado);
-
-            verificarDisponibilidad();
+            limpiarYReverificar();
         }
 
-        // BOTONES CAMBIAR
+        // ✅ BOTONES CAMBIAR
         document.getElementById('cambiarCliente').addEventListener('click', function() {
             clienteIdInput.value = '';
             clienteSeleccionado.style.display = 'none';
             buscarClienteInput.style.display = 'block';
             buscarClienteInput.value = '';
             buscarClienteInput.focus();
+            limpiarEstadoDisponibilidad();
         });
 
         document.getElementById('cambiarServicio').addEventListener('click', function() {
@@ -685,6 +682,7 @@
             buscarServicioInput.value = '';
             buscarServicioInput.focus();
             infoServicio.style.display = 'none';
+            limpiarEstadoDisponibilidad();
         });
 
         document.getElementById('cambiarEmpleado').addEventListener('click', function() {
@@ -693,184 +691,15 @@
             buscarEmpleadoInput.style.display = 'block';
             buscarEmpleadoInput.value = '';
             buscarEmpleadoInput.focus();
-            disponibilidadEmpleado.style.display = 'none';
+            limpiarEstadoDisponibilidad();
         });
 
-        // FUNCIONES AUXILIARES
-        function ocultarResultados(elemento) {
-            elemento.style.display = 'none';
-        }
-
-        function ocultarTodosLosResultados() {
-            ocultarResultados(resultadosCliente);
-            ocultarResultados(resultadosServicio);
-            ocultarResultados(resultadosEmpleado);
-        }
-
-        // CONFIGURACIÓN DE FECHA (sin validaciones JavaScript)
-        const hoy = new Date();
-        const fecha3Meses = new Date();
-        fecha3Meses.setMonth(hoy.getMonth() + 3);
-
-        fechaInput.setAttribute('min', hoy.toISOString().split('T')[0]);
-        fechaInput.setAttribute('max', fecha3Meses.toISOString().split('T')[0]);
-
-        // Solo verificar disponibilidad cuando cambia la fecha (sin validaciones)
-        fechaInput.addEventListener('change', function() {
-            verificarDisponibilidad();
-        });
-
-        // GENERAR HORARIOS COMPLETOS (sin almuerzo ni 6PM)
-        function generarHorariosDisponibles() {
-            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
-
-            // Horarios: 8:00 AM - 11:00 AM, 1:00 PM - 5:00 PM (horas completas)
-            const horarios = [
-                '08:00', '09:00', '10:00', '11:00', // Mañana
-                '13:00', '14:00', '15:00', '16:00', '17:00' // Tarde (sin 12:00 almuerzo ni 18:00 cierre)
-            ];
-
-            horarios.forEach(hora => {
-                const option = document.createElement('option');
-                option.value = hora;
-                option.textContent = hora;
-                horaSelect.appendChild(option);
-            });
-        }
-
-        // Actualizar hora fin cuando cambia la hora de inicio
-        horaSelect.addEventListener('change', function() {
-            actualizarHoraFin();
-        });
-
-        // Contador de caracteres para observaciones
-        observacionesTextarea.addEventListener('input', function() {
-            const count = this.value.length;
-            contadorCaracteres.textContent = count;
-
-            if (count > 180) {
-                contadorCaracteres.style.color = '#dc3545';
-            } else {
-                contadorCaracteres.style.color = '#6c757d';
-            }
-        });
-
-        // Verificar disponibilidad del empleado - VERSIÓN CORREGIDA
+        // ✅ VERIFICACIÓN DE DISPONIBILIDAD
         function verificarDisponibilidad() {
             const empleadoId = empleadoIdInput.value;
+            const clienteId = clienteIdInput.value;
             const fecha = fechaInput.value;
 
-            if (!empleadoId || !fecha) {
-                disponibilidadEmpleado.style.display = 'none';
-                return;
-            }
-
-            loadingSpinner.style.display = 'inline-block';
-
-            // ✅ CORRECCIÓN: Usar GET con parámetros en la URL
-            const url = `{{ route('citas.disponibilidad') }}?empleado_id=${empleadoId}&fecha=${fecha}`;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Respuesta del servidor:', data); // ✅ Para debugging
-
-                    // ✅ VERIFICAR: Asegurar que la respuesta tiene la estructura correcta
-                    if (data.success !== false) {
-                        const horariosOcupados = data.horarios_ocupados || [];
-                        mostrarHorariosOcupados(horariosOcupados);
-                        marcarHorariosOcupados(horariosOcupados);
-                    } else {
-                        console.error('Error del servidor:', data.error || data.message);
-                        mostrarHorariosOcupados([]);
-                        marcarHorariosOcupados([]);
-                    }
-
-                    loadingSpinner.style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                    loadingSpinner.style.display = 'none';
-
-                    const contenedor = document.getElementById('horariosOcupados');
-                    contenedor.innerHTML = '<p class="text-danger">⚠️ No se puede registrar la cita: el empleado ya tiene otra cita en ese horario o el cliente está ocupado con otro servicio.</p>';
-                    disponibilidadEmpleado.style.display = 'block';
-
-
-                    // ✅ LIMPIAR SELECT DE HORAS
-                    marcarHorariosOcupados([]);
-                });
-        }
-
-// Mostrar horarios ocupados - VERSIÓN MEJORADA
-        function mostrarHorariosOcupados(horarios) {
-            const contenedor = document.getElementById('horariosOcupados');
-
-            if (!horarios || horarios.length === 0) {
-                contenedor.innerHTML = '<p class="text-success">✓ Empleado disponible todo el día</p>';
-            } else {
-                let html = '<p class="mb-2">Horarios ocupados:</p>';
-                horarios.forEach(horario => {
-                    // ✅ VALIDAR: Asegurar que horario tiene las propiedades necesarias
-                    const inicio = horario.inicio || horario.hora_inicio || 'N/A';
-                    const fin = horario.fin || horario.hora_fin || 'N/A';
-
-                    html += `<span class="horario-ocupado">${inicio} - ${fin}</span>`;
-                });
-                contenedor.innerHTML = html;
-            }
-
-            disponibilidadEmpleado.style.display = 'block';
-        }
-
-// Marcar horarios ocupados en el select - VERSIÓN MEJORADA
-        function marcarHorariosOcupados(horariosOcupados) {
-            const opciones = horaSelect.querySelectorAll('option');
-
-            // ✅ LIMPIAR: Resetear todas las opciones primero
-            opciones.forEach(option => {
-                if (!option.value) return;
-
-                option.disabled = false;
-                option.style.color = '';
-                option.textContent = option.value; // Remover el texto "(Ocupado)"
-            });
-
-            // ✅ VALIDAR: Solo procesar si hay horarios ocupados válidos
-            if (!horariosOcupados || horariosOcupados.length === 0) {
-                return;
-            }
-
-            opciones.forEach(option => {
-                if (!option.value) return;
-
-                const horaOpcion = option.value;
-                const esOcupado = horarioEstaOcupado(horaOpcion, horariosOcupados);
-
-                if (esOcupado) {
-                    option.disabled = true;
-                    option.style.color = '#dc3545';
-                    option.textContent = option.value + ' (Ocupado)';
-                }
-            });
-        }
-// Verificar disponibilidad del empleado - VERSIÓN CORREGIDA
-        function verificarDisponibilidad() {
-            const empleadoId = empleadoIdInput.value;
-            const fecha = fechaInput.value;
-
-            // ✅ LIMPIAR ESTADO ANTERIOR SIEMPRE
             limpiarEstadoDisponibilidad();
 
             if (!empleadoId || !fecha) {
@@ -880,143 +709,6 @@
 
             loadingSpinner.style.display = 'inline-block';
 
-            // Usar GET con parámetros en la URL
-            const url = `{{ route('citas.disponibilidad') }}?empleado_id=${empleadoId}&fecha=${fecha}`;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Respuesta del servidor:', data);
-
-                    if (data.success !== false) {
-                        const horariosOcupados = data.horarios_ocupados || [];
-                        mostrarHorariosOcupados(horariosOcupados);
-                        marcarHorariosOcupados(horariosOcupados);
-                    } else {
-                        console.error('Error del servidor:', data.error || data.message);
-                        mostrarHorariosOcupados([]);
-                        marcarHorariosOcupados([]);
-                    }
-
-                    loadingSpinner.style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                    loadingSpinner.style.display = 'none';
-
-                    // ✅ CAMBIO IMPORTANTE: No mostrar mensaje de error fijo
-                    // En su lugar, mostrar que no se pudo verificar disponibilidad
-                    const contenedor = document.getElementById('horariosOcupados');
-                    contenedor.innerHTML = '<p class="text-warning">⚠️ No se pudo verificar la disponibilidad. Verifique la conexión.</p>';
-                    disponibilidadEmpleado.style.display = 'block';
-
-                    // ✅ LIMPIAR SELECT DE HORAS (permitir selección)
-                    marcarHorariosOcupados([]);
-                });
-        }
-
-// ✅ NUEVA FUNCIÓN: Limpiar estado de disponibilidad
-        function limpiarEstadoDisponibilidad() {
-            // Limpiar contenedor de horarios ocupados
-            const contenedor = document.getElementById('horariosOcupados');
-            if (contenedor) {
-                contenedor.innerHTML = '';
-            }
-
-            // Ocultar sección de disponibilidad
-            if (disponibilidadEmpleado) {
-                disponibilidadEmpleado.style.display = 'none';
-            }
-
-            // Resetear todas las opciones del select de horas
-            marcarHorariosOcupados([]);
-
-            // Ocultar spinner
-            if (loadingSpinner) {
-                loadingSpinner.style.display = 'none';
-            }
-        }
-
-// Mostrar horarios ocupados - VERSIÓN MEJORADA
-        function mostrarHorariosOcupados(horarios) {
-            const contenedor = document.getElementById('horariosOcupados');
-
-            if (!horarios || horarios.length === 0) {
-                contenedor.innerHTML = '<p class="text-success">✓ Empleado disponible todo el día</p>';
-            } else {
-                let html = '<p class="mb-2">Horarios ocupados:</p>';
-                horarios.forEach(horario => {
-                    const inicio = horario.inicio || horario.hora_inicio || 'N/A';
-                    const fin = horario.fin || horario.hora_fin || 'N/A';
-                    html += `<span class="horario-ocupado">${inicio} - ${fin}</span>`;
-                });
-                contenedor.innerHTML = html;
-            }
-
-            disponibilidadEmpleado.style.display = 'block';
-        }
-
-// Cita.js (VERSIÓN CORREGIDA)
-        function horarioEstaOcupado(hora, horariosOcupados) {
-            const servicioId = servicioIdInput.value;
-            if (!servicioId) return false;
-
-            const servicio = servicios.find(s => s.id == servicioId);
-            if (!servicio) return false;
-
-            const duracionServicio = parseInt(servicio.duracion_estimada);
-
-            // Convertir la hora seleccionada y su fin en minutos para la comparación
-            const inicioSeleccionadoEnMinutos = convertirHoraAMinutos(hora);
-            const finSeleccionadoEnMinutos = inicioSeleccionadoEnMinutos + duracionServicio;
-
-            return horariosOcupados.some(ocupado => {
-                const inicioOcupadoStr = ocupado.inicio || ocupado.hora_inicio;
-                const finOcupadoStr = ocupado.fin || ocupado.hora_fin;
-
-                if (!inicioOcupadoStr || !finOcupadoStr) return false;
-
-                const inicioOcupadoEnMinutos = convertirHoraAMinutos(inicioOcupadoStr);
-                const finOcupadoEnMinutos = convertirHoraAMinutos(finOcupadoStr);
-
-                // ✅ LÓGICA DE SOLAPAMIENTO CORREGIDA
-                // Hay solapamiento si el inicio de una cita es antes del final de la otra Y viceversa.
-                const seSolapan = (inicioSeleccionadoEnMinutos < finOcupadoEnMinutos && finSeleccionadoEnMinutos > inicioOcupadoEnMinutos);
-
-                // Si la hora de inicio seleccionada es la misma que la hora de inicio de una cita ocupada
-                const esMismaHoraInicio = (inicioSeleccionadoEnMinutos === inicioOcupadoEnMinutos);
-
-                return seSolapan || esMismaHoraInicio;
-            });
-        }
-// Verificar disponibilidad del empleado Y cliente - VERSIÓN CORREGIDA
-        function verificarDisponibilidad() {
-            const empleadoId = empleadoIdInput.value;
-            const clienteId = clienteIdInput.value; // ✅ AGREGADO
-            const fecha = fechaInput.value;
-
-            // ✅ LIMPIAR ESTADO ANTERIOR SIEMPRE
-            limpiarEstadoDisponibilidad();
-
-            if (!empleadoId || !fecha) {
-                disponibilidadEmpleado.style.display = 'none';
-                return;
-            }
-
-            loadingSpinner.style.display = 'inline-block';
-
-            // ✅ CORREGIDO: Incluir cliente_id en la consulta
             let url = `{{ route('citas.disponibilidad') }}?empleado_id=${empleadoId}&fecha=${fecha}`;
             if (clienteId) {
                 url += `&cliente_id=${clienteId}`;
@@ -1054,75 +746,75 @@
                     console.error('Error en la petición:', error);
                     loadingSpinner.style.display = 'none';
 
-                    // ✅ CAMBIO IMPORTANTE: No mostrar mensaje de error fijo
-                    // En su lugar, mostrar que no se pudo verificar disponibilidad
                     const contenedor = document.getElementById('horariosOcupados');
                     contenedor.innerHTML = '<p class="text-warning">⚠️ No se pudo verificar la disponibilidad. Verifique la conexión.</p>';
                     disponibilidadEmpleado.style.display = 'block';
 
-                    // ✅ LIMPIAR SELECT DE HORAS (permitir selección)
                     marcarHorariosOcupados([]);
                 });
         }
 
-// ✅ NUEVA FUNCIÓN: Limpiar estado de disponibilidad
-        function limpiarEstadoDisponibilidad() {
-            // Limpiar contenedor de horarios ocupados
-            const contenedor = document.getElementById('horariosOcupados');
-            if (contenedor) {
-                contenedor.innerHTML = '';
-            }
-
-            // Ocultar sección de disponibilidad
-            if (disponibilidadEmpleado) {
-                disponibilidadEmpleado.style.display = 'none';
-            }
-
-            // Resetear todas las opciones del select de horas
-            marcarHorariosOcupados([]);
-
-            // Ocultar spinner
-            if (loadingSpinner) {
-                loadingSpinner.style.display = 'none';
-            }
-        }
-
-// Mostrar horarios ocupados - VERSIÓN MEJORADA
+        // ✅ MOSTRAR HORARIOS OCUPADOS (VERSIÓN ÚNICA MEJORADA)
         function mostrarHorariosOcupados(horarios) {
+            window.horariosOcupadosGlobal = horarios || [];
+
             const contenedor = document.getElementById('horariosOcupados');
 
             if (!horarios || horarios.length === 0) {
-                contenedor.innerHTML = '<p class="text-success">✓ Empleado disponible todo el día</p>';
+                contenedor.innerHTML = '<p class="text-success">✓ Empleado y cliente disponibles todo el día</p>';
             } else {
-                let html = '<p class="mb-2">Horarios ocupados:</p>';
-                horarios.forEach(horario => {
-                    const inicio = horario.inicio || horario.hora_inicio || 'N/A';
-                    const fin = horario.fin || horario.hora_fin || 'N/A';
-                    html += `<span class="horario-ocupado">${inicio} - ${fin}</span>`;
+                let html = '<p class="mb-2"><strong>Horarios ocupados hoy:</strong></p>';
+
+                const horariosFormateados = horarios.map(horario => {
+                    let inicio = horario.inicio || horario.hora_inicio || 'N/A';
+                    let fin = horario.fin || horario.hora_fin || 'N/A';
+
+                    if (inicio.includes('T')) {
+                        inicio = inicio.split('T')[1].substring(0, 5);
+                    }
+                    if (fin.includes('T')) {
+                        fin = fin.split('T')[1].substring(0, 5);
+                    }
+
+                    if (fin === 'N/A' || fin === inicio) {
+                        try {
+                            const [h, m] = inicio.split(':').map(Number);
+                            const inicioMinutos = h * 60 + m;
+                            const finMinutos = inicioMinutos + 60;
+                            const hFin = Math.floor(finMinutos / 60);
+                            const mFin = finMinutos % 60;
+                            fin = `${hFin.toString().padStart(2, '0')}:${mFin.toString().padStart(2, '0')}`;
+                        } catch (e) {
+                            fin = inicio;
+                        }
+                    }
+
+                    return { inicio, fin };
                 });
+
+                horariosFormateados.forEach(horario => {
+                    html += `<span class="horario-ocupado">${horario.inicio} - ${horario.fin}</span>`;
+                });
+
                 contenedor.innerHTML = html;
             }
 
             disponibilidadEmpleado.style.display = 'block';
         }
 
-// Marcar horarios ocupados en el select - VERSIÓN MEJORADA
+        // ✅ MARCAR HORARIOS OCUPADOS (VERSIÓN ÚNICA)
         function marcarHorariosOcupados(horariosOcupados) {
             const opciones = horaSelect.querySelectorAll('option');
 
-            // ✅ LIMPIAR: Resetear todas las opciones primero
             opciones.forEach(option => {
                 if (!option.value) return;
 
                 option.disabled = false;
                 option.style.color = '';
                 option.style.backgroundColor = '';
-                // ✅ MEJORADO: Remover texto "(Ocupado)" de manera más robusta
-                const textoOriginal = option.value;
-                option.textContent = textoOriginal;
+                option.textContent = option.value;
             });
 
-            // ✅ VALIDAR: Solo procesar si hay horarios ocupados válidos
             if (!horariosOcupados || horariosOcupados.length === 0) {
                 return;
             }
@@ -1142,7 +834,6 @@
             });
         }
 
-// Verificar si un horario está ocupado - VERSIÓN MEJORADA
         function horarioEstaOcupado(hora, horariosOcupados) {
             const servicioId = servicioIdInput.value;
             if (!servicioId) return false;
@@ -1164,7 +855,6 @@
                     const ocupadoInicio = convertirHoraAMinutos(inicioOcupado);
                     const ocupadoFin = finOcupado ? convertirHoraAMinutos(finOcupado) : ocupadoInicio + 60;
 
-                    // Verificar solapamiento
                     return (inicioMinutos < ocupadoFin && finMinutos > ocupadoInicio);
                 } catch (error) {
                     console.warn('Error procesando horario ocupado:', ocupado, error);
@@ -1173,20 +863,42 @@
             });
         }
 
-// Convertir hora a minutos
+        // ✅ FUNCIONES AUXILIARES
+        function limpiarEstadoDisponibilidad() {
+            const contenedor = document.getElementById('horariosOcupados');
+            if (contenedor) {
+                contenedor.innerHTML = '';
+            }
+
+            if (disponibilidadEmpleado) {
+                disponibilidadEmpleado.style.display = 'none';
+            }
+
+            marcarHorariosOcupados([]);
+
+            if (loadingSpinner) {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function limpiarYReverificar() {
+            limpiarEstadoDisponibilidad();
+            setTimeout(() => {
+                verificarDisponibilidad();
+            }, 100);
+        }
+
         function convertirHoraAMinutos(hora) {
             const [h, m] = hora.split(':').map(Number);
             return h * 60 + m;
         }
 
-// Convertir minutos a hora
         function convertirMinutosAHora(minutos) {
             const h = Math.floor(minutos / 60);
             const m = minutos % 60;
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
         }
 
-// Actualizar hora fin estimada
         function actualizarHoraFin() {
             const servicioId = servicioIdInput.value;
             const horaInicio = horaSelect.value;
@@ -1206,42 +918,65 @@
             }
         }
 
-// ✅ MEJORAR EVENT LISTENERS - Agregar limpieza automática
-// Event listener para cuando cambie el empleado
-        if (empleadoIdInput) {
-            empleadoIdInput.addEventListener('change', function() {
-                limpiarEstadoDisponibilidad();
-                setTimeout(() => {
-                    verificarDisponibilidad();
-                }, 100);
+        function generarHorariosDisponibles() {
+            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+
+            const horarios = [
+                '08:00', '09:00', '10:00', '11:00',
+                '13:00', '14:00', '15:00', '16:00', '17:00'
+            ];
+
+            horarios.forEach(hora => {
+                const option = document.createElement('option');
+                option.value = hora;
+                option.textContent = hora;
+                horaSelect.appendChild(option);
             });
         }
 
-// Event listener para cuando cambie la fecha
-        if (fechaInput) {
-            fechaInput.addEventListener('change', function() {
-                limpiarEstadoDisponibilidad();
-                setTimeout(() => {
-                    verificarDisponibilidad();
-                }, 100);
-            });
+        function ocultarResultados(elemento) {
+            elemento.style.display = 'none';
         }
 
-// Event listener para cuando cambie el cliente (puede afectar disponibilidad)
-        if (clienteIdInput) {
-            clienteIdInput.addEventListener('change', function() {
-                limpiarEstadoDisponibilidad();
-                setTimeout(() => {
-                    verificarDisponibilidad();
-                }, 100);
-            });
+        function ocultarTodosLosResultados() {
+            ocultarResultados(resultadosCliente);
+            ocultarResultados(resultadosServicio);
+            ocultarResultados(resultadosEmpleado);
         }
 
-// Botón limpiar - VERSIÓN MEJORADA
+        // ✅ EVENT LISTENERS
+        fechaInput.addEventListener('change', function() {
+            limpiarYReverificar();
+        });
+
+        horaSelect.addEventListener('change', function() {
+            actualizarHoraFin();
+        });
+
+        // ✅ CONFIGURACIÓN DE FECHA
+        const hoy = new Date();
+        const fecha3Meses = new Date();
+        fecha3Meses.setMonth(hoy.getMonth() + 3);
+
+        fechaInput.setAttribute('min', hoy.toISOString().split('T')[0]);
+        fechaInput.setAttribute('max', fecha3Meses.toISOString().split('T')[0]);
+
+        // ✅ CONTADOR DE CARACTERES
+        observacionesTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            contadorCaracteres.textContent = count;
+
+            if (count > 180) {
+                contadorCaracteres.style.color = '#dc3545';
+            } else {
+                contadorCaracteres.style.color = '#6c757d';
+            }
+        });
+
+        // ✅ BOTÓN LIMPIAR
         document.getElementById('btnLimpiar').addEventListener('click', function(e) {
             e.preventDefault();
 
-            // Limpiar todos los campos de búsqueda
             clienteIdInput.value = '';
             servicioIdInput.value = '';
             empleadoIdInput.value = '';
@@ -1250,7 +985,6 @@
             buscarServicioInput.value = '';
             buscarEmpleadoInput.value = '';
 
-            // Mostrar campos de búsqueda y ocultar cards seleccionados
             buscarClienteInput.style.display = 'block';
             buscarServicioInput.style.display = 'block';
             buscarEmpleadoInput.style.display = 'block';
@@ -1259,23 +993,17 @@
             servicioSeleccionado.style.display = 'none';
             empleadoSeleccionado.style.display = 'none';
 
-            // Limpiar otros campos
             fechaInput.value = '';
             horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
             observacionesTextarea.value = '';
 
-            // ✅ IMPORTANTE: Limpiar estado de disponibilidad
             limpiarEstadoDisponibilidad();
-
-            // Ocultar información adicional
             infoServicio.style.display = 'none';
             ocultarTodosLosResultados();
 
-            // Resetear contador
             contadorCaracteres.textContent = '0';
             contadorCaracteres.style.color = '#6c757d';
 
-            // Remover clases de error
             const campos = ['buscarCliente', 'buscarServicio', 'buscarEmpleado', 'fecha', 'hora_inicio', 'observaciones'];
             campos.forEach(campoId => {
                 const elemento = document.getElementById(campoId);
@@ -1284,34 +1012,35 @@
                 }
             });
 
-            // Ocultar mensajes de error
             document.querySelectorAll('.invalid-feedback').forEach(feedback => {
                 feedback.style.display = 'none';
             });
 
-            // Regenerar horarios
             generarHorariosDisponibles();
         });
 
-// ✅ NUEVA FUNCIÓN: Función auxiliar para las funciones de selección
-        function limpiarYReverificar() {
-            limpiarEstadoDisponibilidad();
-            setTimeout(() => {
-                verificarDisponibilidad();
-            }, 100);
-        }
+        // ✅ VALIDACIÓN DEL FORMULARIO
+        document.getElementById('citaForm').addEventListener('submit', function(e) {
+            const horaSeleccionada = horaSelect.value;
 
-// ✅ MODIFICAR las funciones de selección existentes para incluir limpieza
-// Agregar esto al final de las funciones seleccionarCliente, seleccionarEmpleado, etc.
-        /*
-        Al final de seleccionarCliente(), seleccionarEmpleado(), seleccionarServicio():
-        limpiarYReverificar();
-        */
+            // Solo bloquear si la hora está marcada como ocupada
+            if (horaSeleccionada) {
+                const opcionSeleccionada = horaSelect.querySelector(`option[value="${horaSeleccionada}"]`);
+                if (opcionSeleccionada && opcionSeleccionada.disabled) {
+                    e.preventDefault();
+                    horaSelect.focus();
+                    return false;
+                }
+            }
 
-// Inicializar horarios
+            // Permitir envío al servidor para validaciones de Laravel
+            return true;
+        });
+
+        // ✅ INICIALIZACIÓN
         generarHorariosDisponibles();
 
-// Restaurar valores old() si existen
+        // ✅ RESTAURAR VALORES OLD()
         const oldClienteId = '{{ old("cliente_id") }}';
         const oldServicioId = '{{ old("servicio_id") }}';
         const oldEmpleadoId = '{{ old("empleado_id") }}';
@@ -1335,6 +1064,13 @@
             if (empleado) {
                 seleccionarEmpleado(empleado.id, empleado.nombre_empleado, empleado.cargo || '');
             }
+        }
+
+        // ✅ VERIFICACIÓN INICIAL
+        if (oldClienteId || oldServicioId || oldEmpleadoId) {
+            setTimeout(() => {
+                verificarDisponibilidad();
+            }, 500);
         }
     });
 </script>
