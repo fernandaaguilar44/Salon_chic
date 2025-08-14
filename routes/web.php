@@ -1,14 +1,17 @@
 
 <?php
 
-
-
-
 use App\Http\Controllers\FacturaController;
-use App\Http\Controllers\ProductoController;
 
+use App\Http\Controllers\FacturadeCompraController;
+use App\Http\Controllers\FacturaVentaController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
+
 use Illuminate\Http\Request;
+
+
+use App\Http\Controllers\VentaController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
@@ -113,3 +116,13 @@ Route::controller(CitaController::class)->group(function () {
 
 });
 
+// Rutas para la gestión de Ventas
+Route::prefix('ventas')->group(function () {
+    Route::get('/', [FacturaVentaController::class, 'index'])->name('facturaventa.index');
+    Route::get('/create', [FacturaVentaController::class, 'create'])->name('facturaventa.create');
+    Route::post('/', [FacturaVentaController::class, 'store'])->name('facturaventa.store');
+    Route::get('/{ventas}', [FacturaVentaController::class, 'show'])->name('facturaventa.show');
+});
+
+Route::get('/api/clientes', [ClienteController::class, 'search'])->name('api.clientes.search');
+Route::get('/api/productos', [ProductoController::class, 'allProducts'])->name('api.productos.all');
