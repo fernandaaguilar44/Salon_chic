@@ -25,6 +25,13 @@ class Proveedor extends Model
     public function proveedor(){
     return $this->hasMany(Proveedor::class);
     }
+    // Un proveedor puede tener muchos productos
+    public function productos()
+    {
+        return $this->hasMany(Producto::class);
+    }
+
+    // Un proveedor puede tener muchas facturas
     public function facturas()
     {
         return $this->hasMany(Factura::class, 'proveedor_id');

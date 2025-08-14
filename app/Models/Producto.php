@@ -17,6 +17,7 @@ class Producto extends Model
         'codigo',
         'fecha_ingreso',
         'imagen',
+        'stock',
     ];
 
     public function proveedor()

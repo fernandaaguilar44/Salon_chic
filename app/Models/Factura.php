@@ -26,10 +26,12 @@ class Factura extends Model
         return $this->belongsTo(Proveedor::class);
     }
 
-    public function detalles(): HasMany
+    // Factura.php
+    public function detalles()
     {
         return $this->hasMany(DetalleFactura::class);
     }
+
 
     public function productos()
     {
