@@ -44,7 +44,7 @@ class FacturaVentaController extends Controller
         $clientes = Cliente::all();
         $productos = Producto::all();
         // ¡Vista corregida! Ahora apunta a 'facturaventas.create'
-        return view('facturaventas.create', compact('clientes', 'productos'));
+        return view('facturaventa.create', compact('clientes', 'productos'));
     }
 
     public function store(Request $request)

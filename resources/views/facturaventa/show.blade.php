@@ -388,7 +388,7 @@
     </div>
 
     <div class="button-group">
-        <a href="{{ route('ventas.index') }}" class="btn btn-beauty btn-secondary-beauty"> {{-- Ruta cambiada --}}
+        <a href="{{ route('facturaventa.index') }}" class="btn btn-beauty btn-secondary-beauty"> {{-- Ruta cambiada --}}
             <i class="fas fa-arrow-left"></i>
             Volver a la lista
         </a>

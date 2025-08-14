@@ -434,7 +434,7 @@
                 <h2><i class="fas fa-file-invoice-dollar"></i> Registrar Factura de Venta</h2>
 
                 {{-- La acción del formulario ahora apunta a la ruta de ventas --}}
-                <form id="ventaForm" method="POST" action="{{ route('ventas.store') }}" novalidate>
+                <form id="ventaForm" method="POST" action="{{ route('facturaventa.store') }}" novalidate>
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6 position-relative">
@@ -563,7 +563,7 @@
 
                     <div class="btn-group-left">
                         {{-- Botón de cancelar con ruta de ventas --}}
-                        <a href="{{ route('ventas.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
+                        <a href="{{ route('facturaventa.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
                         <button type="reset" class="btn btn-danger" id="btnLimpiarFactura"><i class="fas fa-eraser"></i> Limpiar</button>
                         {{-- Texto del botón de guardar actualizado --}}
                         <button type="submit" class="btn btn-primary">Guardar Venta</button>
