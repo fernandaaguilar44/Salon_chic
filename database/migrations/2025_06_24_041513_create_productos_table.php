@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('codigo')->unique();              // Código único
             $table->date('fecha_ingreso')->useCurrent();                   // Fecha de ingreso
             $table->string('imagen')->nullable();            // Ruta de imagen (opcional)
+            $table->integer('stock')->default(0); // Inventario disponible
             $table->timestamps();
         });
     }

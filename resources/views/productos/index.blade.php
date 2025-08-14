@@ -431,6 +431,7 @@
                     </th>
                     <th>Código</th>
                     <th>Categoría</th>
+                    <th>Stock</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -450,7 +451,7 @@
                         <td>{{ $producto->nombre }}</td>
                         <td>{{ $producto->codigo }}</td>
                         <td>{{ ucfirst($producto->categoria) }}</td>
-
+                        <td>{{ $producto->stock ?? 0 }}</td>
                         <td class="action-buttons">
                             <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-beauty btn-secondary-beauty btn-sm">
                                 Ver

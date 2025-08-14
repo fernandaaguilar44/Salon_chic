@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class DetalleFactura extends Model
 {
     use HasFactory;
-
-    // Si el nombre de tu tabla es distinto de 'detalle_facturas', descomenta y ajusta:
-    // protected $table = 'detalles_de_factura';
-
     protected $fillable = [
         'factura_id',
         'producto_id',

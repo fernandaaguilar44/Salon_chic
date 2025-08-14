@@ -8,7 +8,6 @@ use App\Models\Producto;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
@@ -48,6 +47,7 @@ class FacturaController extends Controller
 
     public function store(Request $request)
     {
+        // Validaciones
         $request->validate([
             'numero_factura' => 'required|string|max:50|unique:facturas,numero_factura',
             'proveedor_id' => 'required|exists:proveedores,id',
@@ -74,15 +74,16 @@ class FacturaController extends Controller
             'items.*.precio_unitario.numeric' => 'El precio unitario debe ser un número.',
             'items.*.precio_unitario.min' => 'El precio unitario debe ser al menos :min.',
             'items.*.tipo_impuesto.required' => 'El tipo de impuesto es obligatorio.',
-            'items.*.tipo_impuesto.string' => 'El tipo de impuesto debe ser una cadena de texto.',
             'items.*.tipo_impuesto.in' => 'El tipo de impuesto seleccionado no es válido.',
         ]);
-        try {
+
+        /*try {*/
             DB::transaction(function () use ($request) {
                 $importeExonerado = 0;
                 $importeExento = 0;
                 $importeGravado15 = 0;
 
+                // Calcular importes
                 foreach ($request->items as $item) {
                     $subtotal = $item['cantidad'] * $item['precio_unitario'];
                     if ($item['tipo_impuesto'] === 'exonerado') {
@@ -97,6 +98,7 @@ class FacturaController extends Controller
                 $isv15 = $importeGravado15 * 0.15;
                 $total = $importeExonerado + $importeExento + $importeGravado15 + $isv15;
 
+                // Crear factura
                 $factura = Factura::create([
                     'numero_factura' => $request->numero_factura,
                     'fecha' => $request->fecha ?? Carbon::now(),
@@ -108,9 +110,9 @@ class FacturaController extends Controller
                     'total' => $total,
                 ]);
 
+                // Crear detalles y actualizar stock
                 foreach ($request->items as $item) {
-                    // CORRECCIÓN: Obtener el nombre del producto de la base de datos es más seguro.
-                    $producto = Producto::find($item['producto_id']);
+                    $producto = Producto::whereKey($item['producto_id'])->lockForUpdate()->first();
                     $subtotal = $item['cantidad'] * $item['precio_unitario'];
 
                     $factura->detalles()->create([
@@ -121,38 +123,34 @@ class FacturaController extends Controller
                         'precio_unitario' => $item['precio_unitario'],
                         'subtotal' => $subtotal,
                     ]);
+
+                    // Actualizar stock (sumar cantidad de compra)
+                    $producto->increment('stock', $item['cantidad']);
                 }
             });
 
-            return redirect()->route('facturas.index')->with('success', 'Factura registrada exitosamente.');
-        } catch (\Exception $e) {
+            return redirect()->route('facturas.index')->with('success', 'Factura registrada y stock actualizado exitosamente.');
+        } /*catch (\Exception $e) {
             Log::error('Error al registrar la factura: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al registrar la factura.')->withInput();
-        }
-    }
+        }*/
+
+
 
     public function show(Factura $factura)
     {
         $factura->load('proveedor', 'detalles.producto');
-        $importeExento = $factura->importe_exento;
-        $importeExonerado = $factura->importe_exonerado;
-        $importeGravado15 = $factura->importe_gravado_15;
-        $importeGravado18 = 0;
-        $isv15 = $factura->isv_15;
-        $isv18 = 0;
-        $total = $factura->total;
 
-        return view('facturas.show', compact(
-            'factura',
-            'importeExento',
-            'importeExonerado',
-            'importeGravado15',
-            'importeGravado18',
-            'isv15',
-            'isv18',
-            'total'
-        ));
+        return view('facturas.show', [
+            'factura' => $factura,
+            'importeExento' => $factura->importe_exento,
+            'importeExonerado' => $factura->importe_exonerado,
+            'importeGravado15' => $factura->importe_gravado_15,
+            'isv15' => $factura->isv_15,
+            'total' => $factura->total,
+        ]);
     }
+
 
     public function checkUniqueNumeroFactura(Request $request)
     {
@@ -164,4 +162,5 @@ class FacturaController extends Controller
             'is_unique' => !$facturaExists
         ]);
     }
+
 }

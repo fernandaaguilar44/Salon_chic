@@ -425,6 +425,8 @@
     </style>
 </head>
 <body>
+
+
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
@@ -806,27 +808,26 @@
             newRow.dataset.productId = productId;
             newRow.dataset.itemIndex = itemIndex;
             newRow.innerHTML = `
-            <td>${productName}</td>
-            <td>
-                <span class="badge ${taxType === 'exonerado' ? 'bg-info' : (taxType === 'exento' ? 'bg-secondary' : 'bg-success')}">
-                    ${taxType === 'exonerado' ? 'Exonerado' : (taxType === 'exento' ? 'Exento' : 'Gravado 15%')}
-                </span>
-            </td>
-            <td>${productQuantity}</td>
-            <td>${productPrice.toFixed(2)}</td>
-            <td>${productSubtotal.toFixed(2)}</td>
-            <td><button type="button" class="btn btn-sm btn-danger remove-product"><i class="fas fa-minus-circle"></i></button></td>
-        `;
+        <td>${productName}</td>
+        <td>
+            <span class="badge ${taxType === 'exonerado' ? 'bg-info' : (taxType === 'exento' ? 'bg-secondary' : 'bg-success')}">
+                ${taxType === 'exonerado' ? 'Exonerado' : (taxType === 'exento' ? 'Exento' : 'Gravado 15%')}
+            </span>
+        </td>
+        <td>${productQuantity}</td>
+        <td>${productPrice.toFixed(2)}</td>
+        <td>${productSubtotal.toFixed(2)}</td>
+        <td><button type="button" class="btn btn-sm btn-danger remove-product"><i class="fas fa-minus-circle"></i></button></td>
+    `;
 
             productosTableBody.appendChild(newRow);
 
             const hiddenInputsHTML = `
-            <input type="hidden" name="items[${itemIndex}][producto_id]" value="${productId}" data-item-index="${itemIndex}">
-            <input type="hidden" name="items[${itemIndex}][nombre_producto]" value="${productName}" data-item-index="${itemIndex}">
-            <input type="hidden" name="items[${itemIndex}][tipo_impuesto]" value="${taxType}" data-item-index="${itemIndex}">
-            <input type="hidden" name="items[${itemIndex}][cantidad]" value="${productQuantity}" data-item-index="${itemIndex}">
-            <input type="hidden" name="items[${itemIndex}][precio_unitario]" value="${productPrice.toFixed(2)}" data-item-index="${itemIndex}">
-        `;
+        <input type="hidden" name="items[${itemIndex}][producto_id]" value="${productId}" data-item-index="${itemIndex}">
+        <input type="hidden" name="items[${itemIndex}][tipo_impuesto]" value="${taxType}" data-item-index="${itemIndex}">
+        <input type="hidden" name="items[${itemIndex}][cantidad]" value="${productQuantity}" data-item-index="${itemIndex}">
+        <input type="hidden" name="items[${itemIndex}][precio_unitario]" value="${productPrice.toFixed(2)}" data-item-index="${itemIndex}">
+    `;
             itemsContainer.insertAdjacentHTML('beforeend', hiddenInputsHTML);
 
             itemIndex++;
@@ -946,23 +947,23 @@
                 modalDetallesProducto.classList.remove('d-none');
 
                 detalleProductoTablaBody.innerHTML = `
-                <tr>
-                    <td>${producto.id}</td>
-                    <td>${producto.nombre}</td>
-                    <td>
-                        <span class="badge bg-success">Gravado 15%</span>
-                    </td>
-                    <td>
-                        <input type="number" class="form-control" id="precioCompraDetalle" value="${producto.precio_compra.toFixed(2)}" step="0.01">
-                    </td>
-                    <td>
-                        <input type="number" class="form-control" id="precioVentaDetalle" value="${producto.precio_venta.toFixed(2)}" step="0.01">
-                    </td>
-                    <td>
-                        <input type="number" class="form-control" id="cantidadDetalle" value="${producto.cantidad}" min="1">
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td>${producto.id}</td>
+                <td>${producto.nombre}</td>
+                <td>
+                    <span class="badge bg-success">Gravado 15%</span>
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="precioCompraDetalle" value="${producto.precio_compra.toFixed(2)}" step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="precioVentaDetalle" value="${producto.precio_venta.toFixed(2)}" step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="cantidadDetalle" value="${producto.cantidad}" min="1">
+                </td>
+            </tr>
+        `;
                 btnAgregarConfirmar.dataset.productId = producto.id;
             }
         });
@@ -1148,12 +1149,15 @@
         // --- LÓGICA AL CARGAR LA PÁGINA ---
         @if(old('items'))
         const oldItems = @json(old('items'));
+        const allProducts = @json($productos); // Asegúrate de que $productos esté disponible en la vista
         oldItems.forEach(item => {
             const productId = item.producto_id ?? '';
-            const productName = item.nombre_producto ?? 'Producto desconocido';
+            const productData = allProducts.find(p => p.id == productId);
+            const productName = productData ? productData.nombre : 'Producto desconocido';
             const productPrice = parseFloat(item.precio_unitario) || 0;
             const productQuantity = parseInt(item.cantidad) || 0;
             const taxType = item.tipo_impuesto ?? 'gravado15';
+
             if (productId && productPrice > 0 && productQuantity > 0) {
                 addProductRow(productId, productName, productPrice, productQuantity, taxType, true);
             }
