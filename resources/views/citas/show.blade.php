@@ -18,7 +18,8 @@
             height: 100vh;
             padding: 1rem;
             color: #333;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .container {
@@ -50,8 +51,8 @@
         /* Header */
         .beauty-header {
             text-align: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.8rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.6rem;
             border-bottom: 3px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
         }
@@ -59,7 +60,7 @@
         .beauty-header h2 {
             color: #7B2A8D;
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
             display: flex;
@@ -70,7 +71,7 @@
 
         .beauty-header h2 i {
             color: #E4007C;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
         }
 
         /* Main Content */
@@ -78,7 +79,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
             min-height: 0;
             overflow: hidden;
         }
@@ -88,7 +89,7 @@
             background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
             border: 2px solid rgba(228, 0, 124, 0.15);
             border-radius: 15px;
-            padding: 1rem;
+            padding: 0.8rem;
             text-align: center;
             animation: slideInDown 0.8s ease-out;
             flex-shrink: 0;
@@ -109,12 +110,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
         .appointment-icon {
-            width: 65px;
-            height: 65px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             background: linear-gradient(135deg, #E4007C, #7B2A8D);
             display: flex;
@@ -127,7 +128,7 @@
 
         .appointment-icon i {
             color: white;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
         }
 
         .appointment-details {
@@ -136,43 +137,59 @@
             min-width: 0;
         }
 
-        .appointment-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #7B2A8D;
-            margin-bottom: 0.3rem;
-            line-height: 1.2;
+        /* Cliente y Servicio en la misma línea con etiquetas */
+        .client-service-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+            min-height: 45px;
+            justify-content: center;
         }
 
-        .appointment-client {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 0.5rem;
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #7B2A8D;
+            min-width: 55px;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: #333;
+            word-wrap: break-word;
+            flex: 1;
+            font-size: 1rem;
         }
 
         /* Status Badge */
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
+            gap: 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-top: 0.2rem;
         }
 
         .status-programada {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             color: #1565c0;
             border: 2px solid #42a5f5;
-        }
-
-        .status-confirmada {
-            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
-            color: #2e7d32;
-            border: 2px solid #66bb6a;
         }
 
         .status-en-proceso {
@@ -182,9 +199,9 @@
         }
 
         .status-completada {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            color: #7b1fa2;
-            border: 2px solid #ba68c8;
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 2px solid #66bb6a;
         }
 
         .status-cancelada {
@@ -193,12 +210,12 @@
             border: 2px solid #ef5350;
         }
 
-        /* Info Grid */
+        /* Info Grid - Más compacto */
         .info-grid {
             flex: 1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.8rem;
+            gap: 0.6rem;
             min-height: 0;
             overflow-y: auto;
             padding-right: 5px;
@@ -206,10 +223,10 @@
 
         .info-card {
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: 10px;
+            padding: 0.8rem;
             border-left: 4px solid #E4007C;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -236,21 +253,21 @@
         }
 
         .info-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(228, 0, 124, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(228, 0, 124, 0.15);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 0.6rem;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .card-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
             background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.1));
             display: flex;
             align-items: center;
@@ -261,11 +278,11 @@
 
         .card-icon i {
             color: #E4007C;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .card-label {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: #7B2A8D;
             text-transform: none;
@@ -279,9 +296,11 @@
             line-height: 1.3;
             word-wrap: break-word;
             word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
 
-        /* DateTime Card */
+        /* DateTime Card - Más compacta */
         .datetime-card {
             background: linear-gradient(135deg, rgba(228, 0, 124, 0.05), rgba(123, 42, 141, 0.02));
             border-left: 4px solid #7B2A8D;
@@ -291,57 +310,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            gap: 0.6rem;
         }
 
         .date-section, .time-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.6rem;
+            padding: 0.4rem;
             background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
+            border-radius: 8px;
             flex: 1;
         }
 
         .date-day {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #E4007C;
             line-height: 1;
         }
 
         .date-month {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #7B2A8D;
             font-weight: 600;
             text-transform: uppercase;
-            margin-top: 0.2rem;
+            margin-top: 0.1rem;
         }
 
         .time-display {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #7B2A8D;
             line-height: 1;
         }
 
         .time-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #666;
             text-transform: uppercase;
-            margin-top: 0.2rem;
+            margin-top: 0.1rem;
         }
 
         /* Special Cards */
         .price-card .card-value {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.2rem;
         }
 
         .price-amount {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #059669;
         }
@@ -349,20 +368,20 @@
         .price-currency {
             color: #047857;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .duration-badge {
             background: linear-gradient(135deg, #fef3c7, #fcd34d);
             color: #92400e;
-            padding: 0.3rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
             font-weight: 700;
             border: 1px solid #f59e0b;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.2rem;
         }
 
         /* Contact Link */
@@ -373,10 +392,11 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.2rem;
             font-size: 1rem;
             word-wrap: break-word;
             word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         a[href^="tel:"]:hover {
@@ -384,7 +404,7 @@
             transform: scale(1.02);
         }
 
-        /* Notes Card */
+        /* Notes Card - Sin scroll horizontal */
         .notes-card {
             grid-column: 1 / -1;
             background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.9));
@@ -393,47 +413,73 @@
 
         .notes-value {
             background: rgba(255, 255, 255, 0.8);
-            padding: 0.8rem;
-            border-radius: 8px;
+            padding: 0.6rem;
+            border-radius: 6px;
             border: 1px solid #e2e8f0;
             font-style: italic;
             line-height: 1.4;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            font-size: 0.95rem;
             color: #555;
-            min-height: 50px;
+            min-height: 40px;
+            max-height: 80px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Custom scrollbar para notas */
+        .notes-value::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .notes-value::-webkit-scrollbar-track {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 2px;
+        }
+
+        .notes-value::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 2px;
+        }
+
+        .notes-value::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
         }
 
         /* Actions */
         .actions-section {
             display: flex;
             justify-content: flex-start;
-            padding: 0.8rem 0;
+            padding: 0.6rem 0;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
         }
 
         .btn-beauty {
-            padding: 0.8rem 1.8rem;
-            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
             border: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             text-decoration: none;
             background: linear-gradient(135deg, #E4007C 0%, #7B2A8D 100%);
             color: white;
-            box-shadow: 0 6px 20px rgba(228, 0, 124, 0.3);
+            box-shadow: 0 4px 15px rgba(228, 0, 124, 0.3);
             text-transform: none;
             letter-spacing: 0.3px;
         }
 
         .btn-beauty:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(228, 0, 124, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(228, 0, 124, 0.5);
             color: white;
         }
 
@@ -451,6 +497,7 @@
 
             body {
                 overflow-y: auto !important;
+                overflow-x: hidden !important;
             }
 
             .container {
@@ -460,20 +507,20 @@
             }
 
             .beauty-header h2 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
 
             .appointment-info {
                 flex-direction: column;
-                gap: 0.8rem;
+                gap: 0.6rem;
             }
 
             .appointment-details {
                 text-align: center;
             }
 
-            .appointment-title {
-                font-size: 1.4rem;
+            .info-row {
+                justify-content: center;
             }
 
             .info-grid {
@@ -483,7 +530,7 @@
 
             .datetime-display {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.4rem;
             }
 
             .actions-section {
@@ -493,22 +540,32 @@
 
         @media (max-width: 480px) {
             .beauty-header h2 {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 flex-direction: column;
-                gap: 5px;
+                gap: 4px;
             }
 
             .card-header {
                 flex-direction: column;
                 text-align: center;
-                gap: 0.4rem;
+                gap: 0.3rem;
             }
 
             .btn-beauty {
                 width: 100%;
                 justify-content: center;
-                padding: 0.7rem 1.5rem;
-                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                font-size: 0.75rem;
+            }
+
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.1rem;
+            }
+
+            .info-label {
+                min-width: auto;
             }
         }
 
@@ -526,19 +583,19 @@
         .info-card:nth-child(5) { animation-delay: 0.5s; }
         .info-card:nth-child(6) { animation-delay: 0.6s; }
 
-        /* Custom scrollbar */
+        /* Custom scrollbar principal */
         .info-grid::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         .info-grid::-webkit-scrollbar-track {
             background: rgba(228, 0, 124, 0.1);
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
         .info-grid::-webkit-scrollbar-thumb {
             background: rgba(228, 0, 124, 0.3);
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
         .info-grid::-webkit-scrollbar-thumb:hover {
@@ -547,7 +604,7 @@
 
         /* Accessibility */
         .btn-beauty:focus {
-            outline: 3px solid rgba(228, 0, 124, 0.5);
+            outline: 2px solid rgba(228, 0, 124, 0.5);
             outline-offset: 2px;
         }
 
@@ -558,8 +615,8 @@
     </style>
 </head>
 <body>
+
 <div class="container">
-    <!-- Header -->
     <div class="beauty-header">
         <h2>
             <i class="fas fa-calendar-check"></i>
@@ -567,26 +624,45 @@
         </h2>
     </div>
 
-    <!-- Appointment Content -->
     <div class="appointment-content">
-        <!-- Appointment Header -->
         <div class="appointment-header">
             <div class="appointment-info">
                 <div class="appointment-icon">
-                    <i class="fas fa-cut"></i>
+                    @php
+                        $serviceName = strtolower($cita->servicio->nombre_servicio ?? '');
+                        $serviceIcon = 'fas fa-star'; // default
+
+                        if (str_contains($serviceName, 'manicura') || str_contains($serviceName, 'uñas')) {
+                            $serviceIcon = 'fas fa-hand-sparkles';
+                        } elseif (str_contains($serviceName, 'pedicura') || str_contains($serviceName, 'pie')) {
+                            $serviceIcon = 'fas fa-spa';
+                        } elseif (str_contains($serviceName, 'cabello') || str_contains($serviceName, 'corte') || str_contains($serviceName, 'peinado')) {
+                            $serviceIcon = 'fas fa-cut';
+                        } elseif (str_contains($serviceName, 'facial') || str_contains($serviceName, 'rostro')) {
+                            $serviceIcon = 'fas fa-leaf';
+                        }
+                    @endphp
+                    <i class="{{ $serviceIcon }}"></i>
                 </div>
                 <div class="appointment-details">
-                    <div class="appointment-title">{{ $cita->servicio->nombre_servicio ?? 'Servicio no especificado' }}</div>
-                    <div class="appointment-client">{{ $cita->cliente->nombre ?? 'Cliente no especificado' }}</div>
+                    <div class="client-service-info">
+                        <div class="info-row">
+                            <span class="info-label">Cliente:</span>
+                            <span class="info-value">{{ $cita->cliente->nombre ?? 'Cliente no especificado' }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Servicio:</span>
+                            <span class="info-value">{{ $cita->servicio->nombre_servicio ?? 'Servicio no especificado' }}</span>
+                        </div>
+                    </div>
                     @php
                         $statusConfig = [
-                            'programada' => ['class' => 'status-programada', 'icon' => 'fas fa-calendar-plus', 'text' => 'Programada'],
-                            'confirmada' => ['class' => 'status-confirmada', 'icon' => 'fas fa-check-circle', 'text' => 'Confirmada'],
+                            'pendiente' => ['class' => 'status-programada', 'icon' => 'fas fa-calendar-plus', 'text' => 'Pendiente'],
                             'en_proceso' => ['class' => 'status-en-proceso', 'icon' => 'fas fa-play-circle', 'text' => 'En Proceso'],
-                            'completada' => ['class' => 'status-completada', 'icon' => 'fas fa-check-double', 'text' => 'Completada'],
+                            'finalizada' => ['class' => 'status-completada', 'icon' => 'fas fa-check-double', 'text' => 'Finalizada'],
                             'cancelada' => ['class' => 'status-cancelada', 'icon' => 'fas fa-times-circle', 'text' => 'Cancelada'],
                         ];
-                        $currentStatus = $statusConfig[$cita->estado ?? 'programada'] ?? $statusConfig['programada'];
+                        $currentStatus = $statusConfig[$cita->estado ?? 'pendiente'] ?? $statusConfig['pendiente'];
                     @endphp
                     <div class="status-badge {{ $currentStatus['class'] }}">
                         <i class="{{ $currentStatus['icon'] }}"></i>
@@ -596,67 +672,39 @@
             </div>
         </div>
 
-        <!-- Info Grid -->
         <div class="info-grid">
-            <!-- Fecha y Hora -->
             <div class="info-card datetime-card">
                 <div class="card-header">
                     <div class="card-icon">
-                        <i class="fas fa-calendar-clock"></i>
+                        <i class="fas fa-calendar-alt"></i>
                     </div>
                     <div class="card-label">Fecha y Hora</div>
                 </div>
                 <div class="datetime-display">
                     <div class="date-section">
-                        @if($cita->fecha ?? false)
-                            @php
-                                $fecha = \Carbon\Carbon::parse($cita->fecha);
-                                $meses = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-                            @endphp
-                            <div class="date-day">{{ $fecha->day }}</div>
-                            <div class="date-month">{{ $meses[$fecha->month - 1] }}</div>
-                        @else
-                            <div class="date-day">15</div>
-                            <div class="date-month">MAR</div>
-                        @endif
+                        <div class="date-day">{{ \Carbon\Carbon::parse($cita->fecha)->format('d') }}</div>
+                        <div class="date-month">{{ strtoupper(\Carbon\Carbon::parse($cita->fecha)->locale('es')->format('M')) }}</div>
                     </div>
 
                     <div class="time-section">
-                        @if($cita->hora_inicio ?? false)
-                            @php
-                                $horaInicio = \Carbon\Carbon::parse($cita->hora_inicio);
-                            @endphp
-                            <div class="time-display">{{ $horaInicio->format('H:i') }}</div>
-                            <div class="time-label">Inicio</div>
-                        @else
-                            <div class="time-display">10:30</div>
-                            <div class="time-label">Inicio</div>
-                        @endif
+                        <div class="time-display">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</div>
+                        <div class="time-label">Inicio</div>
                     </div>
 
                     <div class="time-section">
-                        @if($cita->hora_fin ?? false)
-                            @php
-                                $horaFin = \Carbon\Carbon::parse($cita->hora_fin);
-                            @endphp
-                            <div class="time-display">{{ $horaFin->format('H:i') }}</div>
-                            <div class="time-label">Fin</div>
-                        @elseif(($cita->hora_inicio ?? false) && ($cita->servicio->duracion_estimada ?? false))
-                            @php
-                                $horaInicio = \Carbon\Carbon::parse($cita->hora_inicio);
-                                $horaFin = $horaInicio->copy()->addMinutes($cita->servicio->duracion_estimada);
-                            @endphp
-                            <div class="time-display">{{ $horaFin->format('H:i') }}</div>
-                            <div class="time-label">Fin</div>
-                        @else
-                            <div class="time-display">12:00</div>
-                            <div class="time-label">Fin</div>
-                        @endif
+                        @php
+                            $fechaFormateada = \Carbon\Carbon::parse($cita->fecha)->format('Y-m-d');
+                            $horaFormateada = \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i:s');
+                            $estimadoFinCita = \Carbon\Carbon::parse($fechaFormateada . ' ' . $horaFormateada)
+                                                ->addMinutes($cita->servicio->duracion_estimada ?? 90)
+                                                ->format('H:i');
+                        @endphp
+                        <div class="time-display">{{ $estimadoFinCita }}</div>
+                        <div class="time-label">Fin</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Duración -->
             <div class="info-card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -665,14 +713,30 @@
                     <div class="card-label">Duración</div>
                 </div>
                 <div class="card-value">
+                    @php
+                        $duracion = $cita->servicio->duracion_estimada ?? 90;
+                        $duracionTexto = '';
+
+                        if ($duracion >= 60) {
+                            $horas = floor($duracion / 60);
+                            $minutosRestantes = $duracion % 60;
+
+                            if ($minutosRestantes == 0) {
+                                $duracionTexto = $horas . 'h';
+                            } else {
+                                $duracionTexto = $horas . 'h ' . $minutosRestantes . 'min';
+                            }
+                        } else {
+                            $duracionTexto = $duracion . ' min';
+                        }
+                    @endphp
                     <div class="duration-badge">
                         <i class="fas fa-stopwatch"></i>
-                        {{ $cita->servicio->duracion_estimada ?? '90' }} min
+                        {{ $duracionTexto }}
                     </div>
                 </div>
             </div>
 
-            <!-- Precio -->
             <div class="info-card price-card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -686,7 +750,6 @@
                 </div>
             </div>
 
-            <!-- Teléfono Cliente -->
             <div class="info-card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -701,15 +764,11 @@
                             {{ $cita->cliente->telefono }}
                         </a>
                     @else
-                        <a href="tel:+504-9876-5432">
-                            <i class="fas fa-phone"></i>
-                            +504-9876-5432
-                        </a>
+                        <span style="color: #999; font-style: italic;">No especificado</span>
                     @endif
                 </div>
             </div>
 
-            <!-- Estilista -->
             <div class="info-card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -720,8 +779,7 @@
                 <div class="card-value">{{ $cita->empleado->nombre_empleado ?? 'No asignado' }}</div>
             </div>
 
-            <!-- Observaciones -->
-            @if($cita->observaciones ?? false)
+            @if(!empty($cita->observaciones) && trim($cita->observaciones) !== '')
                 <div class="info-card notes-card">
                     <div class="card-header">
                         <div class="card-icon">
@@ -736,7 +794,6 @@
             @endif
         </div>
 
-        <!-- Actions -->
         <div class="actions-section">
             <a href="{{ route('citas.index') }}" class="btn-beauty">
                 <i class="fas fa-arrow-left"></i>
@@ -758,13 +815,25 @@
         // Add hover effects to cards
         document.querySelectorAll('.info-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.01)';
+                this.style.transform = 'translateY(-2px) scale(1.005)';
             });
 
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
+
+        // Auto-resize text for long content
+        function adjustTextSize() {
+            document.querySelectorAll('.info-value, .card-value').forEach(element => {
+                if (element.scrollWidth > element.clientWidth) {
+                    element.style.fontSize = '0.8rem';
+                }
+            });
+        }
+
+        adjustTextSize();
+        window.addEventListener('resize', adjustTextSize);
     });
 </script>
 </body>

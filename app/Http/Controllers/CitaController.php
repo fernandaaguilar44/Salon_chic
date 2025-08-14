@@ -196,7 +196,8 @@ class CitaController extends Controller
     {
         $buscar = $request->buscar;
         $estado = $request->estado;
-        $fecha = $request->fecha;
+        $fecha_desde = $request->fecha_desde;  // Cambiado de 'fecha'
+        $fecha_hasta = $request->fecha_hasta;  // Agregado
         $servicio_id = $request->servicio_id;
 
         $totalGeneral = Cita::count();
@@ -221,8 +222,16 @@ class CitaController extends Controller
             $query->where('estado', $estado);
         }
 
-        if ($fecha) {
-            $query->where('fecha', $fecha);
+        // Filtro de rango de fechas corregido
+        if ($fecha_desde && $fecha_hasta) {
+            // Si hay fecha desde y fecha hasta
+            $query->whereBetween('fecha', [$fecha_desde, $fecha_hasta]);
+        } elseif ($fecha_desde) {
+            // Solo fecha desde
+            $query->where('fecha', '>=', $fecha_desde);
+        } elseif ($fecha_hasta) {
+            // Solo fecha hasta
+            $query->where('fecha', '<=', $fecha_hasta);
         }
 
         if ($servicio_id) {
@@ -232,7 +241,7 @@ class CitaController extends Controller
         $totalFiltrado = $query->count();
         $citas = $query->orderBy('fecha', 'desc')
             ->orderBy('hora_inicio', 'desc')
-            ->paginate(10);
+            ->paginate(8); // Cambiado a 8 para coincidir con el frontend
 
         return response()->json([
             'tabla' => view('citas.partials.tabla', compact('citas'))->render(),
@@ -289,7 +298,7 @@ class CitaController extends Controller
                 'required',
                 'date_format:H:i',
                 $this->getValidacionHorarioLaboral(),
-                $this->getValidacionHorarioDisponible()  // ✅ Ya incluye validación de cliente Y empleado
+                $this->getValidacionHorarioDisponible()
             ],
             'observaciones'=> 'nullable|string|max:200',
         ], [
@@ -321,9 +330,45 @@ class CitaController extends Controller
             return back()->withErrors(['hora_inicio' => 'Formato de hora inválido. Use el formato HH:MM (ejemplo: 09:00).'])->withInput();
         }
 
-        // ✅ ELIMINADO: Las validaciones duplicadas porque ya se hacen en la función de validación
+        // ✅ VALIDACIÓN ADICIONAL ESTRICTA - ANTES de crear la cita
+        // Verificar conflictos del EMPLEADO una vez más
+        $conflictoEmpleadoFinal = Cita::where('empleado_id', $request->empleado_id)
+            ->where('fecha', $fechaSolo)
+            ->whereIn('estado', ['pendiente', 'en_proceso'])
+            ->where(function($query) use ($horaInicio, $horaFin) {
+                $query->whereRaw("
+                (CONCAT(fecha, ' ', hora_inicio) < ? AND 
+                 DATE_ADD(CONCAT(fecha, ' ', hora_inicio), INTERVAL duracion_minutos MINUTE) > ?)
+            ", [$horaFin->format('Y-m-d H:i:s'), $horaInicio->format('Y-m-d H:i:s')]);
+            })
+            ->exists();
 
-        // Crear la cita
+        if ($conflictoEmpleadoFinal) {
+            return back()->withErrors([
+                'hora_inicio' => ' El empleado ya tiene una cita en ese horario. No se puede guardar.'
+            ])->withInput();
+        }
+
+        // Verificar conflictos del CLIENTE una vez más
+        $conflictoClienteFinal = Cita::where('cliente_id', $request->cliente_id)
+            ->where('fecha', $fechaSolo)
+            ->whereIn('estado', ['pendiente', 'en_proceso'])
+            ->where(function($query) use ($horaInicio, $horaFin) {
+                $query->whereRaw("
+                (CONCAT(fecha, ' ', hora_inicio) < ? AND 
+                 DATE_ADD(CONCAT(fecha, ' ', hora_inicio), INTERVAL duracion_minutos MINUTE) > ?)
+            ", [$horaFin->format('Y-m-d H:i:s'), $horaInicio->format('Y-m-d H:i:s')]);
+            })
+            ->exists();
+
+        if ($conflictoClienteFinal) {
+            $cliente = Cliente::find($request->cliente_id);
+            return back()->withErrors([
+                'hora_inicio' => "El cliente {$cliente->nombre} ya tiene una cita en ese horario. No se puede guardar."
+            ])->withInput();
+        }
+
+        // ✅ Si llegamos aquí, NO hay conflictos, crear la cita
         Cita::create([
             'cliente_id'       => $request->cliente_id,
             'empleado_id'      => $request->empleado_id,
@@ -339,7 +384,6 @@ class CitaController extends Controller
 
         return redirect()->route('citas.index')->with('success', 'Cita registrada correctamente.');
     }
-
     /**
      * Display the specified resource.
      */
@@ -352,12 +396,15 @@ class CitaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    /**
+     * ✅ MÉTODO EDIT CORREGIDO - Lógica profesional de salón
+     */
+    /**
+     * ✅ MÉTODO EDIT CORREGIDO - Lógica profesional de salón
+     */
     public function edit(Cita $cita)
     {
-        if ($cita->estado !== 'pendiente') {
-            return redirect()->route('citas.index')
-                ->with('error', 'Solo se pueden editar citas pendientes.');
-        }
+
 
         $clientes = Cliente::orderBy('nombre')->get();
         $empleados = Empleado::where('estado', 'activo')->orderBy('nombre_empleado')->get();
@@ -367,47 +414,82 @@ class CitaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * ✅ MÉTODO UPDATE COMPLETAMENTE REESCRITO - Lógica profesional
      */
     public function update(Request $request, Cita $cita)
     {
-        if ($cita->estado !== 'pendiente') {
-            return redirect()->route('citas.index')
-                ->with('error', 'Solo se pueden modificar citas pendientes.');
+
+        if ($cita->estado === 'cancelada') {
+            return redirect()->route('citas.edit', $cita->id)
+                ->with('error', 'Las citas canceladas no se pueden modificar. Solo se pueden consultar.');
         }
 
-        $rules = [
-            'cliente_id' => ['required', 'exists:clientes,id'],
-            'empleado_id' => ['required', 'exists:empleados,id'],
-            'servicio_id' => ['required', 'exists:servicios,id'],
-            'fecha' => [
-                'required',
-                'date',
-                'after_or_equal:today',
-                'before_or_equal:' . now()->addMonths(3)->toDateString(),
-                function ($attribute, $value, $fail) {
-                    $fecha = Carbon::parse($value);
-                    if ($fecha->dayOfWeek === 0) {
-                        return $fail('No se pueden programar citas los domingos.');
+        // ✅ DETERMINAR QUE SE PUEDE EDITAR SEGÚN EL ESTADO
+        $citaFinalizada = $cita->estado === 'finalizada';
+        $citaEnProceso = $cita->estado === 'en_proceso';
+        $citaPendiente = $cita->estado === 'pendiente';
+
+        // ✅ VALIDACIONES DINÁMICAS SEGÚN EL ESTADO
+        $rules = [];
+
+        // ✅ CITAS PENDIENTES: Se puede editar TODO EXCEPTO CLIENTE
+        if ($citaPendiente) {
+            $rules = [
+                'estado' => 'required|in:pendiente,en_proceso,finalizada,cancelada',
+                'observaciones' => 'nullable|string|max:200',
+                // ✅ CLIENTE NO SE VALIDA - nunca se puede cambiar
+                'empleado_id' => 'required|exists:empleados,id',
+                'servicio_id' => 'required|exists:servicios,id',
+                'fecha' => [
+                    'required',
+                    'date',
+                    'after_or_equal:today',
+                    'before_or_equal:' . now()->addMonths(3)->toDateString(),
+                    function ($attribute, $value, $fail) {
+                        $fecha = Carbon::parse($value);
+                        if ($fecha->dayOfWeek === 0) {
+                            return $fail('No se pueden programar citas los domingos.');
+                        }
+                        $diasFestivos = [$fecha->year . '-01-01', $fecha->year . '-12-25'];
+                        if (in_array($fecha->format('Y-m-d'), $diasFestivos)) {
+                            return $fail('No se pueden programar citas en días festivos.');
+                        }
                     }
-                    $diasFestivos = [$fecha->year . '-01-01', $fecha->year . '-12-25'];
-                    if (in_array($fecha->format('Y-m-d'), $diasFestivos)) {
-                        return $fail('No se pueden programar citas en días festivos.');
-                    }
-                }
-            ],
-            'hora_inicio' => [
-                'required',
-                'date_format:H:i',
-                $this->getValidacionHorarioLaboral(),
-                $this->getValidacionHorarioDisponible($cita->id)  // ✅ Excluir la cita actual
-            ],
-            'observaciones' => ['nullable', 'string', 'max:200']
-        ];
+                ],
+                'hora_inicio' => [
+                    'required',
+                    'date_format:H:i',
+                    $this->getValidacionHorarioLaboral(),
+                    $this->getValidacionHorarioDisponible($cita->id)
+                ]
+            ];
+        }
+
+        // ✅ CITAS EN PROCESO: Solo se puede editar observaciones y estado
+        if ($citaEnProceso) {
+            $rules = [
+                'estado' => 'required|in:pendiente,en_proceso,finalizada,cancelada',
+                'observaciones' => 'nullable|string|max:200'
+            ];
+        }
+
+        // ✅ CITAS FINALIZADAS: Solo observaciones
+        if ($citaFinalizada) {
+            $rules = [
+                'observaciones' => 'nullable|string|max:200'
+            ];
+        }
 
         $messages = [
-            'cliente_id.required' => 'Debe seleccionar un cliente.',
-            'cliente_id.exists' => 'El cliente seleccionado no existe.',
+            // Mensajes para estado
+            'estado.required' => 'El estado es obligatorio.',
+            'estado.in' => 'El estado seleccionado no es válido.',
+
+            // Mensajes para observaciones
+            'observaciones.string' => 'Las observaciones deben ser texto válido.',
+            'observaciones.max' => 'Las observaciones no pueden exceder 200 caracteres.',
+
+            // Mensajes para otros campos (solo para pendientes y en proceso)
             'empleado_id.required' => 'Debe seleccionar un empleado.',
             'empleado_id.exists' => 'El empleado seleccionado no existe.',
             'servicio_id.required' => 'Debe seleccionar un servicio.',
@@ -418,39 +500,130 @@ class CitaController extends Controller
             'fecha.before_or_equal' => 'No se pueden programar citas con más de 3 meses de anticipación.',
             'hora_inicio.required' => 'La hora de inicio es obligatoria.',
             'hora_inicio.date_format' => 'La hora debe tener el formato HH:MM.',
-            'observaciones.string' => 'Las observaciones deben ser texto válido.',
-            'observaciones.max' => 'Las observaciones no pueden exceder 200 caracteres.',
         ];
 
         $validated = $request->validate($rules, $messages);
 
-        $servicio = Servicio::findOrFail($validated['servicio_id']);
-        $validated['duracion_minutos'] = $servicio->duracion_estimada;
-        $validated['precio_estimado'] = $servicio->precio_base;
 
-        $fechaFormateada = Carbon::parse($validated['fecha'])->format('Y-m-d');
-        $horaLimpia = $this->normalizarHora($validated['hora_inicio']);
+        // ✅ PREPARAR DATOS PARA ACTUALIZAR SEGÚN EL ESTADO
+        $datosActualizar = [];
 
-        try {
-            $horaInicio = Carbon::parse($fechaFormateada . ' ' . $horaLimpia);
-            $horaFin = $horaInicio->copy()->addMinutes($servicio->duracion_estimada);
+        // ✅ CITAS PENDIENTES: Actualizar todo excepto cliente
+        if ($citaPendiente) {
+            $servicio = Servicio::findOrFail($validated['servicio_id']);
 
-            $validated['fecha'] = $fechaFormateada;
-            $validated['hora_inicio'] = $horaLimpia;
-            $validated['hora_fin'] = $horaFin->format('H:i');
-        } catch (\Exception $e) {
-            return redirect()->route('citas.index')
-                ->with('error', 'No se pudo actualizar la cita. Verifique los datos ingresados.');
+            $fechaFormateada = Carbon::parse($validated['fecha'])->format('Y-m-d');
+            $horaLimpia = $this->normalizarHora($validated['hora_inicio']);
+
+            try {
+                $horaInicio = Carbon::parse($fechaFormateada . ' ' . $horaLimpia);
+                $horaFin = $horaInicio->copy()->addMinutes($servicio->duracion_estimada);
+
+                $datosActualizar = [
+                    'estado' => $validated['estado'],
+                    'observaciones' => $validated['observaciones'],
+                    'empleado_id' => $validated['empleado_id'],
+                    'servicio_id' => $validated['servicio_id'],
+                    'fecha' => $fechaFormateada,
+                    'hora_inicio' => $horaLimpia,
+                    'hora_fin' => $horaFin->format('H:i'),
+                    'duracion_minutos' => $servicio->duracion_estimada,
+                    'precio_estimado' => $servicio->precio_base,
+                ];
+            } catch (\Exception $e) {
+                return redirect()->route('citas.index')
+                    ->with('error', 'No se pudo actualizar la cita. Verifique los datos ingresados.');
+            }
         }
 
-        $cita->update($validated);
+        // ✅ CITAS EN PROCESO: Solo estado y observaciones
+        if ($citaEnProceso) {
+            $datosActualizar = [
+                'estado' => $validated['estado'],
+                'observaciones' => $validated['observaciones']
+            ];
+        }
 
-        return redirect()->route('citas.index')
-            ->with('success', 'Cita actualizada correctamente.');
+        // ✅ CITAS FINALIZADAS: Solo observaciones (estado se mantiene en 'finalizada')
+        if ($citaFinalizada) {
+            $datosActualizar = [
+                'observaciones' => $validated['observaciones']
+                // Estado NO se cambia - se mantiene 'finalizada'
+            ];
+        }
+
+        // ✅ LÓGICA DE CAMBIOS DE ESTADO CON TIMESTAMPS (solo para pendientes y en proceso)
+        $estadoAnterior = $cita->estado;
+        $nuevoEstado = $validated['estado'] ?? $cita->estado; // Si es finalizada, mantener estado actual
+
+        // Solo procesar cambios de estado si NO es una cita finalizada
+        if (!$citaFinalizada) {
+            // Registrar hora de inicio real cuando pasa a "en_proceso"
+            if ($nuevoEstado === 'en_proceso' && $estadoAnterior === 'pendiente') {
+                $datosActualizar['hora_inicio_real'] = now();
+            }
+
+            // Registrar hora de fin real cuando pasa a "finalizada"
+            if ($nuevoEstado === 'finalizada' && $estadoAnterior === 'en_proceso') {
+                $datosActualizar['hora_fin_real'] = now();
+            }
+
+            // Si se finaliza desde pendiente (caso especial)
+            if ($nuevoEstado === 'finalizada' && $estadoAnterior === 'pendiente') {
+                $datosActualizar['hora_inicio_real'] = now();
+                $datosActualizar['hora_fin_real'] = now();
+            }
+        }
+
+        // ✅ VALIDACIONES DE CAMBIOS DE ESTADO (solo para no finalizadas)
+        if (!$citaFinalizada) {
+            if ($estadoAnterior === 'cancelada' && $nuevoEstado !== 'cancelada') {
+                return redirect()->route('citas.edit', $cita->id)
+                    ->withErrors(['estado' => 'No se puede cambiar el estado de una cita cancelada.'])
+                    ->withInput();
+            }
+        }
+
+        // ✅ MANEJO ESPECIAL PARA EL BOTÓN "FINALIZAR CITA" (solo si no está finalizada)
+        if ($request->has('accion') && $request->accion === 'finalizar' && !$citaFinalizada) {
+            $datosActualizar['estado'] = 'finalizada';
+            if ($estadoAnterior === 'en_proceso') {
+                $datosActualizar['hora_fin_real'] = now();
+            } elseif ($estadoAnterior === 'pendiente') {
+                $datosActualizar['hora_inicio_real'] = now();
+                $datosActualizar['hora_fin_real'] = now();
+            }
+            $nuevoEstado = 'finalizada';
+        }
+
+        // ✅ ACTUALIZAR LA CITA
+        $cita->update($datosActualizar);
+
+        // ✅ MENSAJE DE ÉXITO PERSONALIZADO
+        $mensaje = 'Cita actualizada correctamente.';
+
+        if ($citaFinalizada) {
+            $mensaje = 'Observaciones de la cita finalizada actualizadas correctamente.';
+        } elseif ($estadoAnterior !== $nuevoEstado) {
+            $estadosTexto = [
+                'pendiente' => 'Pendiente',
+                'en_proceso' => 'En Proceso',
+                'finalizada' => 'Finalizada',
+                'cancelada' => 'Cancelada'
+            ];
+
+            $mensaje = "Cita actualizada. Estado cambiado de '{$estadosTexto[$estadoAnterior]}' a '{$estadosTexto[$nuevoEstado]}'.";
+        }
+
+        if ($request->has('accion') && $request->accion === 'finalizar' && !$citaFinalizada) {
+            $mensaje = '¡Cita finalizada exitosamente!';
+        }
+
+        return redirect()->route('citas.index')->with('success', $mensaje);
     }
 
     /**
-     * Cambiar estado de la cita
+     * ✅ MÉTODO CAMBIAR ESTADO MEJORADO (para AJAX si lo usas)
      */
     public function cambiarEstado(Request $request, Cita $cita)
     {
@@ -461,18 +634,32 @@ class CitaController extends Controller
         $estadoAnterior = $cita->estado;
         $nuevoEstado = $request->estado;
 
-        if ($estadoAnterior === 'finalizada' || $estadoAnterior === 'cancelada') {
+        // Validaciones de estados
+        if ($estadoAnterior === 'finalizada' && $nuevoEstado !== 'finalizada') {
             return response()->json([
                 'success' => false,
-                'message' => 'No se puede cambiar el estado de una cita finalizada o cancelada.'
+                'message' => 'No se puede cambiar el estado de una cita finalizada.'
             ]);
         }
 
+        if ($estadoAnterior === 'cancelada') {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede cambiar el estado de una cita cancelada.'
+            ]);
+        }
+
+        // Actualizar timestamps según el cambio de estado
         if ($nuevoEstado === 'en_proceso' && $estadoAnterior === 'pendiente') {
             $cita->hora_inicio_real = now();
         }
 
         if ($nuevoEstado === 'finalizada' && $estadoAnterior === 'en_proceso') {
+            $cita->hora_fin_real = now();
+        }
+
+        if ($nuevoEstado === 'finalizada' && $estadoAnterior === 'pendiente') {
+            $cita->hora_inicio_real = now();
             $cita->hora_fin_real = now();
         }
 
@@ -485,14 +672,13 @@ class CitaController extends Controller
             'nuevo_estado' => $nuevoEstado
         ]);
     }
-
     /**
      * ✅ DISPONIBILIDAD MEJORADA: Incluir conflictos del cliente también
      */
     public function disponibilidad(Request $request)
     {
         $empleadoId = $request->empleado_id;
-        $clienteId = $request->cliente_id;  // ✅ AGREGADO
+        $clienteId = $request->cliente_id;
         $fecha = $request->fecha;
 
         if (!$empleadoId || !$fecha) {
@@ -502,30 +688,36 @@ class CitaController extends Controller
         $fechaSolo = Carbon::parse($fecha)->format('Y-m-d');
         $horariosOcupados = [];
 
-        // ✅ 1. Obtener citas ocupadas del EMPLEADO
+        // Citas del EMPLEADO
         $citasEmpleado = Cita::where('empleado_id', $empleadoId)
             ->where('fecha', $fechaSolo)
             ->whereIn('estado', ['pendiente', 'en_proceso'])
-            ->get(['hora_inicio', 'duracion_minutos']);
+            ->get(['hora_inicio', 'duracion_minutos', 'empleado_id', 'cliente_id']);
 
         foreach ($citasEmpleado as $cita) {
             $horario = $this->procesarHorarioOcupado($cita, $fechaSolo);
             if ($horario) {
+                $horario['empleado_id'] = $cita->empleado_id; // ✅ AGREGAR
+                $horario['cliente_id'] = $cita->cliente_id;   // ✅ AGREGAR
+                $horario['tipo'] = 'empleado';               // ✅ AGREGAR
                 $horariosOcupados[] = $horario;
             }
         }
 
-        // ✅ 2. Obtener citas ocupadas del CLIENTE (si se proporciona)
+        // Citas del CLIENTE (si se proporciona)
         if ($clienteId) {
             $citasCliente = Cita::where('cliente_id', $clienteId)
                 ->where('fecha', $fechaSolo)
                 ->whereIn('estado', ['pendiente', 'en_proceso'])
-                ->where('empleado_id', '!=', $empleadoId) // Evitar duplicados
-                ->get(['hora_inicio', 'duracion_minutos']);
+                ->where('empleado_id', '!=', $empleadoId)
+                ->get(['hora_inicio', 'duracion_minutos', 'empleado_id', 'cliente_id']);
 
             foreach ($citasCliente as $cita) {
                 $horario = $this->procesarHorarioOcupado($cita, $fechaSolo);
                 if ($horario) {
+                    $horario['empleado_id'] = $cita->empleado_id; // ✅ AGREGAR
+                    $horario['cliente_id'] = $cita->cliente_id;   // ✅ AGREGAR
+                    $horario['tipo'] = 'cliente';                // ✅ AGREGAR
                     $horariosOcupados[] = $horario;
                 }
             }
@@ -537,6 +729,9 @@ class CitaController extends Controller
     /**
      * ✅ NUEVA FUNCIÓN: Procesar horario ocupado de manera consistente
      */
+    /**
+     * ✅ FUNCIÓN CORREGIDA: Procesar horario ocupado de manera consistente
+     */
     private function procesarHorarioOcupado($cita, $fecha)
     {
         try {
@@ -546,8 +741,8 @@ class CitaController extends Controller
             $fin = $inicio->copy()->addMinutes($cita->duracion_minutos);
 
             return [
-                'inicio' => $inicio->format('H:i'),
-                'fin' => $fin->format('H:i')
+                'inicio' => $inicio->format('H:i'),  // ✅ Solo hora formato 24h
+                'fin' => $fin->format('H:i')         // ✅ Solo hora formato 24h
             ];
         } catch (\Exception $e) {
             \Log::error('Error procesando horario ocupado: ' . $e->getMessage());
@@ -557,7 +752,6 @@ class CitaController extends Controller
             ];
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */

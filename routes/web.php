@@ -66,13 +66,11 @@ Route::controller(CitaController::class)->group(function () {
     Route::get('/citas/buscar', 'buscar')->name('citas.buscar');  // ✔ Filtro AJAX
     Route::get('/citas/create', 'create')->name('citas.create');  // ✔ Formulario crear
     Route::post('/citas', 'store')->name('citas.store');          // ✔ Guardar nueva cita
-
+    Route::get('/citas/disponibilidad',  'disponibilidad')->name('citas.disponibilidad');
     Route::get('/citas/{cita}', 'show')->name('citas.show');      // ✔ Ver detalles
     Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit'); // ✔ Formulario editar
     Route::put('/citas/{cita}', 'update')->name('citas.update');  // ✔ Guardar cambios
 
 
-// ✅ Opción 1: Ruta específica
-    Route::get('/citas-disponibilidad', [App\Http\Controllers\CitaController::class, 'disponibilidad'])->name('citas.disponibilidad');
 
 });
