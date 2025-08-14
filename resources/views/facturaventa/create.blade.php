@@ -713,19 +713,26 @@
         }
     });
 
-    // Generar un número de factura inicial (puedes reemplazar esto con una llamada a tu backend)
+    // Generar un número de factura inicial usando el formato 000-001-01-0-XXXXXXX
     document.addEventListener('DOMContentLoaded', () => {
         const numeroFacturaInput = document.getElementById('numero_factura');
         const numeroFacturaDisplay = document.getElementById('numero_factura_display');
-        if (!numeroFacturaInput.value) { // Solo si no hay un valor antiguo (old value)
-            const randomNum = Math.floor(1000 + Math.random() * 9000); // Ejemplo simple
-            const prefix = 'VEN'; // Prefijo para ventas
-            const newNumeroFactura = `${prefix}-${randomNum}`;
+
+        if (!numeroFacturaInput.value) { // Solo si no hay valor previo
+            const prefijo = '000-001-01-0-';
+            let parteUnica = '';
+            for (let i = 0; i < 7; i++) {
+                parteUnica += Math.floor(Math.random() * 10);
+            }
+            const newNumeroFactura = prefijo + parteUnica;
+
             numeroFacturaInput.value = newNumeroFactura;
             numeroFacturaDisplay.textContent = newNumeroFactura;
         }
-        updateTotals(); // Asegura que los totales se calculen al cargar la página
+
+        updateTotals(); // Calcula totales al cargar
     });
+
 
     // Lógica para el modal de productos
     const modalProductos = new bootstrap.Modal(document.getElementById('modalProductos'));
