@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FacturadeCompraController;
+use App\Http\Controllers\FacturaVentaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,3 +32,14 @@ Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('pro
 Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
 Route::get('/facturas/checkUniqueNumeroFactura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
 Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name('proveedores.buscar');
+
+// Rutas para la gestión de Ventas
+Route::prefix('ventas')->group(function () {
+    Route::get('/', [FacturaVentaController::class, 'index'])->name('facturaventa.index');
+    Route::get('/create', [FacturaVentaController::class, 'create'])->name('facturaventa.create');
+    Route::post('/', [FacturaVentaController::class, 'store'])->name('facturaventa.store');
+    Route::get('/{ventas}', [FacturaVentaController::class, 'show'])->name('facturaventa.show');
+});
+
+Route::get('/api/clientes', [ClienteController::class, 'search'])->name('api.clientes.search');
+Route::get('/api/productos', [ProductoController::class, 'allProducts'])->name('api.productos.all');

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
             $table->integer('proveedor_id')->nullable();
-            $table->string('numero_factura', 25)->unique(); // Ajustado a 7 caracteres para LLL-NNN
+            $table->string('numero_factura', 25)->unique();
             $table->date('fecha')->useCurrent();
             $table->decimal('total', 10, 2); // Este es el 'gran_total'
             $table->decimal('importe_exonerado', 10, 2)->default(0); // NUEVO
