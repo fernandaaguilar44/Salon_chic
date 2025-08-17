@@ -289,6 +289,16 @@
             <a href="{{ route('clientes.create') }}" class="{{ request()->routeIs('clientes.create') ? 'active' : '' }}">Registrar</a>
         </div>
 
+        {{-- Clientes --}}
+        <div class="menu-item" onclick="toggleSubmenu('citasMenu')" aria-expanded="{{ request()->routeIs('citas.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('citas')">
+            <span><i class="bi bi-person menu-icon"></i>Citas</span>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        <div id="citasMenu" class="submenu {{ request()->routeIs('citas.*') ? 'open' : '' }}">
+            <a href="{{ route('citas.index') }}" class="{{ request()->routeIs('citas.index') ? 'active' : '' }}">Listado</a>
+            <a href="{{ route('citas.create') }}" class="{{ request()->routeIs('citas.create') ? 'active' : '' }}">Registrar</a>
+        </div>
+
         {{-- Proveedores --}}
         <div class="menu-item" onclick="toggleSubmenu('proveedoresMenu')" aria-expanded="{{ request()->routeIs('proveedores.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('proveedoresMenu')">
             <span><i class="bi bi-box-seam menu-icon"></i>Proveedores</span>
@@ -311,12 +321,22 @@
 
         {{-- Facturas --}}
         <div class="menu-item" onclick="toggleSubmenu('facturasMenu')" aria-expanded="{{ request()->routeIs('facturas.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('facturasMenu')">
-            <span><i class="bi bi-receipt menu-icon"></i>Facturas</span>
+            <span><i class="bi bi-receipt menu-icon"></i>Factura de compra</span>
             <i class="bi bi-chevron-down"></i>
         </div>
         <div id="facturasMenu" class="submenu {{ request()->routeIs('facturas.*') ? 'open' : '' }}">
             <a href="{{ route('facturas.index') }}" class="{{ request()->routeIs('facturas.index') ? 'active' : '' }}">Listado</a>
             <a href="{{ route('facturas.create') }}" class="{{ request()->routeIs('facturas.create') ? 'active' : '' }}">Registrar</a>
+        </div>
+
+        {{-- Facturas de--}}
+        <div class="menu-item" onclick="toggleSubmenu('facturaventaMenu')" aria-expanded="{{ request()->routeIs('facturaventa.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('facturaventaMenu')">
+            <span><i class="bi bi-receipt menu-icon"></i>Factura de venta</span>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        <div id="facturaventaMenu" class="submenu {{ request()->routeIs('facturaventa.*') ? 'open' : '' }}">
+            <a href="{{ route('facturaventa.index') }}" class="{{ request()->routeIs('facturaventa.index') ? 'active' : '' }}">Listado</a>
+            <a href="{{ route('facturaventa.create') }}" class="{{ request()->routeIs('facturaventa.create') ? 'active' : '' }}">Registrar</a>
         </div>
 
     </div>

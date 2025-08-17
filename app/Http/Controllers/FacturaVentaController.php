@@ -19,7 +19,7 @@ class FacturaVentaController extends Controller
 
         if ($request->filled('cliente')) {
             $query->whereHas('cliente', function ($q) use ($request) {
-                $q->where('nombre_empresa', 'like', '%' . $request->cliente . '%');
+                $q->where('nombre', 'like', '%' . $request->cliente . '%');
             });
         }
 
@@ -43,14 +43,29 @@ class FacturaVentaController extends Controller
     {
         $clientes = Cliente::all();
         $productos = Producto::all();
-        // ¡Vista corregida! Ahora apunta a 'facturaventas.create'
-        return view('facturaventa.create', compact('clientes', 'productos'));
+
+        // Generar número de factura único con formato 000-001-01-0-XXXXXXX
+        $prefijo = '000-001-01-0-';
+        $parteUnica = '';
+        for ($i = 0; $i < 7; $i++) {
+            $parteUnica .= mt_rand(0, 9);
+        }
+        $numeroFactura = $prefijo . $parteUnica;
+
+        // Retornar la vista con clientes, productos y número de factura
+        return view('facturaventa.create', compact('clientes', 'productos', 'numeroFactura'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->query('query');
+        $clientes = Cliente::where('nombre', 'like', "%{$query}%")->get();
+        return response()->json($clientes);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'numero_factura' => 'required|string|max:50|unique:factura_ventas,numero_factura',
             'cliente_id' => 'required|exists:clientes,id',
             'items' => 'required|array|min:1',
             'items.*.producto_id' => 'required|exists:productos,id',
@@ -58,9 +73,6 @@ class FacturaVentaController extends Controller
             'items.*.precio_unitario' => 'required|numeric|min:0.01',
             'items.*.tipo_impuesto' => 'required|string|in:exento,exonerado,gravado15',
         ], [
-            'numero_factura.required' => 'El número de factura es obligatorio.',
-            'numero_factura.max' => 'El número de factura no puede tener más de 50 caracteres.',
-            'numero_factura.unique' => 'El número de factura ya ha sido registrado.',
             'cliente_id.required' => 'Debe seleccionar un cliente.',
             'cliente_id.exists' => 'El cliente seleccionado no es válido.',
             'items.required' => 'Debe agregar al menos un producto a la venta.',
@@ -79,7 +91,18 @@ class FacturaVentaController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, &$numeroFactura) {
+                // --- Generar número de factura único con el formato 000-001-01-0-XXXXXXX ---
+                $prefijo = '000-001-01-0-';
+                do {
+                    $parteUnica = '';
+                    for ($i = 0; $i < 7; $i++) {
+                        $parteUnica .= mt_rand(0, 9);
+                    }
+                    $numeroFactura = $prefijo . $parteUnica;
+                } while (FacturaVenta::where('numero_factura', $numeroFactura)->exists());
+
+                // --- Calcular importes ---
                 $importeExonerado = 0;
                 $importeExento = 0;
                 $importeGravado15 = 0;
@@ -98,8 +121,9 @@ class FacturaVentaController extends Controller
                 $isv15 = $importeGravado15 * 0.15;
                 $total = $importeExonerado + $importeExento + $importeGravado15 + $isv15;
 
+                // --- Crear la venta ---
                 $venta = FacturaVenta::create([
-                    'numero_factura' => $request->numero_factura,
+                    'numero_factura' => $numeroFactura,
                     'fecha' => $request->fecha ?? Carbon::now(),
                     'cliente_id' => $request->cliente_id,
                     'importe_exonerado' => $importeExonerado,
@@ -110,6 +134,7 @@ class FacturaVentaController extends Controller
                     'notas' => $request->notas,
                 ]);
 
+                // --- Registrar detalles de productos ---
                 foreach ($request->items as $item) {
                     $producto = Producto::whereKey($item['producto_id'])->lockForUpdate()->first();
                     $subtotal = $item['cantidad'] * $item['precio_unitario'];
@@ -138,20 +163,6 @@ class FacturaVentaController extends Controller
         }
     }
 
-    public function show(FacturaVenta $venta)
-    {
-        $venta->load('cliente', 'detalles.producto');
-
-        // ¡Vista corregida! Ahora apunta a 'facturaventas.show'
-        return view('facturaventas.show', [
-            'venta' => $venta,
-            'importeExento' => $venta->importe_exento,
-            'importeExonerado' => $venta->importe_exonerado,
-            'importeGravado15' => $venta->importe_gravado_15,
-            'isv15' => $venta->isv_15,
-            'total' => $venta->total,
-        ]);
-    }
 
     public function checkUniqueNumeroFactura(Request $request)
     {

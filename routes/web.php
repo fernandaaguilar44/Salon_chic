@@ -123,6 +123,8 @@ Route::prefix('ventas')->group(function () {
     Route::post('/', [FacturaVentaController::class, 'store'])->name('facturaventa.store');
     Route::get('/{ventas}', [FacturaVentaController::class, 'show'])->name('facturaventa.show');
 });
+// routes/web.php
+Route::get('/api/clientes', [FacturaVentaController::class, 'search'])->name('clientes.search');
 
 Route::get('/api/clientes', [ClienteController::class, 'search'])->name('api.clientes.search');
 Route::get('/api/productos', [ProductoController::class, 'allProducts'])->name('api.productos.all');

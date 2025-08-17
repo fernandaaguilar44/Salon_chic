@@ -425,7 +425,12 @@
     </style>
 </head>
 <body>
-
+@include('layouts.slider')
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+        </div>
+    </div>
 
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
@@ -659,8 +664,8 @@
         // --- REFERENCIAS A ELEMENTOS DEL DOM ---
         // Del modal de productos
         const productSearchInput = document.getElementById('productSearchInput');
-        const modalBodyProducts = document.getElementById('modalBodyProductos');
-        const productRows = modalBodyProducts.getElementsByTagName('tr');
+        const modalBodyProductos = document.getElementById('modalBodyProductos');
+        const productRows = modalBodyProductos.getElementsByTagName('tr');
         const resultadosBusquedaProductos = document.getElementById('resultadosBusquedaProductos');
         const modalProductos = document.getElementById('modalProductos');
         const modalListaProductos = document.getElementById('modalListaProductos');
@@ -808,26 +813,26 @@
             newRow.dataset.productId = productId;
             newRow.dataset.itemIndex = itemIndex;
             newRow.innerHTML = `
-        <td>${productName}</td>
-        <td>
-            <span class="badge ${taxType === 'exonerado' ? 'bg-info' : (taxType === 'exento' ? 'bg-secondary' : 'bg-success')}">
-                ${taxType === 'exonerado' ? 'Exonerado' : (taxType === 'exento' ? 'Exento' : 'Gravado 15%')}
-            </span>
-        </td>
-        <td>${productQuantity}</td>
-        <td>${productPrice.toFixed(2)}</td>
-        <td>${productSubtotal.toFixed(2)}</td>
-        <td><button type="button" class="btn btn-sm btn-danger remove-product"><i class="fas fa-minus-circle"></i></button></td>
-    `;
+                <td>${productName}</td>
+                <td>
+                    <span class="badge ${taxType === 'exonerado' ? 'bg-info' : (taxType === 'exento' ? 'bg-secondary' : 'bg-success')}">
+                        ${taxType === 'exonerado' ? 'Exonerado' : (taxType === 'exento' ? 'Exento' : 'Gravado 15%')}
+                    </span>
+                </td>
+                <td>${productQuantity}</td>
+                <td>${productPrice.toFixed(2)}</td>
+                <td>${productSubtotal.toFixed(2)}</td>
+                <td><button type="button" class="btn btn-sm btn-danger remove-product"><i class="fas fa-minus-circle"></i></button></td>
+            `;
 
             productosTableBody.appendChild(newRow);
 
             const hiddenInputsHTML = `
-        <input type="hidden" name="items[${itemIndex}][producto_id]" value="${productId}" data-item-index="${itemIndex}">
-        <input type="hidden" name="items[${itemIndex}][tipo_impuesto]" value="${taxType}" data-item-index="${itemIndex}">
-        <input type="hidden" name="items[${itemIndex}][cantidad]" value="${productQuantity}" data-item-index="${itemIndex}">
-        <input type="hidden" name="items[${itemIndex}][precio_unitario]" value="${productPrice.toFixed(2)}" data-item-index="${itemIndex}">
-    `;
+                <input type="hidden" name="items[${itemIndex}][producto_id]" value="${productId}" data-item-index="${itemIndex}">
+                <input type="hidden" name="items[${itemIndex}][tipo_impuesto]" value="${taxType}" data-item-index="${itemIndex}">
+                <input type="hidden" name="items[${itemIndex}][cantidad]" value="${productQuantity}" data-item-index="${itemIndex}">
+                <input type="hidden" name="items[${itemIndex}][precio_unitario]" value="${productPrice.toFixed(2)}" data-item-index="${itemIndex}">
+            `;
             itemsContainer.insertAdjacentHTML('beforeend', hiddenInputsHTML);
 
             itemIndex++;
@@ -884,24 +889,15 @@
             return isValid;
         };
 
-        // --- NUEVA FUNCIÓN PARA LIMPIAR EL MODAL ---
         const limpiarModalProductos = () => {
-            // Ocultar el panel de detalles y mostrar la lista
             modalDetallesProducto.classList.add('d-none');
             modalListaProductos.classList.remove('d-none');
-
-            // Limpiar el campo de búsqueda y la tabla de resultados
             productSearchInput.value = '';
             resultadosBusquedaProductos.classList.add('d-none');
-            // Mostrar todas las filas de productos
             for (let i = 0; i < productRows.length; i++) {
                 productRows[i].style.display = '';
             }
-
-            // Limpiar la tabla de detalles del producto
             detalleProductoTablaBody.innerHTML = '';
-
-            // Limpiar cálculos si los tienes en el modal
             limpiarCalculosModal();
         };
 
@@ -947,23 +943,23 @@
                 modalDetallesProducto.classList.remove('d-none');
 
                 detalleProductoTablaBody.innerHTML = `
-            <tr>
-                <td>${producto.id}</td>
-                <td>${producto.nombre}</td>
-                <td>
-                    <span class="badge bg-success">Gravado 15%</span>
-                </td>
-                <td>
-                    <input type="number" class="form-control" id="precioCompraDetalle" value="${producto.precio_compra.toFixed(2)}" step="0.01">
-                </td>
-                <td>
-                    <input type="number" class="form-control" id="precioVentaDetalle" value="${producto.precio_venta.toFixed(2)}" step="0.01">
-                </td>
-                <td>
-                    <input type="number" class="form-control" id="cantidadDetalle" value="${producto.cantidad}" min="1">
-                </td>
-            </tr>
-        `;
+                    <tr>
+                        <td>${producto.id}</td>
+                        <td>${producto.nombre}</td>
+                        <td>
+                            <span class="badge bg-success">Gravado 15%</span>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" id="precioCompraDetalle" value="${producto.precio_compra.toFixed(2)}" step="0.01">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" id="precioVentaDetalle" value="${producto.precio_venta.toFixed(2)}" step="0.01">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" id="cantidadDetalle" value="${producto.cantidad}" min="1">
+                        </td>
+                    </tr>
+                `;
                 btnAgregarConfirmar.dataset.productId = producto.id;
             }
         });
@@ -989,6 +985,7 @@
 
             const productId = this.dataset.productId;
             const nombre = document.querySelector(`[data-product-id="${productId}"]`).dataset.nombre;
+            // CORRECCIÓN: El precio unitario para la factura de compra se toma del input 'precioCompraDetalle'
             const precioUnitario = parseFloat(precioCompraInput.value);
             const cantidad = parseInt(cantidadInput.value, 10);
             const tipoImpuesto = document.querySelector(`[data-product-id="${productId}"]`).dataset.impuesto;
@@ -1035,7 +1032,8 @@
                                 const item = document.createElement('button');
                                 item.type = 'button';
                                 item.classList.add('list-group-item', 'list-group-item-action');
-                                item.textContent = proveedor.nombre_empresa;
+                                // CORRECCIÓN: Aseguramos que el nombre de la propiedad sea el correcto, si es 'nombre'
+                                item.textContent = proveedor.nombre || proveedor.nombre_empresa;
                                 item.setAttribute('data-id', proveedor.id);
                                 item.addEventListener('click', function() {
                                     inputNombreEmpresa.value = this.textContent;
