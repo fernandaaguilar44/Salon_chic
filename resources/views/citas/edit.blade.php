@@ -271,12 +271,17 @@
                     $esHoy = $fechaHoraCita->isToday();
                     $faltaPoco = $fechaHoraCita->diffInHours($ahora) <= 2 && $fechaHoraCita->isFuture();
 
-                    // Nuevas reglas de edición
-                   $citaFinalizada = $cita->estado === 'finalizada';
-                   $citaCancelada = $cita->estado === 'cancelada';
-                   $puedeEditarEmpleadoServicio = !$citaFinalizada && !$citaCancelada;
-                   $puedeEditarFechaHora = !$citaFinalizada && !$citaCancelada;
-                   $puedeEditarEstado = true; // El estado siempre se puede cambiar
+                    // Reglas específicas por estado
+                    $citaPendiente = $cita->estado === 'pendiente';
+                    $citaEnProceso = $cita->estado === 'en_proceso';
+                    $citaFinalizada = $cita->estado === 'finalizada';
+                    $citaCancelada = $cita->estado === 'cancelada';
+
+                    // Reglas de edición
+                    $puedeEditarEmpleadoServicio = $citaPendiente; // Solo pendiente
+                    $puedeEditarFechaHora = $citaPendiente; // Solo pendiente
+                    $puedeEditarEstado = $citaPendiente || $citaEnProceso; // Pendiente o en proceso
+                    $puedeEditarObservaciones = !$citaFinalizada && !$citaCancelada; // Todos menos finalizada y cancelada
 
                     // Información adicional para el "plus"
                     $estimadoFinCita = \Carbon\Carbon::parse($fechaCitaFormateada . ' ' . $horaInicioFormateada)
@@ -462,12 +467,25 @@
                             </label>
                             <div class="input-group">
                                 <select id="estado" name="estado"
-                                        class="form-select @error('estado') is-invalid @enderror">
-                                    <option value="pendiente" {{ old('estado', $cita->estado) == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                    <option value="en_proceso" {{ old('estado', $cita->estado) == 'en_proceso' ? 'selected' : '' }}>En proceso</option>
-                                    <option value="finalizada" {{ old('estado', $cita->estado) == 'finalizada' ? 'selected' : '' }}>Finalizada</option>
-                                    <option value="cancelada" {{ old('estado', $cita->estado) == 'cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                        class="form-select @error('estado') is-invalid @enderror"
+                                        {{ !$puedeEditarEstado ? 'disabled' : '' }}>
+                                    @if($citaPendiente)
+                                        <option value="pendiente" {{ old('estado', $cita->estado) == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                        <option value="en_proceso" {{ old('estado', $cita->estado) == 'en_proceso' ? 'selected' : '' }}>En proceso</option>
+                                        <option value="finalizada" {{ old('estado', $cita->estado) == 'finalizada' ? 'selected' : '' }}>Finalizada</option>
+                                        <option value="cancelada" {{ old('estado', $cita->estado) == 'cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                    @elseif($citaEnProceso)
+                                        <option value="en_proceso" selected>En proceso</option>
+                                        <option value="finalizada">Finalizada</option>
+                                    @elseif($citaCancelada)
+                                        <option value="cancelada" selected>Cancelada</option>
+                                    @elseif($citaFinalizada)
+                                        <option value="finalizada" selected>Finalizada</option>
+                                    @endif
                                 </select>
+                                @if(!$puedeEditarEstado)
+                                    <input type="hidden" name="estado" value="{{ $cita->estado }}">
+                                @endif
                             </div>
                             @error('estado')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -497,47 +515,65 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <!-- Hora -->
                         <div class="col-md-6">
                             <label for="hora_inicio" class="form-label">
                                 <i class="fas fa-clock"></i> Hora de inicio
                             </label>
-                            <div class="input-group">
-                                <input type="time" id="hora_inicio" name="hora_inicio"
-                                       class="form-control @error('hora_inicio') is-invalid @enderror {{ !$puedeEditarFechaHora ? 'readonly-field' : '' }}"
-                                       value="{{ old('hora_inicio', $horaInicioFormateada) }}"
-                                        {{ !$puedeEditarFechaHora ? 'readonly' : '' }} />
-                                @if(!$puedeEditarFechaHora)
-                                    <input type="hidden" name="hora_inicio" value="{{ $horaInicioFormateada }}">
-                                @endif
-                            </div>
-                            @if($citaFinalizada)
-                                <div class="restriction-note finalizada-note">
-                                    <i class="fas fa-check-circle"></i> No editable - Cita finalizada
+                            <select id="hora_inicio" name="hora_inicio"
+                                    class="form-select @error('hora_inicio') is-invalid @enderror"
+                                    {{ !$puedeEditarFechaHora ? 'disabled' : '' }}>
+                                <option value="">Seleccione una hora</option>
+                                @foreach ([
+                                    '08:00', '09:00', '10:00', '11:00',
+                                    '13:00', '14:00', '15:00', '16:00', '17:00'
+                                ] as $hora)
+                                    <option value="{{ $hora }}" {{ old('hora_inicio', $horaInicioFormateada) == $hora ? 'selected' : '' }}>
+                                        {{ $hora }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if(!$puedeEditarFechaHora)
+                                <input type="hidden" name="hora_inicio" value="{{ $horaInicioFormateada }}">
+                            @endif
+
+                            @if(!$puedeEditarFechaHora)
+                                <div class="restriction-note {{ $citaFinalizada ? 'finalizada-note' : '' }}">
+                                    <i class="fas fa-{{ $citaFinalizada ? 'check-circle' : 'times-circle' }}"></i>
+                                    No editable - Cita {{ $citaFinalizada ? 'finalizada' : ($citaCancelada ? 'cancelada' : 'en proceso') }}
                                 </div>
                             @endif
+
                             @error('hora_inicio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <!-- Observaciones de la cita - SIEMPRE EDITABLE -->
+                        <!-- Observaciones de la cita -->
                         <div class="col-12">
                             <label for="observaciones" class="form-label">
                                 <i class="fas fa-sticky-note"></i> Observaciones de la cita
                             </label>
                             <div class="input-group">
-                                <textarea id="observaciones" name="observaciones" rows="3" maxlength="200"
-                                          class="form-control @error('observaciones') is-invalid @enderror"
-                                          placeholder="Observaciones adicionales sobre esta cita específica...">{{ old('observaciones', $cita->observaciones) }}</textarea>
+        <textarea id="observaciones" name="observaciones" rows="3" maxlength="200"
+                  class="form-control @error('observaciones') is-invalid @enderror"
+                  placeholder="Observaciones adicionales sobre esta cita específica..."
+                  {{ !$puedeEditarObservaciones ? 'disabled' : '' }}>{{ old('observaciones', $cita->observaciones) }}</textarea>
+                                @if(!$puedeEditarObservaciones)
+                                    <input type="hidden" name="observaciones" value="{{ $cita->observaciones }}">
+                                @endif
                             </div>
-                            <small class="text-muted">Las observaciones de la cita siempre se pueden agregar o modificar.</small>
+                            @if($citaFinalizada || $citaCancelada)
+                                <div class="restriction-note {{ $citaFinalizada ? 'finalizada-note' : '' }}">
+                                    <i class="fas fa-{{ $citaFinalizada ? 'check-circle' : 'times-circle' }}"></i>
+                                    No editable - Cita {{ $citaFinalizada ? 'finalizada' : 'cancelada' }}
+                                </div>
+                            @else
+                                <small class="text-muted">Las observaciones de la cita se pueden agregar o modificar.</small>
+                            @endif
                             @error('observaciones')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
 
                     <div class="btn-group-left mt-4">
                         <a href="{{ route('citas.index') }}" class="btn btn-secondary">
