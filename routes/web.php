@@ -85,20 +85,10 @@ Route::controller(ClienteController::class)->group(function () {
 
 });
 
-
-Route::resource('facturas', FacturaController::class);
-Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
-Route::get('/facturas/create', [FacturaController::class, 'create'])->name('facturas.create');
-Route::post('/facturas', [FacturaController::class, 'store'])->name('facturas.store');
-Route::get('facturas/{factura}', [FacturaController::class, 'show'])->name('facturas.show');
+Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
 Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])
     ->name('facturas.checkUniqueNumeroFactura');
-Route::get('/facturas/check-unique-numero-factura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
-
-Route::resource('facturas', FacturaController::class)->except(['edit', 'update', 'destroy']);
-Route::get('/facturas/checkUniqueNumeroFactura', [FacturaController::class, 'checkUniqueNumeroFactura'])->name('facturas.checkUniqueNumeroFactura');
 Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name('proveedores.buscar');
-
 
 // Agregar estas rutas a tu archivo web.php
 

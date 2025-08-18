@@ -53,6 +53,16 @@ class FacturaVentaController extends Controller
 
         return view('facturaventa.create', compact('clientes', 'productos', 'numeroFactura'));
     }
+    public function show($id)
+    {
+        // Buscar la venta con cliente y detalles de productos
+        $venta = FacturaVenta::with(['cliente', 'detalles.producto'])->findOrFail($id);
+
+        // Enviar la venta a la vista show
+        return view('facturaventa.show', compact('venta'));
+    }
+
+
 
     public function search(Request $request)
     {

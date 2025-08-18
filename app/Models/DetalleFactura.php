@@ -11,7 +11,7 @@ class DetalleFactura extends Model
     protected $fillable = [
         'factura_id',
         'producto_id',
-        'nombre_producto', // ¡CORRECCIÓN CLAVE! Cambiado de 'nombre_producto_manual'
+        'nombre_producto_manual', // ¡CORRECCIÓN CLAVE! Cambiado de 'nombre_producto_manual'
         'tipo_impuesto',
         'cantidad',
         'precio_unitario',
