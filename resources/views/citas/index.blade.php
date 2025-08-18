@@ -523,8 +523,76 @@
             font-weight: 600;
             font-size: 0.8rem;
         }
+
+        /* Alineación perfecta de filtros */
+        .filters-container .form-control,
+        .filters-container .form-select {
+            height: 38px;
+            padding: 0.375rem 0.75rem;
+        }
+
+        .filters-container .form-label {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            height: 1.2rem; /* Altura fija para labels */
+            display: block;
+        }
+
+        /* Botón reset alineado */
+        .btn-reset-beauty {
+            height: 38px;
+            min-height: 38px;
+            width: 38px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Contenedor de fecha y botón */
+        .filters-container .d-flex.gap-2 {
+            height: 38px;
+        }
+
+        .filters-container .flex-grow-1 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filters-container .date-range-single-container {
+            flex-grow: 1;
+        }
+
+        /* Mejorar espaciado responsive */
+        @media (max-width: 992px) {
+            .filters-container .col-lg-4 .d-flex {
+                flex-direction: column;
+                gap: 0.5rem;
+                height: auto;
+            }
+
+            .btn-reset-beauty {
+                width: 100%;
+                height: 38px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filters-container .d-flex.gap-2 {
+                flex-direction: column;
+                align-items: stretch;
+                height: auto;
+            }
+
+            .btn-reset-beauty {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
     </style>
 </head>
+
 
 
 
@@ -549,17 +617,19 @@
         </div>
     </div>
 
-    <!-- Filtros -->
+    <!-- REEMPLAZA TU SECCIÓN DE FILTROS POR ESTA ESTRUCTURA -->
     <div class="filters-container">
-        <div class="row align-items-end">
-            <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+        <div class="row g-3 align-items-end">
+            <!-- Cliente - 3 columnas -->
+            <div class="col-lg-3 col-md-6">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-search"></i> Buscar por cliente
                 </label>
                 <input type="text" id="buscar" class="form-control" placeholder="Buscar por nombre del cliente" autocomplete="off">
             </div>
 
-            <div class="col-lg-2 col-md-6 mb-3 mb-lg-0">
+            <!-- Servicio - 2 columnas -->
+            <div class="col-lg-2 col-md-6">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-cut"></i> Servicio
                 </label>
@@ -571,7 +641,8 @@
                 </select>
             </div>
 
-            <div class="col-lg-2 col-md-6 mb-3 mb-lg-0">
+            <!-- Estado - 2 columnas -->
+            <div class="col-lg-2 col-md-6">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-flag"></i> Estado
                 </label>
@@ -584,7 +655,8 @@
                 </select>
             </div>
 
-            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+            <!-- Rango de fechas - 4 columnas -->
+            <div class="col-lg-4 col-md-6">
                 <label class="form-label fw-semibold text-muted">
                     <i class="fas fa-calendar-week"></i> Rango de fechas
                 </label>
@@ -593,15 +665,22 @@
                     <input type="hidden" id="fecha_desde">
                     <input type="hidden" id="fecha_hasta">
                 </div>
-                <small class="form-text text-muted mt-1">
-                    <i class="fas fa-info-circle"></i> Haz clic para seleccionar desde qué fecha hasta qué fecha filtrar
-                </small>
             </div>
 
-            <div class="col-lg-1 col-md-6 mb-3 mb-lg-0">
+            <!-- Botón Reset - 1 columna separada -->
+            <div class="col-lg-1 col-md-6">
                 <button type="button" id="btn-reset-filtros" class="btn btn-reset-beauty w-100" title="Limpiar filtros">
                     <i class="fas fa-undo"></i>
                 </button>
+            </div>
+        </div>
+
+        <!-- Texto de ayuda FUERA del row principal -->
+        <div class="row mt-2">
+            <div class="col-lg-4 offset-lg-7">
+                <small class="form-text text-muted">
+                    <i class="fas fa-info-circle"></i> Haz clic para seleccionar desde qué fecha hasta qué fecha filtrar
+                </small>
             </div>
         </div>
     </div>
@@ -631,15 +710,16 @@
             </div>
         </div>
         <div class="date-range-buttons">
+            <button type="button" class="btn-cancel-range" onclick="cerrarModal()">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button type="button" class="btn-clear-range" onclick="limpiarRango()">
+                <i class="fas fa-eraser"></i> Limpiar
+            </button>
             <button type="button" class="btn-apply-range" onclick="aplicarRango()">
                 <i class="fas fa-check"></i> Aplicar
             </button>
-            <button type="button" class="btn-clear-range" onclick="limpiarRango()">
-                <i class="fas fa-times"></i> Limpiar
-            </button>
-            <button type="button" class="btn-cancel-range" onclick="cerrarModal()">
-                Cancelar
-            </button>
+        </div>
         </div>
     </div>
 </div>

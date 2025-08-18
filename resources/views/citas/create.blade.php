@@ -1044,6 +1044,18 @@
         const oldClienteId = '{{ old("cliente_id") }}';
         const oldServicioId = '{{ old("servicio_id") }}';
         const oldEmpleadoId = '{{ old("empleado_id") }}';
+        const oldHoraInicio = '{{ old("hora_inicio") }}';
+
+        if (oldHoraInicio) {
+            setTimeout(() => {
+                const opcionHora = horaSelect.querySelector(`option[value="${oldHoraInicio}"]`);
+                if (opcionHora) {
+                    horaSelect.value = oldHoraInicio;
+                    actualizarHoraFin();
+                }
+            }, 1000);
+        }
+
 
         if (oldClienteId) {
             const cliente = clientes.find(c => c.id == oldClienteId);

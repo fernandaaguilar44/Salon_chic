@@ -16,10 +16,9 @@
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
-            padding: 1rem;
+            padding: 0.4rem;
             color: #333;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         .container {
@@ -27,14 +26,15 @@
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 1.2rem;
+            padding: 0.6rem;
             box-shadow: 0 15px 35px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 2rem);
+            height: calc(100vh - 0.8rem);
             overflow: hidden;
+            position: relative;
         }
 
         @keyframes slideInUp {
@@ -48,53 +48,6 @@
             }
         }
 
-        /* Header */
-        .beauty-header {
-            text-align: center;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.6rem;
-            border-bottom: 3px solid rgba(228, 0, 124, 0.1);
-            flex-shrink: 0;
-        }
-
-        .beauty-header h2 {
-            color: #7B2A8D;
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .beauty-header h2 i {
-            color: #E4007C;
-            font-size: 1.5rem;
-        }
-
-        /* Main Content */
-        .appointment-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            min-height: 0;
-            overflow: hidden;
-        }
-
-        /* Appointment Header */
-        .appointment-header {
-            background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
-            border: 2px solid rgba(228, 0, 124, 0.15);
-            border-radius: 15px;
-            padding: 0.8rem;
-            text-align: center;
-            animation: slideInDown 0.8s ease-out;
-            flex-shrink: 0;
-        }
-
         @keyframes slideInDown {
             from {
                 opacity: 0;
@@ -106,87 +59,130 @@
             }
         }
 
-        .appointment-info {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.2rem;
-        }
-
-        .appointment-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #E4007C, #7B2A8D);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(228, 0, 124, 0.3);
-            border: 3px solid rgba(255, 255, 255, 0.8);
+        /* Header */
+        .beauty-header {
+            text-align: center;
+            margin-bottom: 0.4rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 3px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
         }
 
-        .appointment-icon i {
-            color: white;
-            font-size: 1.4rem;
+        .beauty-header h2 {
+            color: #7B2A8D;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .appointment-details {
-            text-align: left;
+        .beauty-header h2 i {
+            color: #E4007C;
+            font-size: 1.3rem;
+        }
+
+        /* Main Content */
+        .appointment-content {
             flex: 1;
-            min-width: 0;
-        }
-
-        /* Cliente y Servicio en la misma línea con etiquetas */
-        .client-service-info {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
-            margin-bottom: 0.5rem;
-            min-height: 45px;
-            justify-content: center;
+            gap: 0.4rem;
+            min-height: 0;
+            overflow: hidden;
         }
 
-        .info-row {
+        /* Appointment Header */
+        .appointment-header {
+            background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
+            border: 2px solid rgba(228, 0, 124, 0.15);
+            border-radius: 15px;
+            padding: 0.6rem;
+            text-align: center;
+            animation: slideInDown 0.8s ease-out;
+            flex-shrink: 0;
+        }
+
+        .appointment-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        /* Sección Cliente */
+        .client-section {
+            flex: none;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            line-height: 1.3;
+            gap: 0.7rem;
         }
 
-        .info-label {
-            font-weight: 600;
-            color: #7B2A8D;
-            min-width: 55px;
-            font-size: 0.9rem;
-            text-transform: capitalize;
-            letter-spacing: 0.3px;
-        }
-
-        .info-value {
-            font-weight: 500;
-            color: #333;
-            word-wrap: break-word;
-            flex: 1;
-            font-size: 1rem;
-        }
-
-        /* Status Badge */
-        .status-badge {
-            display: inline-flex;
+        .client-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            display: flex;
             align-items: center;
-            gap: 0.3rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 15px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 0.2rem;
+            justify-content: center;
+            box-shadow: 0 6px 18px rgba(40, 167, 69, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            flex-shrink: 0;
         }
 
-        .status-programada {
+        .client-icon i {
+            color: white;
+            font-size: 1.05rem;
+        }
+
+        .client-details {
+            flex: 1;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .client-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #28a745;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.1rem;
+        }
+
+        .client-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        /* Estado */
+        .status-section {
+            align-items: flex-start;
+            gap: 0.3rem;
+            padding-left: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.55rem;
+            font-size: 0.65rem;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .status-pendiente {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             color: #1565c0;
             border: 2px solid #42a5f5;
@@ -198,7 +194,7 @@
             border: 2px solid #ffb74d;
         }
 
-        .status-completada {
+        .status-finalizada {
             background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
             color: #2e7d32;
             border: 2px solid #66bb6a;
@@ -210,29 +206,97 @@
             border: 2px solid #ef5350;
         }
 
-        /* Info Grid - Más compacto */
-        .info-grid {
+        /* Info Sections */
+        .info-sections {
             flex: 1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
             min-height: 0;
-            overflow-y: auto;
-            padding-right: 5px;
+            overflow: hidden;
         }
 
+        .info-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 0.5rem;
+            border: 1px solid rgba(228, 0, 124, 0.1);
+            box-shadow: 0 4px 12px rgba(228, 0, 124, 0.08);
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #7B2A8D;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.35rem;
+            padding-bottom: 0.2rem;
+            border-bottom: 2px solid rgba(228, 0, 124, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .section-title i {
+            color: #E4007C;
+            font-size: 0.75rem;
+        }
+
+        .section-content {
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .schedule-section .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.45rem;
+        }
+
+        .schedule-section .info-card {
+            min-height: 110px;
+        }
+
+        /* Sección de Servicios */
+        .service-info-section .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.45rem;
+        }
+
+        .service-info-section .info-card {
+            min-height: 110px;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .service-info-section {
+            margin: 0 -0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        /* Sección de Personas */
+        .people-section .section-content {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .people-section.with-notes .section-content {
+            grid-template-columns: 1fr 2fr;
+        }
+
+        /* Info Cards */
         .info-card {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
-            padding: 0.8rem;
-            border-left: 4px solid #E4007C;
+            padding: 0.55rem;
+            border-left: 3px solid #E4007C;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             height: fit-content;
         }
 
@@ -260,14 +324,14 @@
         .card-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            gap: 0.35rem;
+            margin-bottom: 0.35rem;
         }
 
         .card-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 23px;
+            height: 23px;
+            border-radius: 6px;
             background: linear-gradient(135deg, rgba(228, 0, 124, 0.1), rgba(123, 42, 141, 0.1));
             display: flex;
             align-items: center;
@@ -278,29 +342,31 @@
 
         .card-icon i {
             color: #E4007C;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
         }
 
         .card-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #7B2A8D;
-            text-transform: none;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
         }
 
         .card-value {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.4;
             word-wrap: break-word;
             word-break: break-word;
             overflow-wrap: break-word;
-            hyphens: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
         }
 
-        /* DateTime Card - Más compacta */
+        /* DateTime Card Especial */
         .datetime-card {
             background: linear-gradient(135deg, rgba(228, 0, 124, 0.05), rgba(123, 42, 141, 0.02));
             border-left: 4px solid #7B2A8D;
@@ -310,57 +376,66 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.7rem;
+            flex: 1;
         }
 
         .date-section, .time-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.4rem;
+            padding: 0.35rem;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             flex: 1;
+            border: 1px solid rgba(228, 0, 124, 0.1);
         }
 
         .date-day {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #E4007C;
             line-height: 1;
         }
 
         .date-month {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: #7B2A8D;
             font-weight: 600;
-            text-transform: uppercase;
+            text-transform: capitalize;
+            margin-top: 0.1rem;
+        }
+
+        .date-weekday {
+            font-size: 0.5rem;
+            color: #666;
             margin-top: 0.1rem;
         }
 
         .time-display {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #7B2A8D;
             line-height: 1;
         }
 
         .time-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #666;
-            text-transform: uppercase;
             margin-top: 0.1rem;
+            font-weight: 600;
         }
 
         /* Special Cards */
         .price-card .card-value {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 0.2rem;
+            align-items: center;
         }
 
         .price-amount {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #059669;
         }
@@ -368,23 +443,40 @@
         .price-currency {
             color: #047857;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.65rem;
         }
 
         .duration-badge {
             background: linear-gradient(135deg, #fef3c7, #fcd34d);
             color: #92400e;
-            padding: 0.2rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
             font-weight: 700;
-            border: 1px solid #f59e0b;
+            border: 2px solid #f59e0b;
             display: inline-flex;
             align-items: center;
-            gap: 0.2rem;
+            justify-content: center;
+            gap: 0.4rem;
+            min-width: 110px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
 
-        /* Contact Link */
+        /* Contact in Card */
+        .contact-card .card-value {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .client-name-text {
+            font-weight: 700;
+            color: #28a745;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
         a[href^="tel:"] {
             color: #059669;
             font-weight: 600;
@@ -392,11 +484,10 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.2rem;
-            font-size: 1rem;
+            gap: 0.3rem;
+            font-size: 0.75rem;
             word-wrap: break-word;
             word-break: break-word;
-            overflow-wrap: break-word;
         }
 
         a[href^="tel:"]:hover {
@@ -404,89 +495,105 @@
             transform: scale(1.02);
         }
 
-        /* Notes Card - Sin scroll horizontal */
-        .notes-card {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.9));
-            border-left: 4px solid #6366f1;
+        /* Notes Card Inline */
+        .notes-card-inline {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(79, 70, 229, 0.02));
+            border-left: 3px solid #6366f1;
         }
 
-        .notes-value {
-            background: rgba(255, 255, 255, 0.8);
+        .notes-card-inline .card-icon i {
+            color: #6366f1;
+        }
+
+        /* Notes Card Simple - Sin botones */
+        .notes-value-simple {
+            background: rgba(255, 255, 255, 0.9);
             padding: 0.6rem;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            border: 2px solid rgba(99, 102, 241, 0.1);
             font-style: italic;
             line-height: 1.4;
-            margin-top: 0.3rem;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             color: #555;
-            min-height: 40px;
-            max-height: 80px;
-            overflow-y: auto;
-            overflow-x: hidden;
             word-wrap: break-word;
             word-break: break-word;
             overflow-wrap: break-word;
-            hyphens: auto;
+            text-align: left;
+            min-height: 60px;
+            display: flex;
+            align-items: flex-start;
+        }
+        /* Estilos para observaciones con botones de navegación */
+        .notes-wrapper-buttons {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            border: 2px solid rgba(99, 102, 241, 0.1);
         }
 
-        /* Custom scrollbar para notas */
-        .notes-value::-webkit-scrollbar {
-            width: 3px;
-        }
 
-        .notes-value::-webkit-scrollbar-track {
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 2px;
-        }
-
-        .notes-value::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.3);
-            border-radius: 2px;
-        }
-
-        .notes-value::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.5);
+        .notes-text-movable {
+            transition: transform 0.3s ease;
         }
 
         /* Actions */
         .actions-section {
             display: flex;
             justify-content: flex-start;
-            padding: 0.6rem 0;
+            padding: 0.4rem 0;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
+            position: sticky;
+            bottom: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 15px 15px;
+            margin: 0 -0.6rem -0.6rem -0.6rem;
+            padding-left: 0.6rem;
+            padding-right: 0.6rem;
         }
 
         .btn-beauty {
-            padding: 0.6rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
             border: none;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             text-decoration: none;
             background: linear-gradient(135deg, #E4007C 0%, #7B2A8D 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(228, 0, 124, 0.3);
+            box-shadow: 0 6px 20px rgba(228, 0, 124, 0.3);
             text-transform: none;
             letter-spacing: 0.3px;
+            position: relative;
+            z-index: 10;
         }
 
         .btn-beauty:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(228, 0, 124, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(228, 0, 124, 0.5);
             color: white;
         }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .info-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .service-info-section .section-content {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .schedule-section .section-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .service-info-section .section-content,
+            .people-section .section-content {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -497,35 +604,34 @@
 
             body {
                 overflow-y: auto !important;
-                overflow-x: hidden !important;
+                padding: 0.3rem;
             }
 
             .container {
                 height: auto;
-                min-height: calc(100vh - 2rem);
+                min-height: calc(100vh - 0.6rem);
+                overflow: visible;
+                padding: 0.5rem;
+            }
+
+            .appointment-content {
                 overflow: visible;
             }
 
             .beauty-header h2 {
-                font-size: 1.3rem;
+                font-size: 1.1rem;
             }
 
             .appointment-info {
-                flex-direction: column;
-                gap: 0.6rem;
+                align-items: flex-start;
+                gap: 0.4rem;
             }
 
-            .appointment-details {
-                text-align: center;
-            }
-
-            .info-row {
-                justify-content: center;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                overflow-y: visible;
+            .client-section {
+                flex: none;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
             }
 
             .datetime-display {
@@ -535,12 +641,22 @@
 
             .actions-section {
                 justify-content: center;
+                position: relative;
+                margin: 0;
+                padding: 0.4rem 0;
+                border-radius: 0;
+                background: transparent;
+                backdrop-filter: none;
+            }
+
+            .info-sections {
+                overflow-y: visible;
             }
         }
 
         @media (max-width: 480px) {
             .beauty-header h2 {
-                font-size: 1.1rem;
+                font-size: 1rem;
                 flex-direction: column;
                 gap: 4px;
             }
@@ -548,63 +664,40 @@
             .card-header {
                 flex-direction: column;
                 text-align: center;
-                gap: 0.3rem;
+                gap: 0.25rem;
             }
 
             .btn-beauty {
                 width: 100%;
                 justify-content: center;
-                padding: 0.6rem 1.2rem;
+                padding: 0.5rem 1rem;
                 font-size: 0.75rem;
             }
 
-            .info-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.1rem;
+            .client-name {
+                font-size: 1rem;
             }
 
-            .info-label {
-                min-width: auto;
+            .card-label {
+                font-size: 0.7rem;
             }
         }
 
         /* Loading animations */
-        .info-card {
+        .info-section {
             animation: slideInUp 0.6s ease-out;
             animation-fill-mode: both;
             opacity: 0;
         }
 
-        .info-card:nth-child(1) { animation-delay: 0.1s; }
-        .info-card:nth-child(2) { animation-delay: 0.2s; }
-        .info-card:nth-child(3) { animation-delay: 0.3s; }
-        .info-card:nth-child(4) { animation-delay: 0.4s; }
-        .info-card:nth-child(5) { animation-delay: 0.5s; }
-        .info-card:nth-child(6) { animation-delay: 0.6s; }
-
-        /* Custom scrollbar principal */
-        .info-grid::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .info-grid::-webkit-scrollbar-track {
-            background: rgba(228, 0, 124, 0.1);
-            border-radius: 2px;
-        }
-
-        .info-grid::-webkit-scrollbar-thumb {
-            background: rgba(228, 0, 124, 0.3);
-            border-radius: 2px;
-        }
-
-        .info-grid::-webkit-scrollbar-thumb:hover {
-            background: rgba(228, 0, 124, 0.5);
-        }
+        .info-section:nth-child(1) { animation-delay: 0.1s; }
+        .info-section:nth-child(2) { animation-delay: 0.3s; }
+        .info-section:nth-child(3) { animation-delay: 0.5s; }
+        .info-section:nth-child(4) { animation-delay: 0.7s; }
 
         /* Accessibility */
         .btn-beauty:focus {
-            outline: 2px solid rgba(228, 0, 124, 0.5);
+            outline: 3px solid rgba(228, 0, 124, 0.5);
             outline-offset: 2px;
         }
 
@@ -620,46 +713,32 @@
     <div class="beauty-header">
         <h2>
             <i class="fas fa-calendar-check"></i>
-            Detalles de la Cita
+            Detalles de la cita
         </h2>
     </div>
 
     <div class="appointment-content">
+        <!-- Header con información principal -->
         <div class="appointment-header">
             <div class="appointment-info">
-                <div class="appointment-icon">
-                    @php
-                        $serviceName = strtolower($cita->servicio->nombre_servicio ?? '');
-                        $serviceIcon = 'fas fa-star'; // default
-
-                        if (str_contains($serviceName, 'manicura') || str_contains($serviceName, 'uñas')) {
-                            $serviceIcon = 'fas fa-hand-sparkles';
-                        } elseif (str_contains($serviceName, 'pedicura') || str_contains($serviceName, 'pie')) {
-                            $serviceIcon = 'fas fa-spa';
-                        } elseif (str_contains($serviceName, 'cabello') || str_contains($serviceName, 'corte') || str_contains($serviceName, 'peinado')) {
-                            $serviceIcon = 'fas fa-cut';
-                        } elseif (str_contains($serviceName, 'facial') || str_contains($serviceName, 'rostro')) {
-                            $serviceIcon = 'fas fa-leaf';
-                        }
-                    @endphp
-                    <i class="{{ $serviceIcon }}"></i>
-                </div>
-                <div class="appointment-details">
-                    <div class="client-service-info">
-                        <div class="info-row">
-                            <span class="info-label">Cliente:</span>
-                            <span class="info-value">{{ $cita->cliente->nombre ?? 'Cliente no especificado' }}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Servicio:</span>
-                            <span class="info-value">{{ $cita->servicio->nombre_servicio ?? 'Servicio no especificado' }}</span>
-                        </div>
+                <!-- Sección Cliente -->
+                <div class="client-section">
+                    <div class="client-icon">
+                        <i class="fas fa-user"></i>
                     </div>
+                    <div class="client-details">
+                        <div class="client-label">Cliente</div>
+                        <div class="client-name">{{ $cita->cliente->nombre ?? 'Cliente no especificado' }}</div>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="status-section">
                     @php
                         $statusConfig = [
-                            'pendiente' => ['class' => 'status-programada', 'icon' => 'fas fa-calendar-plus', 'text' => 'Pendiente'],
+                            'pendiente' => ['class' => 'status-pendiente', 'icon' => 'fas fa-calendar-plus', 'text' => 'Pendiente'],
                             'en_proceso' => ['class' => 'status-en-proceso', 'icon' => 'fas fa-play-circle', 'text' => 'En Proceso'],
-                            'finalizada' => ['class' => 'status-completada', 'icon' => 'fas fa-check-double', 'text' => 'Finalizada'],
+                            'finalizada' => ['class' => 'status-finalizada', 'icon' => 'fas fa-check-double', 'text' => 'Finalizada'],
                             'cancelada' => ['class' => 'status-cancelada', 'icon' => 'fas fa-times-circle', 'text' => 'Cancelada'],
                         ];
                         $currentStatus = $statusConfig[$cita->estado ?? 'pendiente'] ?? $statusConfig['pendiente'];
@@ -672,128 +751,204 @@
             </div>
         </div>
 
-        <div class="info-grid">
-            <div class="info-card datetime-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="card-label">Fecha y Hora</div>
+        <div class="info-sections">
+            <!-- SECCIÓN 1: PROGRAMACIÓN Y HORARIOS -->
+            <div class="info-section schedule-section">
+                <div class="section-title">
+                    <i class="fas fa-clock"></i>
+                    Programación y horarios
                 </div>
-                <div class="datetime-display">
-                    <div class="date-section">
-                        <div class="date-day">{{ \Carbon\Carbon::parse($cita->fecha)->format('d') }}</div>
-                        <div class="date-month">{{ strtoupper(\Carbon\Carbon::parse($cita->fecha)->locale('es')->format('M')) }}</div>
+                <div class="section-content">
+                    <!-- Fecha y Horario Completo -->
+                    <div class="info-card datetime-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="card-label">Fecha y horario programado</div>
+                        </div>
+                        <div class="datetime-display">
+                            <div class="date-section">
+                                <div class="date-day">{{ \Carbon\Carbon::parse($cita->fecha)->format('d') }}</div>
+                                <div class="date-month">{{ strtoupper(\Carbon\Carbon::parse($cita->fecha)->locale('es')->format('M Y')) }}</div>
+                                @php
+                                    $diasSemana = [
+                                        'Monday' => 'Lunes',
+                                        'Tuesday' => 'Martes',
+                                        'Wednesday' => 'Miércoles',
+                                        'Thursday' => 'Jueves',
+                                        'Friday' => 'Viernes',
+                                        'Saturday' => 'Sábado',
+                                        'Sunday' => 'Domingo'
+                                    ];
+                                    $diaIngles = \Carbon\Carbon::parse($cita->fecha)->format('l');
+                                    $diaEspanol = $diasSemana[$diaIngles] ?? $diaIngles;
+                                @endphp
+                                <div class="date-weekday">{{ $diaEspanol }}</div>
+                            </div>
+
+                            <div class="time-section">
+                                <div class="time-display">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</div>
+                                <div class="time-label">Hora de inicio</div>
+                            </div>
+
+                            <div class="time-section">
+                                @php
+                                    $fechaFormateada = \Carbon\Carbon::parse($cita->fecha)->format('Y-m-d');
+                                    $horaFormateada = \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i:s');
+                                    $estimadoFinCita = \Carbon\Carbon::parse($fechaFormateada . ' ' . $horaFormateada)
+                                                        ->addMinutes($cita->servicio->duracion_estimada ?? 90)
+                                                        ->format('H:i');
+                                @endphp
+                                <div class="time-display">{{ $estimadoFinCita }}</div>
+                                <div class="time-label">Hora de finalización</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="time-section">
-                        <div class="time-display">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</div>
-                        <div class="time-label">Inicio</div>
-                    </div>
+                    <!-- Duración del Servicio -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div class="card-label">Duración estimada</div>
+                        </div>
+                        <div class="card-value" style="display: flex; justify-content: center;">
+                            @php
+                                $duracion = $cita->servicio->duracion_estimada ?? 90;
+                                $duracionTexto = '';
 
-                    <div class="time-section">
-                        @php
-                            $fechaFormateada = \Carbon\Carbon::parse($cita->fecha)->format('Y-m-d');
-                            $horaFormateada = \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i:s');
-                            $estimadoFinCita = \Carbon\Carbon::parse($fechaFormateada . ' ' . $horaFormateada)
-                                                ->addMinutes($cita->servicio->duracion_estimada ?? 90)
-                                                ->format('H:i');
-                        @endphp
-                        <div class="time-display">{{ $estimadoFinCita }}</div>
-                        <div class="time-label">Fin</div>
+                                if ($duracion >= 60) {
+                                    $horas = floor($duracion / 60);
+                                    $minutosRestantes = $duracion % 60;
+
+                                    if ($minutosRestantes == 0) {
+                                        $duracionTexto = $horas . ' hora' . ($horas > 1 ? 's' : '');
+                                    } else {
+                                        $duracionTexto = $horas . 'h ' . $minutosRestantes . 'min';
+                                    }
+                                } else {
+                                    $duracionTexto = $duracion . ' minutos';
+                                }
+                            @endphp
+                            <div class="duration-badge">
+                                <i class="fas fa-stopwatch"></i>
+                                {{ $duracionTexto }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <div class="card-label">Duración</div>
+            <!-- SECCIÓN 2: INFORMACIÓN DEL SERVICIO -->
+            <div class="info-section service-info-section">
+                <div class="section-title">
+                    <i class="fas fa-spa"></i>
+                    Información del servicio
                 </div>
-                <div class="card-value">
-                    @php
-                        $duracion = $cita->servicio->duracion_estimada ?? 90;
-                        $duracionTexto = '';
+                <div class="section-content">
+                    <!-- Tipo de Servicio -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <div class="card-label">Tipo de servicio</div>
+                        </div>
+                        <div class="card-value" style="text-align: center;">
+                            <div style="font-weight: 700; color: #E4007C;">
+                                {{ $cita->servicio->nombre_servicio ?? 'Servicio no especificado' }}
+                            </div>
+                        </div>
+                    </div>
 
-                        if ($duracion >= 60) {
-                            $horas = floor($duracion / 60);
-                            $minutosRestantes = $duracion % 60;
+                    <!-- Costo del Servicio -->
+                    <div class="info-card price-card"><div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="card-label">Costo total</div>
+                        </div>
+                        <div class="card-value">
+                            <span class="price-currency">Lempiras</span>
+                            <span class="price-amount">L. {{ number_format($cita->precio_final ?? $cita->servicio->precio_base ?? 0, 2) }}</span>
+                        </div>
+                    </div>
 
-                            if ($minutosRestantes == 0) {
-                                $duracionTexto = $horas . 'h';
-                            } else {
-                                $duracionTexto = $horas . 'h ' . $minutosRestantes . 'min';
-                            }
-                        } else {
-                            $duracionTexto = $duracion . ' min';
-                        }
-                    @endphp
-                    <div class="duration-badge">
-                        <i class="fas fa-stopwatch"></i>
-                        {{ $duracionTexto }}
+                    <!-- Especialista Asignado -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="card-label">Especialista asignado</div>
+                        </div>
+                        <div class="card-value" style="text-align: center; flex-direction: column;">
+                            <div style="font-weight: 700; color: #333; margin-bottom: 0.2rem;">
+                                {{ $cita->empleado->nombre_empleado ?? 'Por asignar' }}
+                            </div>
+                            @if($cita->empleado->cargo ?? false)
+                                <div style="color: #7B2A8D; font-weight: 500; font-size: 0.7rem;">
+                                    {{ $cita->empleado->cargo }}
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="info-card price-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-tag"></i>
+            <!-- SECCIÓN 3: INFORMACIÓN DE CONTACTO -->
+            <div class="info-section people-section {{ (!empty($cita->observaciones) && trim($cita->observaciones) !== '') ? 'with-notes' : '' }}">
+                <div class="section-title">
+                    <i class="fas fa-address-book"></i>
+                    Información de contacto
+                </div>
+                <div class="section-content">
+                    <!-- Datos del Cliente con Teléfono -->
+                    <div class="info-card contact-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="card-label">Teléfono </div>
+                        </div>
+                        <div class="card-value">
+                            <div class="client-name-text">
+                                {{ $cita->cliente->nombre ?? 'Cliente no especificado' }}
+                            </div>
+                            @if($cita->cliente->telefono ?? false)
+                                <a href="tel:{{ $cita->cliente->telefono }}">
+                                    <i class="fas fa-phone"></i>
+                                    {{ $cita->cliente->telefono }}
+                                </a>
+                            @else
+                                <div style="color: #999; font-style: italic; font-size: 0.8rem;">
+                                    Sin teléfono registrado
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                    <div class="card-label">Precio</div>
-                </div>
-                <div class="card-value">
-                    <span class="price-currency">L.</span>
-                    <span class="price-amount">{{ number_format($cita->precio_final ?? $cita->servicio->precio_base ?? 0, 2) }}</span>
-                </div>
-            </div>
 
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="card-label">Teléfono</div>
-                </div>
-                <div class="card-value">
-                    @if($cita->cliente->telefono ?? false)
-                        <a href="tel:{{ $cita->cliente->telefono }}">
-                            <i class="fas fa-phone"></i>
-                            {{ $cita->cliente->telefono }}
-                        </a>
-                    @else
-                        <span style="color: #999; font-style: italic;">No especificado</span>
+                    <!-- Observaciones (Solo si existen) -->
+                    @if(!empty($cita->observaciones) && trim($cita->observaciones) !== '')
+                        <div class="info-card notes-card-inline">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-sticky-note"></i>
+                                </div>
+                                <div class="card-label">Observaciones</div>
+                            </div>
+                            <div class="notes-value-simple">
+                                {{ $cita->observaciones }}
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
-
-            <div class="info-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="card-label">Estilista</div>
-                </div>
-                <div class="card-value">{{ $cita->empleado->nombre_empleado ?? 'No asignado' }}</div>
-            </div>
-
-            @if(!empty($cita->observaciones) && trim($cita->observaciones) !== '')
-                <div class="info-card notes-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-sticky-note"></i>
-                        </div>
-                        <div class="card-label">Observaciones</div>
-                    </div>
-                    <div class="notes-value">
-                        {{ $cita->observaciones }}
-                    </div>
-                </div>
-            @endif
         </div>
 
+        <!-- Actions -->
         <div class="actions-section">
             <a href="{{ route('citas.index') }}" class="btn-beauty">
                 <i class="fas fa-arrow-left"></i>
@@ -805,35 +960,45 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                window.location.href = '{{ route("citas.index") }}';
+        // Navegación de observaciones con botones
+        let scrollPosition = 0;
+
+        window.scrollNotes = function(direction) {
+            const notesText = document.getElementById('notesText');
+            const container = document.querySelector('.notes-content-scrollable');
+            const upBtn = document.getElementById('scrollUpBtn');
+            const downBtn = document.getElementById('scrollDownBtn');
+
+            if (!notesText || !container) return;
+
+            const maxScroll = notesText.scrollHeight - container.clientHeight;
+
+            if (direction === 'up') {
+                scrollPosition = Math.max(0, scrollPosition - 25);
+            } else {
+                scrollPosition = Math.min(maxScroll, scrollPosition + 25);
             }
-        });
 
-        // Add hover effects to cards
-        document.querySelectorAll('.info-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px) scale(1.005)';
-            });
+            notesText.style.transform = `translateY(-${scrollPosition}px)`;
 
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
+            // Actualizar estado de botones
+            upBtn.disabled = scrollPosition <= 0;
+            downBtn.disabled = scrollPosition >= maxScroll;
+        };
 
-        // Auto-resize text for long content
-        function adjustTextSize() {
-            document.querySelectorAll('.info-value, .card-value').forEach(element => {
-                if (element.scrollWidth > element.clientWidth) {
-                    element.style.fontSize = '0.8rem';
-                }
-            });
+        // Inicializar estado de botones al cargar la página
+        const notesText = document.getElementById('notesText');
+        const container = document.querySelector('.notes-content-scrollable');
+        const upBtn = document.getElementById('scrollUpBtn');
+        const downBtn = document.getElementById('scrollDownBtn');
+
+        if (notesText && container && upBtn && downBtn) {
+            const maxScroll = notesText.scrollHeight - container.clientHeight;
+            upBtn.disabled = true; // Inicialmente en la parte superior
+            downBtn.disabled = maxScroll <= 0; // Si no hay contenido que hacer scroll
         }
 
-        adjustTextSize();
-        window.addEventListener('resize', adjustTextSize);
+
     });
 </script>
 </body>
