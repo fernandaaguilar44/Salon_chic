@@ -422,6 +422,7 @@
             padding: 2rem;
         }
 
+
     </style>
 </head>
 <body>
@@ -574,17 +575,17 @@
         </div>
     </div>
 
-    {{-- Modal for Products with Search Filter --}}
+    {{-- Modal --}}
     <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" style="margin-left: 250px; max-width: calc(100% - 250px);">
             <div class="modal-content">
                 <div class="modal-header text-white" style="background-image: linear-gradient(to right, #a8c0ff, #3f2b96);">
-                    <h5 class="modal-title" id="modalProductosLabel">Seleccionar Producto</h5>
+                    <h5 class="modal-title" id="modalProductosLabel" style="margin-left: 80px;">Seleccionar Producto</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
                 <div class="modal-body">
-                    <div id="modalListaProductos">
+                    <div id="modalListaProductos" style="margin-left: 80px;">
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                             <input type="text" class="form-control" id="productSearchInput" placeholder="Buscar producto por nombre...">
@@ -625,7 +626,7 @@
                         </div>
                     </div>
 
-                    <div id="modalDetallesProducto" class="d-none">
+                    <div id="modalDetallesProducto" class="d-none ms-5">
                         <h5 class="mb-3">Detalle del Producto Seleccionado</h5>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">

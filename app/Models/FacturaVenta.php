@@ -27,10 +27,12 @@ class FacturaVenta extends Model
         'isv_15',
     ];
 
-    public function cliente(): BelongsTo
+    public function cliente()
     {
-        return $this->belongsTo(Cliente::class); // Relacionado con el modelo Cliente
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+
+
 
     public function detalles()
     {

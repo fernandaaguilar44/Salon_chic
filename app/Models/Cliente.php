@@ -17,10 +17,11 @@ class Cliente extends Model
         'direccion',
     ];
 
-    public function ventas()
+    public function facturasVenta()
     {
-        return $this->hasMany(Venta::class);
+        return $this->hasMany(FacturaVenta::class, 'cliente_id');
     }
+
 
 
 

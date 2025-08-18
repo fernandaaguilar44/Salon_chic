@@ -15,14 +15,17 @@ class FacturaVentaController extends Controller
 {
     public function index(Request $request)
     {
+        // Carga las facturas con la relación cliente
         $query = FacturaVenta::with('cliente')->orderBy('fecha', 'desc');
 
+        // Filtro por nombre de cliente
         if ($request->filled('cliente')) {
             $query->whereHas('cliente', function ($q) use ($request) {
-                $q->where('nombre', 'like', '%' . $request->cliente . '%');
+                $q->where('nombre_empresa', 'like', '%' . $request->cliente . '%');
             });
         }
 
+        // Filtro por rango de fechas
         if ($request->filled('fecha_rango')) {
             $dateRange = explode(' to ', $request->fecha_rango);
             if (count($dateRange) === 2) {
@@ -37,6 +40,7 @@ class FacturaVentaController extends Controller
 
         return view('facturaventa.index', compact('ventas', 'totalResultados'));
     }
+
 
     public function create()
     {

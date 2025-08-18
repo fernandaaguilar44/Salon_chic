@@ -287,6 +287,16 @@
             <a href="{{ route('clientes.create') }}" class="{{ request()->routeIs('clientes.create') ? 'active' : '' }}">Registrar</a>
         </div>
 
+        {{-- Citas --}}
+        <div class="menu-item" onclick="toggleSubmenu('citasMenu')" aria-expanded="{{ request()->routeIs('citas.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('citasMenu')">
+            <span><i class="bi bi-person menu-icon"></i>Citas</span>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        <div id="citasMenu" class="submenu {{ request()->routeIs('citas.*') ? 'open' : '' }}">
+            <a href="{{ route('citas.index') }}" class="{{ request()->routeIs('citas.index') ? 'active' : '' }}">Listado</a>
+            <a href="{{ route('citas.create') }}" class="{{ request()->routeIs('citas.create') ? 'active' : '' }}">Registrar</a>
+        </div>
+
         {{-- Proveedores --}}
         <div class="menu-item" onclick="toggleSubmenu('proveedoresMenu')" aria-expanded="{{ request()->routeIs('proveedores.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('proveedoresMenu')">
             <span><i class="bi bi-box-seam menu-icon"></i>Proveedores</span>

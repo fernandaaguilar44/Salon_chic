@@ -293,7 +293,6 @@
             ['title' => 'Proveedores', 'count' => $data['proveedores'], 'icon' => 'bi-truck', 'label' => 'Activos'],
             ['title' => 'Productos', 'count' => $data['productos'], 'icon' => 'bi-bag-heart', 'label' => 'En inventario'],
             ['title' => 'Facturas', 'count' => $data['facturas'], 'icon' => 'bi-receipt-cutoff', 'label' => 'Este mes'],
-            ['title' => 'Facturas', 'count' => $data['facturas'], 'icon' => 'bi-receipt-cutoff', 'label' => 'Este mes'],
             ];
         @endphp
 

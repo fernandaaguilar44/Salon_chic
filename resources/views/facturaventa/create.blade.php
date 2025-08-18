@@ -451,7 +451,8 @@
                                        placeholder="Escriba el nombre del cliente para buscar..." autocomplete="off"
                                        value="{{ old('nombre') }}">
                                 <input type="hidden" name="cliente_id" id="cliente_id" value="{{ old('cliente_id') }}">
-                                <div id="listaClientes" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
+                                <div id="listaClientes" class="list-group position-absolute w-100"
+                                     style="max-height: 200px; overflow-y: auto; z-index: 1000; display: none;"></div>
                                 @error('cliente_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -586,17 +587,17 @@
     </div>
 </div>
 
-{{-- Modal for Products with Search Filter --}}
-<div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
+{{-- Modal --}}
+    <div class="modal fade" id="modalProductos" tabindex="-1" aria-labelledby="modalProductosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" style="margin-left: 250px; max-width: calc(100% - 250px);">
+            <div class="modal-content">
             <div class="modal-header text-white" style="background-image: linear-gradient(to right, #a8c0ff, #3f2b96);">
-                <h5 class="modal-title" id="modalProductosLabel">Seleccionar Producto</h5>
+                <h5 class="modal-title" id="modalProductosLabel" style="margin-left: 80px;">Seleccionar Producto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
-                <div id="modalListaProductos">
+                <div id="modalListaProductos" style="margin-left: 80px;">
                     <div class="input-group mb-3">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                         <input type="text" class="form-control" id="productSearchInput" placeholder="Buscar producto por nombre...">

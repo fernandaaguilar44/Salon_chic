@@ -372,8 +372,8 @@
                 <tbody>
                 @forelse ($facturas as $factura)
                     <tr>
-                        <td>{{ $factura->id }}</td>
-                        <td>{{ $factura->proveedor->nombre_empresa }}</td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ optional($factura->proveedor)->nombre_empresa ?? 'Sin proveedor' }}</td>
                         <td>{{ $factura->numero_factura }}</td>
                         <td>{{ \Carbon\Carbon::parse($factura->fecha_emision)->format('d/m/Y') }}</td>
                         <td>{{ number_format($factura->total, 2) }}</td>
@@ -389,6 +389,7 @@
                     </tr>
                 @endforelse
                 </tbody>
+
             </table>
         </div>
 
