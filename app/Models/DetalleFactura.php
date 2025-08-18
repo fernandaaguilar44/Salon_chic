@@ -11,8 +11,8 @@ class DetalleFactura extends Model
     protected $fillable = [
         'factura_id',
         'producto_id',
-        'nombre_producto_manual', // Mantener si hay un caso de uso para productos no registrados
-        'tipo_impuesto',         // ¡CAMBIO CLAVE! Añadir este campo
+        'nombre_producto', // ¡CORRECCIÓN CLAVE! Cambiado de 'nombre_producto_manual'
+        'tipo_impuesto',
         'cantidad',
         'precio_unitario',
         'subtotal',

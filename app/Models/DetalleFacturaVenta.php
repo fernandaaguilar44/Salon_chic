@@ -25,9 +25,9 @@ class DetalleFacturaVenta extends Model
 
     public function venta(): BelongsTo
     {
-        // Relacionado con el modelo Venta
-        return $this->belongsTo(Venta::class, 'venta_id');
+        return $this->belongsTo(FacturaVenta::class, 'venta_id');
     }
+
 
     public function producto(): BelongsTo
     {

@@ -47,14 +47,17 @@ class FacturaController extends Controller
 
     public function store(Request $request)
     {
-        // Validaciones
+        // Las validaciones son correctas y completas para todos los campos.
         $request->validate([
             'numero_factura' => 'required|string|max:50|unique:facturas,numero_factura',
             'proveedor_id' => 'required|exists:proveedores,id',
+            'fecha' => 'required|date',
+            'notas' => 'nullable|string|max:200',
             'items' => 'required|array|min:1',
             'items.*.producto_id' => 'required|exists:productos,id',
             'items.*.cantidad' => 'required|numeric|min:1',
-            'items.*.precio_unitario' => 'required|numeric|min:0.01',
+            'items.*.precio_compra' => 'required|numeric|min:0.01',
+            'items.*.precio_venta' => 'required|numeric|min:0.01',
             'items.*.tipo_impuesto' => 'required|string|in:exento,exonerado,gravado15',
         ], [
             'numero_factura.required' => 'El número de factura es obligatorio.',
@@ -62,6 +65,9 @@ class FacturaController extends Controller
             'numero_factura.unique' => 'El número de factura ya ha sido registrado.',
             'proveedor_id.required' => 'Debe seleccionar un proveedor.',
             'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
+            'fecha.required' => 'La fecha de la factura es obligatoria.',
+            'fecha.date' => 'La fecha de la factura debe ser una fecha válida.',
+            'notas.max' => 'Las notas no pueden exceder los 200 caracteres.',
             'items.required' => 'Debe agregar al menos un producto a la factura.',
             'items.array' => 'Los productos de la factura deben estar en un formato válido.',
             'items.min' => 'Debe agregar al menos un producto a la factura.',
@@ -70,22 +76,25 @@ class FacturaController extends Controller
             'items.*.cantidad.required' => 'La cantidad del producto es obligatoria.',
             'items.*.cantidad.numeric' => 'La cantidad debe ser un número.',
             'items.*.cantidad.min' => 'La cantidad debe ser al menos :min.',
-            'items.*.precio_unitario.required' => 'El precio unitario es obligatorio.',
-            'items.*.precio_unitario.numeric' => 'El precio unitario debe ser un número.',
-            'items.*.precio_unitario.min' => 'El precio unitario debe ser al menos :min.',
+            'items.*.precio_compra.required' => 'El precio de compra es obligatorio.',
+            'items.*.precio_compra.numeric' => 'El precio de compra debe ser un número.',
+            'items.*.precio_compra.min' => 'El precio de compra debe ser al menos :min.',
+            'items.*.precio_venta.required' => 'El precio de venta es obligatorio.',
+            'items.*.precio_venta.numeric' => 'El precio de venta debe ser un número.',
+            'items.*.precio_venta.min' => 'El precio de venta debe ser al menos :min.',
             'items.*.tipo_impuesto.required' => 'El tipo de impuesto es obligatorio.',
             'items.*.tipo_impuesto.in' => 'El tipo de impuesto seleccionado no es válido.',
         ]);
 
-        /*try {*/
+        try {
             DB::transaction(function () use ($request) {
                 $importeExonerado = 0;
                 $importeExento = 0;
                 $importeGravado15 = 0;
 
-                // Calcular importes
                 foreach ($request->items as $item) {
-                    $subtotal = $item['cantidad'] * $item['precio_unitario'];
+                    // Se usa 'precio_compra' para los cálculos del subtotal de la factura de compra
+                    $subtotal = $item['cantidad'] * $item['precio_compra'];
                     if ($item['tipo_impuesto'] === 'exonerado') {
                         $importeExonerado += $subtotal;
                     } elseif ($item['tipo_impuesto'] === 'exento') {
@@ -101,28 +110,38 @@ class FacturaController extends Controller
                 // Crear factura
                 $factura = Factura::create([
                     'numero_factura' => $request->numero_factura,
-                    'fecha' => $request->fecha ?? Carbon::now(),
+                    'fecha' => $request->fecha, // Se usa la fecha del request que ahora es validada
                     'proveedor_id' => $request->proveedor_id,
                     'importe_exonerado' => $importeExonerado,
                     'importe_exento' => $importeExento,
                     'importe_gravado_15' => $importeGravado15,
                     'isv_15' => $isv15,
                     'total' => $total,
+                    'notas' => $request->notas, // Se guarda el campo de notas
                 ]);
 
                 // Crear detalles y actualizar stock
                 foreach ($request->items as $item) {
                     $producto = Producto::whereKey($item['producto_id'])->lockForUpdate()->first();
-                    $subtotal = $item['cantidad'] * $item['precio_unitario'];
+                    // El subtotal del detalle se calcula con el precio de compra del item
+                    $subtotal = $item['cantidad'] * $item['precio_compra'];
 
                     $factura->detalles()->create([
                         'producto_id' => $item['producto_id'],
                         'nombre_producto' => $producto->nombre,
                         'tipo_impuesto' => $item['tipo_impuesto'],
                         'cantidad' => $item['cantidad'],
-                        'precio_unitario' => $item['precio_unitario'],
+                        'precio_unitario' => $item['precio_compra'], // Guardar el precio de compra como precio_unitario en el detalle
                         'subtotal' => $subtotal,
                     ]);
+
+                    // --- La línea clave que faltaba para guardar los precios en el maestro de productos ---
+                    // Actualiza el precio de compra y el precio de venta en la tabla de productos.
+                    $producto->update([
+                        'precio_compra' => $item['precio_compra'],
+                        'precio_venta' => $item['precio_venta']
+                    ]);
+                    // --- Fin de la línea clave ---
 
                     // Actualizar stock (sumar cantidad de compra)
                     $producto->increment('stock', $item['cantidad']);
@@ -130,12 +149,11 @@ class FacturaController extends Controller
             });
 
             return redirect()->route('facturas.index')->with('success', 'Factura registrada y stock actualizado exitosamente.');
-        } /*catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Error al registrar la factura: ' . $e->getMessage());
-            return back()->withErrors('Ocurrió un error al registrar la factura.')->withInput();
-        }*/
-
-
+            return back()->withErrors('Ocurrió un error al registrar la factura: ' . $e->getMessage())->withInput();
+        }
+    }
 
     public function show(Factura $factura)
     {
@@ -151,7 +169,6 @@ class FacturaController extends Controller
         ]);
     }
 
-
     public function checkUniqueNumeroFactura(Request $request)
     {
         $numeroFactura = $request->query('numero_factura');
@@ -162,5 +179,4 @@ class FacturaController extends Controller
             'is_unique' => !$facturaExists
         ]);
     }
-
 }

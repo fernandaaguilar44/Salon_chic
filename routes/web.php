@@ -10,9 +10,9 @@ use App\Http\Controllers\ProveedorController;
 
 use Illuminate\Http\Request;
 
-
 use App\Http\Controllers\VentaController;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LlamadoAtencionController;
@@ -111,9 +111,6 @@ Route::controller(CitaController::class)->group(function () {
     Route::get('/citas/{cita}', 'show')->name('citas.show');      // ✔ Ver detalles
     Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit'); // ✔ Formulario editar
     Route::put('/citas/{cita}', 'update')->name('citas.update');  // ✔ Guardar cambios
-
-
-
 });
 
 // Rutas para la gestión de Ventas
@@ -123,8 +120,20 @@ Route::prefix('ventas')->group(function () {
     Route::post('/', [FacturaVentaController::class, 'store'])->name('facturaventa.store');
     Route::get('/{ventas}', [FacturaVentaController::class, 'show'])->name('facturaventa.show');
 });
-// routes/web.php
-Route::get('/api/clientes', [FacturaVentaController::class, 'search'])->name('clientes.search');
-
-Route::get('/api/clientes', [ClienteController::class, 'search'])->name('api.clientes.search');
+Route::get('/api/clientes', [FacturaVentaController::class, 'search'])->name('api.clientes.search');
 Route::get('/api/productos', [ProductoController::class, 'allProducts'])->name('api.productos.all');
+
+Route::get('/', function () {
+    $data = [
+        'citas' => DB::table('citas')->count(),
+        'empleados' => DB::table('empleados')->count(),
+        'servicios' => DB::table('servicios')->count(),
+        'clientes' => DB::table('clientes')->count(),
+        'proveedores' => DB::table('proveedores')->count(),
+        'productos' => DB::table('productos')->count(),
+        'facturas' => DB::table('facturas')->count(),
+        /*'facturaventa' => DB::table('facturaventa')->count(),*/
+    ];
+
+    return view('layouts.dashboard', compact('data'));
+})->name('dashboard');

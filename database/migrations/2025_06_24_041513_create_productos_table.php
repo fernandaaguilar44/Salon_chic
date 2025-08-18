@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('fecha_ingreso')->useCurrent();                   // Fecha de ingreso
             $table->string('imagen')->nullable();            // Ruta de imagen (opcional)
             $table->integer('stock')->default(0); // Inventario disponible
+            $table->decimal('precio_compra', 10, 2)->nullable();
+            $table->decimal('precio_venta', 10, 2)->nullable();
             $table->timestamps();
         });
     }

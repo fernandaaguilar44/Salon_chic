@@ -670,140 +670,133 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Variables globales para la gestión de productos y clientes
-        let productosSeleccionados = [];
-        let productosDisponibles = @json($productos ?? []);
-        let productoSeleccionadoDetalle = null;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Referencias a elementos del DOM
-        const inputNombreCliente = document.getElementById('nombre');
-        const inputClienteId = document.getElementById('cliente_id');
-        const listaClientes = document.getElementById('listaClientes');
-        const numeroFacturaInput = document.getElementById('numero_factura');
-        const numeroFacturaDisplay = document.getElementById('numero_factura_display');
-        const productSearchInput = document.getElementById('productSearchInput');
-        const modalBodyProductos = document.getElementById('modalBodyProductos');
-        const resultadosBusquedaProductos = document.getElementById('resultadosBusquedaProductos');
-        const modalProductos = new bootstrap.Modal(document.getElementById('modalProductos'));
-        const modalListaProductos = document.getElementById('modalListaProductos');
-        const modalDetallesProducto = document.getElementById('modalDetallesProducto');
-        const detalleProductoTablaBody = document.getElementById('detalleProductoTablaBody');
-        const btnVolver = document.getElementById('btnVolver');
-        const btnAgregarConfirmar = document.getElementById('btnAgregarConfirmar');
-        const productosTableBody = document.querySelector('#productosTable tbody');
-        const productosTableWrapper = document.getElementById('productosTableWrapper');
-        const btnLimpiarFactura = document.getElementById('btnLimpiarFactura');
-        const granTotalLabel = document.getElementById('granTotalLabel');
-        const importeExoneradoInput = document.getElementById('importe_exonerado');
-        const importeExentoInput = document.getElementById('importe_exento');
-        const importeGravado15Input = document.getElementById('importe_gravado_15');
-        const isv15Input = document.getElementById('isv_15');
-        const granTotalInput = document.getElementById('gran_total');
-        const itemsContainer = document.getElementById('itemsContainer');
+            // Variables
+            let productosDisponibles = @json($productos ?? []);
+            let productoSeleccionadoDetalle = null;
 
-        // --- Autocompletado de clientes ---
-        const searchClientes = async (query) => {
-            if (query.length < 2) {
-                listaClientes.style.display = 'none';
-                return;
-            }
-            try {
-                const response = await fetch(`/api/clientes?query=${encodeURIComponent(query)}`);
-                const clientes = await response.json();
+            // Elementos DOM
+            const inputNombreCliente = document.getElementById('nombre');
+            const inputClienteId = document.getElementById('cliente_id');
+            const listaClientes = document.getElementById('listaClientes');
+            const numeroFacturaInput = document.getElementById('numero_factura');
+            const numeroFacturaDisplay = document.getElementById('numero_factura_display');
+            const productSearchInput = document.getElementById('productSearchInput');
+            const modalBodyProductos = document.getElementById('modalBodyProductos');
+            const modalProductos = new bootstrap.Modal(document.getElementById('modalProductos'));
+            const modalListaProductos = document.getElementById('modalListaProductos');
+            const modalDetallesProducto = document.getElementById('modalDetallesProducto');
+            const detalleProductoTablaBody = document.getElementById('detalleProductoTablaBody');
+            const btnVolver = document.getElementById('btnVolver');
+            const btnAgregarConfirmar = document.getElementById('btnAgregarConfirmar');
+            const productosTableBody = document.querySelector('#productosTable tbody');
+            const productosTableWrapper = document.getElementById('productosTableWrapper');
+            const btnLimpiarFactura = document.getElementById('btnLimpiarFactura');
+            const granTotalLabel = document.getElementById('granTotalLabel');
+            const importeExoneradoInput = document.getElementById('importe_exonerado');
+            const importeExentoInput = document.getElementById('importe_exento');
+            const importeGravado15Input = document.getElementById('importe_gravado_15');
+            const isv15Input = document.getElementById('isv_15');
+            const granTotalInput = document.getElementById('gran_total');
+            const itemsContainer = document.getElementById('itemsContainer');
+            const resultadosBusquedaProductos = document.getElementById('resultadosBusquedaProductos');
 
-                listaClientes.innerHTML = '';
-                if (clientes.length > 0) {
-                    clientes.forEach(cliente => {
-                        const item = document.createElement('a');
-                        item.href = '#';
-                        item.classList.add('list-group-item', 'list-group-item-action');
-                        item.textContent = cliente.nombre;
-                        item.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            inputNombreCliente.value = cliente.nombre;
-                            inputClienteId.value = cliente.id;
-                            listaClientes.style.display = 'none';
-                        });
-                        listaClientes.appendChild(item);
-                    });
-                    listaClientes.style.display = 'block';
-                } else {
-                    const noResults = document.createElement('div');
-                    noResults.classList.add('list-group-item', 'list-group-item-light');
-                    noResults.textContent = 'No se encontraron clientes.';
-                    listaClientes.appendChild(noResults);
-                    listaClientes.style.display = 'block';
+            // --- Autocompletado de clientes ---
+            const searchClientes = async (query) => {
+                if (query.length < 1) {
+                    listaClientes.style.display = 'none';
+                    return;
                 }
-            } catch (error) {
-                console.error('Error buscando clientes:', error);
-                listaClientes.style.display = 'none';
-            }
-        };
-
-        inputNombreCliente.addEventListener('input', (e) => {
-            searchClientes(e.target.value);
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#listaClientes') && e.target !== inputNombreCliente) {
-                listaClientes.style.display = 'none';
-            }
-        });
-
-        // --- Número de factura ---
-        if (!numeroFacturaInput.value) {
-            numeroFacturaInput.value = '{{ $numeroFactura }}';
-            numeroFacturaDisplay.textContent = '{{ $numeroFactura }}';
-        }
-
-        // ======================
-        // PRODUCTOS - MODAL
-        // ======================
-        function renderModalProducts(filter = '') {
-            modalBodyProductos.innerHTML = '';
-            const filteredProducts = productosDisponibles.filter(producto =>
-                producto.nombre.toLowerCase().includes(filter.toLowerCase())
-            );
-
-            if (filteredProducts.length === 0) {
-                resultadosBusquedaProductos.classList.remove('d-none');
-                resultadosBusquedaProductos.textContent = 'No se encontraron productos con ese nombre.';
-                return;
-            } else {
-                resultadosBusquedaProductos.classList.add('d-none');
-            }
-
-            filteredProducts.forEach((producto, index) => {
-                const row = document.createElement('tr');
-                row.dataset.productId = producto.id;
-                row.dataset.nombre = producto.nombre;
-                row.dataset.precioVenta = producto.precio_venta;
-                row.dataset.impuesto = 'gravado15';
-
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${producto.nombre}</td>
-                    <td><span class="badge bg-success">Gravado 15%</span></td>
-                    <td>L ${number_format(producto.precio_venta, 2)}</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-primary agregarProductoModal">
-                            <i class="fas fa-plus"></i> Agregar
-                        </button>
-                    </td>
-                `;
-                modalBodyProductos.appendChild(row);
+                try {
+                    const response = await fetch(`/api/clientes?query=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    const clientes = data.clientes ?? data;
+                    listaClientes.innerHTML = '';
+                    if (clientes.length > 0) {
+                        clientes.forEach(cliente => {
+                            const item = document.createElement('a');
+                            item.href = '#';
+                            item.classList.add('list-group-item', 'list-group-item-action');
+                            item.textContent = cliente.nombre;
+                            item.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                inputNombreCliente.value = cliente.nombre;
+                                inputClienteId.value = cliente.id;
+                                listaClientes.style.display = 'none';
+                            });
+                            listaClientes.appendChild(item);
+                        });
+                        listaClientes.style.display = 'block';
+                    } else {
+                        const noResults = document.createElement('div');
+                        noResults.classList.add('list-group-item', 'list-group-item-light');
+                        noResults.textContent = 'No se encontraron clientes.';
+                        listaClientes.appendChild(noResults);
+                        listaClientes.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error buscando clientes:', error);
+                    listaClientes.style.display = 'none';
+                }
+            };
+            inputNombreCliente.addEventListener('input', e => searchClientes(e.target.value));
+            document.addEventListener('click', e => {
+                if (!e.target.closest('#listaClientes') && e.target !== inputNombreCliente) {
+                    listaClientes.style.display = 'none';
+                }
             });
-            attachModalProductListeners();
-        }
 
-        productSearchInput.addEventListener('input', (e) => renderModalProducts(e.target.value));
+            // --- Número de factura ---
+            if (!numeroFacturaInput.value) {
+                numeroFacturaInput.value = '{{ $numeroFactura }}';
+                numeroFacturaDisplay.textContent = '{{ $numeroFactura }}';
+            }
 
-        function attachModalProductListeners() {
-            document.querySelectorAll('.agregarProductoModal').forEach(button => {
-                button.onclick = (event) => {
-                    const row = event.target.closest('tr');
+            // ======================
+            // PRODUCTOS - MODAL
+            // ======================
+            function renderModalProducts(filter = '') {
+                modalBodyProductos.innerHTML = '';
+                const filteredProducts = productosDisponibles.filter(p =>
+                    p.nombre.toLowerCase().includes(filter.toLowerCase())
+                );
+
+                if (filteredProducts.length === 0) {
+                    resultadosBusquedaProductos.classList.remove('d-none');
+                    resultadosBusquedaProductos.textContent = 'No se encontraron productos con ese nombre.';
+                    return;
+                } else {
+                    resultadosBusquedaProductos.classList.add('d-none');
+                }
+
+                filteredProducts.forEach((producto, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.productId = producto.id;
+                    row.dataset.nombre = producto.nombre;
+                    row.dataset.precioVenta = producto.precio_venta;
+                    row.dataset.impuesto = 'gravado15';
+                    row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${producto.nombre}</td>
+                <td><span class="badge bg-success">Gravado 15%</span></td>
+                <td>L ${number_format(producto.precio_venta, 2)}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary agregarProductoModal">
+                        <i class="fas fa-plus"></i> Agregar
+                    </button>
+                </td>
+            `;
+                    modalBodyProductos.appendChild(row);
+                });
+            }
+            productSearchInput.addEventListener('input', e => renderModalProducts(e.target.value));
+
+            // Delegación de eventos para agregar productos desde modal
+            modalBodyProductos.addEventListener('click', e => {
+                if (e.target.closest('.agregarProductoModal')) {
+                    const row = e.target.closest('tr');
                     productoSeleccionadoDetalle = {
                         id: row.dataset.productId,
                         nombre: row.dataset.nombre,
@@ -812,184 +805,183 @@
                         cantidad: 1
                     };
                     showProductDetailsInModal(productoSeleccionadoDetalle);
-                };
-            });
-        }
-
-        function showProductDetailsInModal(producto) {
-            modalListaProductos.classList.add('d-none');
-            modalDetallesProducto.classList.remove('d-none');
-            detalleProductoTablaBody.innerHTML = `
-                <tr>
-                    <td>${producto.id}</td>
-                    <td>${producto.nombre}</td>
-                    <td><span class="badge bg-success">${producto.tipo_impuesto.replace('gravado', 'Gravado ')}%</span></td>
-                    <td>L ${number_format(producto.precio_venta, 2)}</td>
-                    <td>
-                        <input type="number" class="form-control form-control-sm" value="${producto.cantidad}" min="1" id="cantidadProductoModal">
-                    </td>
-                </tr>
-            `;
-            document.getElementById('cantidadProductoModal').addEventListener('input', (e) => {
-                productoSeleccionadoDetalle.cantidad = parseInt(e.target.value) || 1;
-            });
-        }
-
-        btnVolver.addEventListener('click', () => {
-            modalListaProductos.classList.remove('d-none');
-            modalDetallesProducto.classList.add('d-none');
-            productoSeleccionadoDetalle = null;
-            productSearchInput.value = '';
-            renderModalProducts();
-        });
-
-        btnAgregarConfirmar.addEventListener('click', () => {
-            if (productoSeleccionadoDetalle) {
-                addProductToMainTable(productoSeleccionadoDetalle);
-                modalProductos.hide();
-                btnVolver.click();
-            }
-        });
-
-        // ======================
-        // TABLA PRINCIPAL DE PRODUCTOS
-        // ======================
-        function addProductToMainTable(producto) {
-            const existingRow = productosTableBody.querySelector(`tr[data-product-id="${producto.id}"]`);
-
-            if (existingRow) {
-                let currentQuantity = parseInt(existingRow.querySelector('.product-cantidad').value);
-                currentQuantity += producto.cantidad;
-                existingRow.querySelector('.product-cantidad').value = currentQuantity;
-                updateRowSubtotal(existingRow);
-            } else {
-                const newRow = document.createElement('tr');
-                newRow.dataset.productId = producto.id;
-                newRow.dataset.tipoImpuesto = producto.tipo_impuesto;
-                newRow.dataset.precioUnitario = producto.precio_venta;
-                newRow.innerHTML = `
-                    <td>${producto.nombre}</td>
-                    <td><span class="badge bg-primary">${producto.tipo_impuesto.replace('gravado', 'Gravado ')}%</span></td>
-                    <td><input type="number" class="form-control form-control-sm product-cantidad" value="${producto.cantidad}" min="1"></td>
-                    <td>L <span class="product-precio-unitario">${number_format(producto.precio_venta, 2)}</span></td>
-                    <td>L <span class="product-subtotal">0.00</span></td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-danger remove-product">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                productosTableBody.appendChild(newRow);
-                newRow.querySelector('.product-cantidad').addEventListener('input', () => updateRowSubtotal(newRow));
-                newRow.querySelector('.remove-product').addEventListener('click', () => {
-                    newRow.remove();
-                    updateTotals();
-                    checkProductosTableVisibility();
-                });
-                updateRowSubtotal(newRow);
-            }
-            checkProductosTableVisibility();
-        }
-
-        function updateRowSubtotal(row) {
-            const cantidad = parseFloat(row.querySelector('.product-cantidad').value);
-            const precioUnitario = parseFloat(row.dataset.precioUnitario);
-            const subtotal = cantidad * precioUnitario;
-            row.querySelector('.product-subtotal').textContent = number_format(subtotal, 2);
-            updateTotals();
-        }
-
-        function updateTotals() {
-            let totalExonerado = 0;
-            let totalExento = 0;
-            let totalGravado15 = 0;
-            let totalIsv15 = 0;
-
-            document.querySelectorAll('#productosTable tbody tr').forEach(row => {
-                const subtotal = parseFloat(row.querySelector('.product-subtotal').textContent.replace(/[^0-9.-]+/g, ""));
-                const tipoImpuesto = row.dataset.tipoImpuesto;
-
-                if (tipoImpuesto === 'exonerado') totalExonerado += subtotal;
-                else if (tipoImpuesto === 'exento') totalExento += subtotal;
-                else if (tipoImpuesto === 'gravado15') {
-                    totalGravado15 += subtotal;
-                    totalIsv15 += subtotal * 0.15;
                 }
             });
 
-            const granTotal = totalExonerado + totalExento + totalGravado15 + totalIsv15;
-
-            document.getElementById('subtotalExoneradoLabel').textContent = number_format(totalExonerado, 2);
-            document.getElementById('subtotalExentoLabel').textContent = number_format(totalExento, 2);
-            document.getElementById('subtotalGravado15Label').textContent = number_format(totalGravado15, 2);
-            document.getElementById('isv15Label').textContent = number_format(totalIsv15, 2);
-            document.getElementById('granTotalLabel').textContent = number_format(granTotal, 2);
-
-            importeExoneradoInput.value = totalExonerado.toFixed(2);
-            importeExentoInput.value = totalExento.toFixed(2);
-            importeGravado15Input.value = totalGravado15.toFixed(2);
-            isv15Input.value = totalIsv15.toFixed(2);
-            granTotalInput.value = granTotal.toFixed(2);
-
-            updateHiddenItemsInput();
-        }
-
-        function checkProductosTableVisibility() {
-            document.getElementById('productosTableWrapper').style.display = productosTableBody.children.length > 0 ? 'block' : 'none';
-        }
-
-        function updateHiddenItemsInput() {
-            const items = [];
-            document.querySelectorAll('#productosTable tbody tr').forEach(row => {
-                items.push({
-                    producto_id: row.dataset.productId,
-                    nombre_producto_manual: row.querySelector('td:nth-child(1)').textContent,
-                    tipo_impuesto: row.dataset.tipoImpuesto,
-                    cantidad: parseInt(row.querySelector('.product-cantidad').value),
-                    precio_unitario: parseFloat(row.dataset.precioUnitario),
-                    subtotal: parseFloat(row.querySelector('.product-subtotal').textContent.replace(/[^0-9.-]+/g, ""))
+            function showProductDetailsInModal(producto) {
+                modalListaProductos.classList.add('d-none');
+                modalDetallesProducto.classList.remove('d-none');
+                detalleProductoTablaBody.innerHTML = `
+            <tr>
+                <td>${producto.id}</td>
+                <td>${producto.nombre}</td>
+                <td><span class="badge bg-success">${producto.tipo_impuesto.replace('gravado','Gravado ')}%</span></td>
+                <td>L ${number_format(producto.precio_venta,2)}</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm" value="${producto.cantidad}" min="1" id="cantidadProductoModal">
+                </td>
+            </tr>
+        `;
+                document.getElementById('cantidadProductoModal').addEventListener('input', e => {
+                    productoSeleccionadoDetalle.cantidad = parseInt(e.target.value) || 1;
                 });
+            }
+
+            btnVolver.addEventListener('click', () => {
+                modalListaProductos.classList.remove('d-none');
+                modalDetallesProducto.classList.add('d-none');
+                productoSeleccionadoDetalle = null;
+                productSearchInput.value = '';
+                renderModalProducts();
             });
-            document.getElementById('itemsContainer').innerHTML = `<input type="hidden" name="items" value='${JSON.stringify(items)}'>`;
-        }
 
-        function number_format(number, decimals = 2, decPoint = '.', thousandsSep = ',') {
-            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-            const n = !isFinite(+number) ? 0 : +number;
-            const prec = Math.abs(decimals);
-            const sep = thousandsSep;
-            const dec = decPoint;
-            let s = '';
-            const toFixedFix = function(n, prec) {
-                const k = Math.pow(10, prec);
-                return '' + (Math.round(n * k) / k).toFixed(prec);
-            };
-            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-            if (s[0].length > 3) s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-            if ((s[1] || '').length < prec) s[1] = s[1] || '' + new Array(prec - (s[1] || '').length + 1).join('0');
-            return s.join(dec);
-        }
+            btnAgregarConfirmar.addEventListener('click', () => {
+                if (productoSeleccionadoDetalle) {
+                    addProductToMainTable(productoSeleccionadoDetalle);
+                    productoSeleccionadoDetalle = null;
+                    renderModalProducts();
+                    modalListaProductos.classList.remove('d-none');
+                    modalDetallesProducto.classList.add('d-none');
+                }
+            });
 
-        // ======================
-        // BOTÓN LIMPIAR
-        // ======================
-        document.getElementById('btnLimpiarFactura').addEventListener('click', () => {
-            inputNombreCliente.value = '';
-            inputClienteId.value = '';
-            numeroFacturaDisplay.textContent = '{{ $numeroFactura }}';
-            numeroFacturaInput.value = '{{ $numeroFactura }}';
-            productosTableBody.innerHTML = '';
-            document.getElementById('notas').value = '';
+            // ======================
+            // TABLA PRINCIPAL DE PRODUCTOS
+            // ======================
+            function addProductToMainTable(producto) {
+                const existingRow = productosTableBody.querySelector(`tr[data-product-id="${producto.id}"]`);
+                if (existingRow) {
+                    let currentQuantity = parseInt(existingRow.querySelector('.product-cantidad').value);
+                    currentQuantity += producto.cantidad;
+                    existingRow.querySelector('.product-cantidad').value = currentQuantity;
+                    updateRowSubtotal(existingRow);
+                } else {
+                    const newRow = document.createElement('tr');
+                    newRow.dataset.productId = producto.id;
+                    newRow.dataset.tipoImpuesto = producto.tipo_impuesto;
+                    newRow.dataset.precioUnitario = producto.precio_venta;
+                    newRow.innerHTML = `
+                <td>${producto.nombre}</td>
+                <td><span class="badge bg-primary">${producto.tipo_impuesto.replace('gravado','Gravado ')}%</span></td>
+                <td><input type="number" class="form-control form-control-sm product-cantidad" value="${producto.cantidad}" min="1"></td>
+                <td>L <span class="product-precio-unitario">${number_format(producto.precio_venta,2)}</span></td>
+                <td>L <span class="product-subtotal">0.00</span></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger remove-product"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+                    productosTableBody.appendChild(newRow);
+                    newRow.querySelector('.product-cantidad').addEventListener('input', ()=>updateRowSubtotal(newRow));
+                    newRow.querySelector('.remove-product').addEventListener('click', ()=>{
+                        newRow.remove();
+                        updateTotals();
+                        checkProductosTableVisibility();
+                    });
+                    updateRowSubtotal(newRow);
+                }
+                checkProductosTableVisibility();
+            }
+
+            function updateRowSubtotal(row) {
+                const cantidad = parseFloat(row.querySelector('.product-cantidad').value);
+                const precioUnitario = parseFloat(row.dataset.precioUnitario);
+                const subtotal = cantidad * precioUnitario;
+                row.querySelector('.product-subtotal').textContent = number_format(subtotal,2);
+                updateTotals();
+            }
+
+            function updateTotals() {
+                let totalExonerado=0, totalExento=0, totalGravado15=0, totalIsv15=0;
+                document.querySelectorAll('#productosTable tbody tr').forEach(row=>{
+                    const subtotal = parseFloat(row.querySelector('.product-subtotal').textContent.replace(/[^0-9.-]+/g,""));
+                    const tipoImpuesto = row.dataset.tipoImpuesto;
+                    if(tipoImpuesto==='exonerado') totalExonerado += subtotal;
+                    else if(tipoImpuesto==='exento') totalExento += subtotal;
+                    else if(tipoImpuesto==='gravado15'){
+                        totalGravado15 += subtotal;
+                        totalIsv15 += subtotal*0.15;
+                    }
+                });
+                const granTotal = totalExonerado + totalExento + totalGravado15 + totalIsv15;
+
+                document.getElementById('subtotalExoneradoLabel').textContent = number_format(totalExonerado,2);
+                document.getElementById('subtotalExentoLabel').textContent = number_format(totalExento,2);
+                document.getElementById('subtotalGravado15Label').textContent = number_format(totalGravado15,2);
+                document.getElementById('isv15Label').textContent = number_format(totalIsv15,2);
+                document.getElementById('granTotalLabel').textContent = number_format(granTotal,2);
+
+                importeExoneradoInput.value = totalExonerado.toFixed(2);
+                importeExentoInput.value = totalExento.toFixed(2);
+                importeGravado15Input.value = totalGravado15.toFixed(2);
+                isv15Input.value = totalIsv15.toFixed(2);
+                granTotalInput.value = granTotal.toFixed(2);
+
+                updateHiddenItemsInput();
+            }
+
+            function checkProductosTableVisibility() {
+                productosTableWrapper.style.display = productosTableBody.children.length>0 ? 'block' : 'none';
+            }
+
+            function updateHiddenItemsInput() {
+                const items = [];
+                document.querySelectorAll('#productosTable tbody tr').forEach(row=>{
+                    items.push({
+                        producto_id: row.dataset.productId,
+                        nombre_producto_manual: row.querySelector('td:nth-child(1)').textContent,
+                        tipo_impuesto: row.dataset.tipoImpuesto,
+                        cantidad: parseInt(row.querySelector('.product-cantidad').value),
+                        precio_unitario: parseFloat(row.dataset.precioUnitario),
+                        subtotal: parseFloat(row.querySelector('.product-subtotal').textContent.replace(/[^0-9.-]+/g,""))
+                    });
+                });
+                itemsContainer.innerHTML = `<input type="hidden" name="items" value='${JSON.stringify(items)}'>`;
+            }
+
+            function number_format(number, decimals=2, decPoint='.', thousandsSep=','){
+                number = (number+'').replace(/[^0-9+\-Ee.]/g,'');
+                const n=!isFinite(+number)?0:+number;
+                const prec = Math.abs(decimals);
+                const sep = thousandsSep;
+                const dec = decPoint;
+                let s='';
+                const toFixedFix=function(n,prec){ const k=Math.pow(10,prec); return ''+(Math.round(n*k)/k).toFixed(prec); };
+                s=(prec?toFixedFix(n,prec):''+Math.round(n)).split('.');
+                if(s[0].length>3) s[0]=s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g,sep);
+                if((s[1]||'').length<prec) s[1]=s[1]||''+new Array(prec-(s[1]||'').length+1).join('0');
+                return s.join(dec);
+            }
+
+            // ======================
+            // BOTÓN LIMPIAR
+            // ======================
+            btnLimpiarFactura.addEventListener('click', ()=>{
+                inputNombreCliente.value='';
+                inputClienteId.value='';
+                numeroFacturaDisplay.textContent='{{ $numeroFactura }}';
+                numeroFacturaInput.value='{{ $numeroFactura }}';
+                productosTableBody.innerHTML='';
+                document.getElementById('notas').value='';
+                checkProductosTableVisibility();
+                updateTotals();
+            });
+
+            // ======================
+            // ENVÍO DE FACTURA
+            // ======================
+            document.getElementById('ventaForm').addEventListener('submit', function(e){
+                // Se puede quitar preventDefault si quieres submit normal
+                updateHiddenItemsInput();
+            });
+
+            // Inicializar modal y tabla
+            renderModalProducts();
             checkProductosTableVisibility();
             updateTotals();
-        });
 
-        // Inicializar modal y tabla
-        renderModalProducts();
-        checkProductosTableVisibility();
-        updateTotals();
-    });
-</script>
+        });
+    </script>
+
 </body>
 </html>
 

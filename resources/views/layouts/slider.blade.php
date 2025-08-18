@@ -250,9 +250,7 @@
         <a href="{{ url('/') }}" class="logo-text" tabindex="0">Salon <span>Chic</span></a>
         <div class="header-icons">
 
-            <button class="btn-close d-lg-none" onclick="toggleSidebar()" aria-label="Cerrar menú">
-                <i class="bi bi-x-lg"></i>
-            </button>
+
         </div>
     </div>
 
@@ -289,16 +287,6 @@
             <a href="{{ route('clientes.create') }}" class="{{ request()->routeIs('clientes.create') ? 'active' : '' }}">Registrar</a>
         </div>
 
-        {{-- Clientes --}}
-        <div class="menu-item" onclick="toggleSubmenu('citasMenu')" aria-expanded="{{ request()->routeIs('citas.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('citas')">
-            <span><i class="bi bi-person menu-icon"></i>Citas</span>
-            <i class="bi bi-chevron-down"></i>
-        </div>
-        <div id="citasMenu" class="submenu {{ request()->routeIs('citas.*') ? 'open' : '' }}">
-            <a href="{{ route('citas.index') }}" class="{{ request()->routeIs('citas.index') ? 'active' : '' }}">Listado</a>
-            <a href="{{ route('citas.create') }}" class="{{ request()->routeIs('citas.create') ? 'active' : '' }}">Registrar</a>
-        </div>
-
         {{-- Proveedores --}}
         <div class="menu-item" onclick="toggleSubmenu('proveedoresMenu')" aria-expanded="{{ request()->routeIs('proveedores.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('proveedoresMenu')">
             <span><i class="bi bi-box-seam menu-icon"></i>Proveedores</span>
@@ -321,7 +309,7 @@
 
         {{-- Facturas --}}
         <div class="menu-item" onclick="toggleSubmenu('facturasMenu')" aria-expanded="{{ request()->routeIs('facturas.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('facturasMenu')">
-            <span><i class="bi bi-receipt menu-icon"></i>Factura de compra</span>
+            <span><i class="bi bi-receipt menu-icon"></i>Facturas de compra</span>
             <i class="bi bi-chevron-down"></i>
         </div>
         <div id="facturasMenu" class="submenu {{ request()->routeIs('facturas.*') ? 'open' : '' }}">
@@ -329,15 +317,15 @@
             <a href="{{ route('facturas.create') }}" class="{{ request()->routeIs('facturas.create') ? 'active' : '' }}">Registrar</a>
         </div>
 
-        {{-- Facturas de--}}
+        {{-- Facturas de venta--}}
         <div class="menu-item" onclick="toggleSubmenu('facturaventaMenu')" aria-expanded="{{ request()->routeIs('facturaventa.*') ? 'true' : 'false' }}" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleSubmenu('facturaventaMenu')">
-            <span><i class="bi bi-receipt menu-icon"></i>Factura de venta</span>
-            <i class="bi bi-chevron-down"></i>
-        </div>
-        <div id="facturaventaMenu" class="submenu {{ request()->routeIs('facturaventa.*') ? 'open' : '' }}">
-            <a href="{{ route('facturaventa.index') }}" class="{{ request()->routeIs('facturaventa.index') ? 'active' : '' }}">Listado</a>
-            <a href="{{ route('facturaventa.create') }}" class="{{ request()->routeIs('facturaventa.create') ? 'active' : '' }}">Registrar</a>
-        </div>
+           <span><i class="bi bi-receipt menu-icon"></i>Facturas de venta</span>
+           <i class="bi bi-chevron-down"></i>
+       </div>
+       <div id="facturaventaMenu" class="submenu {{ request()->routeIs('facturaventa.*') ? 'open' : '' }}">
+           <a href="{{ route('facturaventa.index') }}" class="{{ request()->routeIs('facturaventa.index') ? 'active' : '' }}">Listado</a>
+           <a href="{{ route('facturaventa.create') }}" class="{{ request()->routeIs('facturaventa.create') ? 'active' : '' }}">Registrar</a>
+       </div>
 
     </div>
 </nav>
@@ -361,7 +349,7 @@
         const submenu = document.getElementById(id);
         submenu.classList.toggle('open');
 
-        // Actualizar aria-expanded del menu-item correspondiente
+// Actualizar aria-expanded del menu-item correspondiente
         const menuItem = submenu.previousElementSibling;
         if (submenu.classList.contains('open')) {
             menuItem.setAttribute('aria-expanded', 'true');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Producto extends Model
 {
@@ -18,22 +19,24 @@ class Producto extends Model
         'fecha_ingreso',
         'imagen',
         'stock',
+        // ¡Estos dos campos son CRUCIALES para que se guarden!
+        'precio_compra',
+        'precio_venta',
     ];
 
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class);
     }
+
     public function detalleFacturas()
     {
-        return $this->hasMany(DetalleFactura::class, 'producto_id'); // Usaremos 'producto_id' aquí
+        return $this->hasMany(DetalleFactura::class, 'producto_id');
     }
 
-    // Si quieres una relación Muchos a Muchos directa con Facturas (sin el detalle de por medio), se haría así:
     public function facturas()
     {
         return $this->belongsToMany(Factura::class, 'detalle_facturas', 'producto_id', 'factura_id')
-            ->withPivot('cantidad', 'precio_unitario', 'subtotal'); // Asegúrate de incluir los campos de la tabla pivote
+            ->withPivot('cantidad', 'precio_unitario', 'subtotal');
     }
-
 }

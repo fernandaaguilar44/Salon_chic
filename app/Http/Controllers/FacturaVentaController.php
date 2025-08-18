@@ -35,7 +35,6 @@ class FacturaVentaController extends Controller
         $ventas = $query->get();
         $totalResultados = $ventas->count();
 
-        // ¡Vista corregida! Ahora apunta a 'facturaventas.index'
         return view('facturaventa.index', compact('ventas', 'totalResultados'));
     }
 
@@ -52,7 +51,6 @@ class FacturaVentaController extends Controller
         }
         $numeroFactura = $prefijo . $parteUnica;
 
-        // Retornar la vista con clientes, productos y número de factura
         return view('facturaventa.create', compact('clientes', 'productos', 'numeroFactura'));
     }
 
@@ -65,6 +63,16 @@ class FacturaVentaController extends Controller
 
     public function store(Request $request)
     {
+        // Decodificar el JSON que viene en "items"
+        $items = json_decode($request->input('items'), true);
+
+        if (!$items || !is_array($items)) {
+            return back()->withErrors('Debe agregar al menos un producto válido.')->withInput();
+        }
+
+        // Reemplazar en el request para que la validación funcione
+        $request->merge(['items' => $items]);
+
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'items' => 'required|array|min:1',
@@ -92,7 +100,7 @@ class FacturaVentaController extends Controller
 
         try {
             DB::transaction(function () use ($request, &$numeroFactura) {
-                // --- Generar número de factura único con el formato 000-001-01-0-XXXXXXX ---
+                // Generar número de factura único
                 $prefijo = '000-001-01-0-';
                 do {
                     $parteUnica = '';
@@ -102,7 +110,7 @@ class FacturaVentaController extends Controller
                     $numeroFactura = $prefijo . $parteUnica;
                 } while (FacturaVenta::where('numero_factura', $numeroFactura)->exists());
 
-                // --- Calcular importes ---
+                // Calcular importes
                 $importeExonerado = 0;
                 $importeExento = 0;
                 $importeGravado15 = 0;
@@ -121,7 +129,7 @@ class FacturaVentaController extends Controller
                 $isv15 = $importeGravado15 * 0.15;
                 $total = $importeExonerado + $importeExento + $importeGravado15 + $isv15;
 
-                // --- Crear la venta ---
+                // Crear la venta
                 $venta = FacturaVenta::create([
                     'numero_factura' => $numeroFactura,
                     'fecha' => $request->fecha ?? Carbon::now(),
@@ -134,12 +142,12 @@ class FacturaVentaController extends Controller
                     'notas' => $request->notas,
                 ]);
 
-                // --- Registrar detalles de productos ---
+                // Registrar detalles usando el modelo correcto
                 foreach ($request->items as $item) {
                     $producto = Producto::whereKey($item['producto_id'])->lockForUpdate()->first();
                     $subtotal = $item['cantidad'] * $item['precio_unitario'];
 
-                    $venta->detalles()->create([
+                    $venta->detalles()->create([ // <-- detalles() debe estar en FacturaVenta
                         'producto_id' => $item['producto_id'],
                         'nombre_producto_manual' => $producto->nombre,
                         'tipo_impuesto' => $item['tipo_impuesto'],
@@ -156,13 +164,12 @@ class FacturaVentaController extends Controller
                 }
             });
 
-            return redirect()->route('ventas.index')->with('success', 'Venta registrada y stock actualizado exitosamente.');
+            return redirect()->route('facturaventa.index')->with('success', 'Venta registrada y stock actualizado exitosamente.');
         } catch (\Exception $e) {
             Log::error('Error al registrar la venta: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al registrar la venta: ' . $e->getMessage())->withInput();
         }
     }
-
 
     public function checkUniqueNumeroFactura(Request $request)
     {

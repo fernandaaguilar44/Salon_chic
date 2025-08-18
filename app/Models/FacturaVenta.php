@@ -32,12 +32,11 @@ class FacturaVenta extends Model
         return $this->belongsTo(Cliente::class); // Relacionado con el modelo Cliente
     }
 
-    public function detalles(): HasMany
+    public function detalles()
     {
-        // Relacionado con el nuevo modelo DetalleVenta
-        // Asumiendo que DetalleVenta se conecta a la tabla 'detalle_ventas'
-        return $this->hasMany(DetalleFacturaVenta::class);
+        return $this->hasMany(DetalleFacturaVenta::class, 'venta_id');
     }
+
 
     public function productos(): BelongsToMany
     {
