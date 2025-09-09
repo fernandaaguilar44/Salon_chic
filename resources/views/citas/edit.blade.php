@@ -271,17 +271,17 @@
                     $citaEnProceso = $cita->estado === 'en_proceso';
                     $citaFinalizada = $cita->estado === 'finalizada';
                     $citaCancelada = $cita->estado === 'cancelada';
+                    $citaVencida = $yaPaso && $citaPendiente; // ← LÍNEA NUEVA
+                     // Reglas de edición ACTUALIZADAS
+                    $puedeEditarEmpleadoServicio = $citaPendiente && !$citaVencida; // ← CAMBIO
+                    $puedeEditarFechaHora = $citaPendiente && !$citaVencida; // ← CAMBIO
+                    $puedeEditarEstado = ($citaPendiente || $citaEnProceso) || $citaVencida; // ← CAMBIO
+                    $puedeEditarObservaciones = (!$citaFinalizada && !$citaCancelada) && !$citaVencida; // ← CAMBIO
 
-                    // Reglas de edición
-                    $puedeEditarEmpleadoServicio = $citaPendiente; // Solo pendiente
-                    $puedeEditarFechaHora = $citaPendiente; // Solo pendiente
-                    $puedeEditarEstado = $citaPendiente || $citaEnProceso; // Pendiente o en proceso
-                    $puedeEditarObservaciones = !$citaFinalizada && !$citaCancelada; // Todos menos finalizada y cancelada
-
-                    // Información adicional para el "plus"
+                      // Información adicional para el "plus"
                     $estimadoFinCita = \Carbon\Carbon::parse($fechaCitaFormateada . ' ' . $horaInicioFormateada)
-                                        ->addMinutes($cita->servicio->duracion_estimada)
-                                        ->format('H:i');
+                        ->addMinutes($cita->servicio->duracion_estimada)
+                        ->format('H:i');
                 @endphp
 
                         <!-- Información del estado actual y resumen de la cita -->
@@ -335,7 +335,7 @@
                 @if($citaFinalizada)
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        <strong>Cita finalizada:</strong> Esta cita ya fue completada. Solo se puede cambiar el estado y agregar observaciones.
+                        <strong>Cita finalizada:</strong> Esta cita ya está finalizada. Solo es posible actualizar el estado o añadir observaciones; no se permite realizar más ediciones.
                     </div>
                 @elseif($faltaPoco && $cita->estado === 'pendiente')
                     <div class="alert alert-info">

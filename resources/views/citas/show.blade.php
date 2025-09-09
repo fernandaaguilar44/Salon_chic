@@ -366,66 +366,80 @@
             flex: 1;
         }
 
-        /* DateTime Card Especial */
+        /* --- ESTILOS DE LA SECCIÓN DE PROGRAMACIÓN --- */
+
+        /* Estilo para la tarjeta de Fecha y Horario */
         .datetime-card {
             background: linear-gradient(135deg, rgba(228, 0, 124, 0.05), rgba(123, 42, 141, 0.02));
             border-left: 4px solid #7B2A8D;
         }
 
-        .datetime-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.7rem;
-            flex: 1;
+        .datetime-display-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            text-align: center;
         }
 
-        .date-section, .time-section {
+        .datetime-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.35rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            flex: 1;
-            border: 1px solid rgba(228, 0, 124, 0.1);
+            justify-content: center;
+            padding: 0.4rem;
         }
 
-        .date-day {
-            font-size: 1.2rem;
+        .datetime-main-number {
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #E4007C;
-            line-height: 1;
+            line-height: 1.1;
+            color: #7B2A8D;
+            margin-bottom: 0.2rem;
         }
 
-        .date-month {
-            font-size: 0.6rem;
-            color: #7B2A8D;
+        .datetime-main-label {
+            font-size: 0.75rem;
             font-weight: 600;
+            color: #7B2A8D;
             text-transform: capitalize;
-            margin-top: 0.1rem;
+            line-height: 1.2;
         }
 
-        .date-weekday {
-            font-size: 0.5rem;
-            color: #666;
-            margin-top: 0.1rem;
+        .datetime-sub-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #E4007C;
+            text-transform: capitalize;
+            margin-top: 0.2rem;
         }
 
-        .time-display {
-            font-size: 1.1rem;
+        /* Estilo para el badge de Duración */
+        .duration-value {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .duration-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 0.8rem;
+
+        }
+
+        .duration-badge .fas {
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        .duration-number {
+            font-size: 1.6rem;
             font-weight: 700;
             color: #7B2A8D;
-            line-height: 1;
         }
 
-        .time-label {
-            font-size: 0.6rem;
-            color: #666;
-            margin-top: 0.1rem;
-            font-weight: 600;
-        }
-
+        /* --- FIN DE ESTILOS DE LA SECCIÓN DE PROGRAMACIÓN --- */
         /* Special Cards */
         .price-card .card-value {
             display: flex;
@@ -446,21 +460,8 @@
             font-size: 0.65rem;
         }
 
-        .duration-badge {
-            background: linear-gradient(135deg, #fef3c7, #fcd34d);
-            color: #92400e;
-            padding: 0.8rem 1.2rem;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border: 2px solid #f59e0b;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            min-width: 110px;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        }
+
+
 
         /* Contact in Card */
         .contact-card .card-value {
@@ -638,6 +639,25 @@
                 flex-direction: column;
                 gap: 0.4rem;
             }
+            /* AGREGA estas reglas: */
+            .date-section, .time-section {
+                height: 60px;
+                width: 100%;
+                gap: 0.15rem;
+            }
+
+            .date-day, .time-display {
+                font-size: 1.1rem !important;
+            }
+
+            .date-month, .time-label {
+                font-size: 0.55rem !important;
+            }
+
+            .date-weekday {
+                font-size: 0.5rem !important;
+            }
+
 
             .actions-section {
                 justify-content: center;
@@ -759,7 +779,6 @@
                     Programación y horarios
                 </div>
                 <div class="section-content">
-                    <!-- Fecha y Horario Completo -->
                     <div class="info-card datetime-card">
                         <div class="card-header">
                             <div class="card-icon">
@@ -767,32 +786,17 @@
                             </div>
                             <div class="card-label">Fecha y horario programado</div>
                         </div>
-                        <div class="datetime-display">
-                            <div class="date-section">
-                                <div class="date-day">{{ \Carbon\Carbon::parse($cita->fecha)->format('d') }}</div>
-                                <div class="date-month">{{ strtoupper(\Carbon\Carbon::parse($cita->fecha)->locale('es')->format('M Y')) }}</div>
-                                @php
-                                    $diasSemana = [
-                                        'Monday' => 'Lunes',
-                                        'Tuesday' => 'Martes',
-                                        'Wednesday' => 'Miércoles',
-                                        'Thursday' => 'Jueves',
-                                        'Friday' => 'Viernes',
-                                        'Saturday' => 'Sábado',
-                                        'Sunday' => 'Domingo'
-                                    ];
-                                    $diaIngles = \Carbon\Carbon::parse($cita->fecha)->format('l');
-                                    $diaEspanol = $diasSemana[$diaIngles] ?? $diaIngles;
-                                @endphp
-                                <div class="date-weekday">{{ $diaEspanol }}</div>
+                        <div class="datetime-display-grid">
+                            <div class="datetime-block">
+                                <div class="datetime-main-number">{{ \Carbon\Carbon::parse($cita->fecha)->format('d') }}</div>
+                                <div class="datetime-main-label">{{ strtoupper(\Carbon\Carbon::parse($cita->fecha)->locale('es')->isoFormat('MMM Y')) }}</div>
+                                <div class="datetime-sub-label">{{ \Carbon\Carbon::parse($cita->fecha)->locale('es')->isoFormat('dddd') }}</div>
                             </div>
-
-                            <div class="time-section">
-                                <div class="time-display">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</div>
-                                <div class="time-label">Hora de inicio</div>
+                            <div class="datetime-block">
+                                <div class="datetime-main-number">{{ \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i') }}</div>
+                                <div class="datetime-main-label">Hora de inicio</div>
                             </div>
-
-                            <div class="time-section">
+                            <div class="datetime-block">
                                 @php
                                     $fechaFormateada = \Carbon\Carbon::parse($cita->fecha)->format('Y-m-d');
                                     $horaFormateada = \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i:s');
@@ -800,13 +804,12 @@
                                                         ->addMinutes($cita->servicio->duracion_estimada ?? 90)
                                                         ->format('H:i');
                                 @endphp
-                                <div class="time-display">{{ $estimadoFinCita }}</div>
-                                <div class="time-label">Hora de finalización</div>
+                                <div class="datetime-main-number">{{ $estimadoFinCita }}</div>
+                                <div class="datetime-main-label">Hora de finalización</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Duración del Servicio -->
                     <div class="info-card">
                         <div class="card-header">
                             <div class="card-icon">
@@ -814,17 +817,15 @@
                             </div>
                             <div class="card-label">Duración estimada</div>
                         </div>
-                        <div class="card-value" style="display: flex; justify-content: center;">
+                        <div class="card-value duration-value">
                             @php
                                 $duracion = $cita->servicio->duracion_estimada ?? 90;
                                 $duracionTexto = '';
-
                                 if ($duracion >= 60) {
                                     $horas = floor($duracion / 60);
                                     $minutosRestantes = $duracion % 60;
-
                                     if ($minutosRestantes == 0) {
-                                        $duracionTexto = $horas . ' hora' . ($horas > 1 ? 's' : '');
+                                        $duracionTexto = $horas . ' hr' . ($horas > 1 ? 's' : '');
                                     } else {
                                         $duracionTexto = $horas . 'h ' . $minutosRestantes . 'min';
                                     }
@@ -834,13 +835,12 @@
                             @endphp
                             <div class="duration-badge">
                                 <i class="fas fa-stopwatch"></i>
-                                {{ $duracionTexto }}
+                                <span class="duration-number">{{ $duracionTexto }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <!-- SECCIÓN 2: INFORMACIÓN DEL SERVICIO -->
             <div class="info-section service-info-section">
                 <div class="section-title">
