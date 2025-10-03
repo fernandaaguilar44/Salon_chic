@@ -715,7 +715,7 @@
                         <div class="card-icon">
                             <i class="fas fa-bullseye"></i>
                         </div>
-                        <div class="card-title">Aplicación y Estado</div>
+                        <div class="card-title">Aplicación y estado</div>
                     </div>
                     <div class="card-content">
                         <div style="margin-bottom: 1rem;">
@@ -814,7 +814,7 @@
                         <div class="card-icon">
                             <i class="fas fa-chart-pie"></i>
                         </div>
-                        <div class="card-title">Control de Uso</div>
+                        <div class="card-title">Control de uso</div>
                     </div>
                     <div class="card-content">
                         @php
@@ -872,9 +872,9 @@
                         </div>
                         <div class="card-title">
                             @if(($promocion->aplica_a ?? 'servicios') == 'servicios')
-                                Servicios Incluidos o Aplicables
+                                Servicios Incluidos o aplicables
                             @else
-                                Productos Incluidos o Aplicables
+                                Productos Incluidos o aplicables
                             @endif
                         </div>
                     </div>
@@ -978,7 +978,7 @@
         <!-- Scroll Indicator -->
         <div class="scroll-indicator" id="scrollIndicator">
             <i class="fas fa-chevron-down"></i>
-            Desliza para ver más
+            Desliza para ver
         </div>
 
         <!-- Actions -->
