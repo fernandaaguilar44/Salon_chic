@@ -18,5 +18,11 @@ class Servicio extends Model
         'estado',
 
     ];
+    public function promociones()
+    {
+        return $this->belongsToMany(Promocion::class, 'promocion_servicio', 'servicio_id', 'promocion_id')
+            ->withTimestamps();
+    }
+
 
 }

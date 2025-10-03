@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #ffeef8 0%, #f3e6f9 50%, #e8d5f2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding: 0.5rem;
+            padding: 0.3rem;
             color: #333;
         }
 
@@ -25,13 +25,12 @@
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 1rem;
+            padding: 0.8rem;
             box-shadow: 0 15px 35px rgba(228, 0, 124, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
-            min-height: calc(100vh - 1rem);
             position: relative;
         }
 
@@ -60,8 +59,8 @@
         /* Header */
         .beauty-header {
             text-align: center;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.6rem;
+            margin-bottom: 0.6rem;
+            padding-bottom: 0.4rem;
             border-bottom: 3px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
         }
@@ -69,7 +68,7 @@
         .beauty-header h2 {
             color: #7B2A8D;
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin: 0;
             text-shadow: 0 2px 4px rgba(123, 42, 141, 0.1);
             display: flex;
@@ -80,7 +79,7 @@
 
         .beauty-header h2 i {
             color: #E4007C;
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         /* Main Content */
@@ -88,7 +87,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.6rem;
             min-height: 0;
         }
 
@@ -97,7 +96,7 @@
             background: linear-gradient(135deg, rgba(123, 42, 141, 0.08), rgba(228, 0, 124, 0.04));
             border: 2px solid rgba(228, 0, 124, 0.15);
             border-radius: 15px;
-            padding: 1.2rem;
+            padding: 1rem;
             animation: slideInDown 0.8s ease-out;
             flex-shrink: 0;
         }
@@ -229,15 +228,15 @@
             flex: 1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.7rem;
+            gap: 0.5rem;
             min-height: 0;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .info-card {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
-            padding: 1rem;
+            padding: 0.8rem;
             border-left: 4px solid #E4007C;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
@@ -331,6 +330,12 @@
             font-weight: 600;
         }
 
+        .email-card .card-value {
+            color: #7c3aed;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
         /* Address Card */
         .address-card {
             grid-column: 1 / -1;
@@ -338,37 +343,38 @@
 
         .address-value {
             background: rgba(248, 250, 252, 0.9);
-            padding: 0.8rem;
+            padding: 0.6rem;
             border-radius: 8px;
             border: 2px solid #e2e8f0;
             font-style: italic;
-            line-height: 1.4;
-            margin-top: 0.5rem;
+            line-height: 1.3;
+            margin-top: 0.4rem;
             font-size: 0.9rem;
             word-wrap: break-word;
             word-break: break-word;
             overflow: hidden;
             resize: none;
             width: 100%;
-            min-height: 80px;
+            min-height: 60px;
+            max-height: 80px;
         }
 
         /* Alerts */
         .alert {
             border-radius: 15px;
             border: none;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             font-weight: 600;
-            font-size: 0.9rem;
-            margin: 1rem 0;
+            font-size: 0.85rem;
+            margin: 0.6rem 0;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.6rem;
             animation: slideInUp 0.8s ease-out;
         }
 
         .alert i {
-            font-size: 1.2rem;
+            font-size: 1rem;
             flex-shrink: 0;
         }
 
@@ -389,41 +395,41 @@
         /* Actions Section - Alineados a la izquierda */
         .actions-section {
             display: flex;
-            gap: 0.6rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
             justify-content: flex-start;
-            padding: 0.8rem 0;
+            padding: 0.6rem 0;
             border-top: 2px solid rgba(228, 0, 124, 0.1);
             flex-shrink: 0;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             border-radius: 0 0 15px 15px;
-            margin: 0 -1rem -1rem -1rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            margin: 0.3rem -0.8rem -0.8rem -0.8rem;
+            padding-left: 0.8rem;
+            padding-right: 0.8rem;
             position: sticky;
             bottom: 0;
             z-index: 10;
-            min-height: 60px;
+            min-height: 50px;
             align-items: center;
         }
 
         .btn-beauty {
-            padding: 0.7rem 1.5rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 25px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
             border: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             text-decoration: none;
             text-transform: none;
             letter-spacing: 0.3px;
             position: relative;
             overflow: hidden;
-            min-width: 140px;
+            min-width: 120px;
             justify-content: center;
             cursor: pointer;
         }
@@ -523,22 +529,22 @@
         @media (max-width: 768px) {
             .container {
                 min-height: auto;
-                padding: 0.8rem;
+                padding: 0.6rem;
             }
 
             .beauty-header h2 {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
 
             .beauty-header h2 i {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
 
             .employee-info {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                gap: 1rem;
+                gap: 0.8rem;
             }
 
             .employee-details {
@@ -546,7 +552,7 @@
             }
 
             .employee-name {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 text-align: center !important;
             }
 
@@ -560,49 +566,59 @@
 
             .info-grid {
                 grid-template-columns: 1fr;
-                margin-bottom: 0.8rem;
+                margin-bottom: 0.6rem;
             }
 
             .actions-section {
                 justify-content: center;
                 flex-direction: column;
                 align-items: center;
-                gap: 0.5rem;
-                margin: 0.5rem -0.8rem -0.8rem -0.8rem;
-                padding-left: 0.8rem;
-                padding-right: 0.8rem;
+                gap: 0.4rem;
+                margin: 0.3rem -0.6rem -0.6rem -0.6rem;
+                padding-left: 0.6rem;
+                padding-right: 0.6rem;
             }
 
             .btn-beauty {
                 width: 100%;
-                max-width: 280px;
+                max-width: 260px;
+            }
+
+            .address-value {
+                min-height: 50px;
+                max-height: 70px;
             }
         }
 
         @media (max-width: 480px) {
             .beauty-header h2 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 flex-direction: column;
-                gap: 5px;
+                gap: 4px;
             }
 
             .beauty-header h2 i {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
 
             .card-header {
                 flex-direction: column;
                 text-align: center;
-                gap: 0.4rem;
+                gap: 0.3rem;
             }
 
             .employee-name {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
 
             .btn-beauty {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+
+            .address-value {
+                min-height: 45px;
+                max-height: 60px;
             }
         }
 
@@ -676,6 +692,17 @@
                     <div class="card-label">Teléfono</div>
                 </div>
                 <div class="card-value">{{ $empleado->telefono }}</div>
+            </div>
+
+            <!-- Correo Electrónico -->
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="card-label">Correo electrónico</div>
+                </div>
+                <div class="card-value">{{ $empleado->correo }}</div>
             </div>
 
             <!-- Fecha de Ingreso -->
@@ -839,10 +866,6 @@
             }, index * 100);
         });
     }, 100);
-
-
-
-
 </script>
 </body>
-</html>
+</html> 

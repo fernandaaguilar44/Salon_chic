@@ -225,6 +225,35 @@
 </body>
 </html>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Solo letras y espacios (nombres)
+        function soloLetras(input) {
+            input.addEventListener('input', function (e) {
+                let val = e.target.value;
+                val = val.replace(/[^a-zA-ZÁÉÍÓÚáéíóúñÑ\s]/g, '');
+                e.target.value = val;
+            });
+        }
+
+        // Solo números
+        function soloNumeros(input) {
+            input.addEventListener('input', function (e) {
+                let val = e.target.value;
+                val = val.replace(/[^0-9]/g, '');
+                e.target.value = val;
+            });
+        }
+
+        // Aplicar restricciones según campo
+        soloLetras(document.getElementById('nombre_empleado'));
+        soloLetras(document.getElementById('contacto_emergencia_nombre'));
+
+        soloNumeros(document.getElementById('numero_identidad'));
+        soloNumeros(document.getElementById('telefono'));
+        soloNumeros(document.getElementById('salario'));
+        soloNumeros(document.getElementById('contacto_emergencia'));
+    });
+
     document.getElementById('btnLimpiar').addEventListener('click', function (e) {
         e.preventDefault(); // Prevenir el comportamiento por defecto del botón
 
