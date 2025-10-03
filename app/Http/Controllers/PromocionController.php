@@ -462,6 +462,11 @@ class PromocionController extends Controller
             $query->where('estado', $request->estado);
         }
 
+        if ($request->aplica_a) {
+            $query->where('aplica_a', $request->aplica_a); // <-- Esto filtra correctamente
+        }
+
+
         // Filtro de promociones vigentes/expiradas
         if ($request->vigencia === 'vigente') {
             $query->where('fecha_inicio', '<=', now())
@@ -498,15 +503,13 @@ class PromocionController extends Controller
     public function create()
     {
         $servicios = Servicio::where('estado', 'activo')
-            ->orderBy('categoria_servicio')
             ->orderBy('nombre_servicio')
             ->get();
 
 
-        $productos = Producto::where('estado', 'activo')
-            ->orderBy('categoria_producto')
-            ->orderBy('nombre_producto')
+        $productos = Producto::orderBy('nombre')
             ->get();
+
 
         return view('promociones.create', compact('servicios', 'productos'));
     }

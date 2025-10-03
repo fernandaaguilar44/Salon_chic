@@ -75,14 +75,14 @@ Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->n
 Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');Route::get('productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
 Route::controller(ClienteController::class)->group(function () {
-    Route::get('/clientes', 'index')->name('clientes.index');           // ✔ Listado principal
-    Route::get('/clientes/buscar', 'buscar')->name('clientes.buscar');  // ❗ Filtro AJAX (te faltaba)
-    Route::get('/clientes/create', 'create')->name('clientes.create');  // ✔ Formulario crear
-    Route::post('/clientes', 'store')->name('clientes.store');          // ✔ Guardar nuevo cliente
+    Route::get('/clientes', 'index')->name('clientes.index');
+    Route::get('/clientes/buscar', 'buscar')->name('clientes.buscar');
+    Route::get('/clientes/create', 'create')->name('clientes.create');
+    Route::post('/clientes', 'store')->name('clientes.store');
 
-    Route::get('/clientes/{cliente}', 'show')->name('clientes.show');   // ❗ Ver detalles
-    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit'); // ❗ Formulario editar
-    Route::put('/clientes/{cliente}', 'update')->name('clientes.update');  // ❗ Guardar cambios
+    Route::get('/clientes/{cliente}', 'show')->name('clientes.show');
+    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{cliente}', 'update')->name('clientes.update');
 
 });
 
@@ -94,14 +94,14 @@ Route::get('/buscar-proveedores', [ProveedorController::class, 'buscar'])->name(
 // Agregar estas rutas a tu archivo web.php
 
 Route::controller(CitaController::class)->group(function () {
-    Route::get('/citas', 'index')->name('citas.index');           // ✔ Listado principal
-    Route::get('/citas/buscar', 'buscar')->name('citas.buscar');  // ✔ Filtro AJAX
-    Route::get('/citas/create', 'create')->name('citas.create');  // ✔ Formulario crear
-    Route::post('/citas', 'store')->name('citas.store');          // ✔ Guardar nueva cita
+    Route::get('/citas', 'index')->name('citas.index');
+    Route::get('/citas/buscar', 'buscar')->name('citas.buscar');
+    Route::get('/citas/create', 'create')->name('citas.create');
+    Route::post('/citas', 'store')->name('citas.store');
     Route::get('/citas/disponibilidad',  'disponibilidad')->name('citas.disponibilidad');
-    Route::get('/citas/{cita}', 'show')->name('citas.show');      // ✔ Ver detalles
-    Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit'); // ✔ Formulario editar
-    Route::put('/citas/{cita}', 'update')->name('citas.update');  // ✔ Guardar cambios
+    Route::get('/citas/{cita}', 'show')->name('citas.show');
+    Route::get('/citas/{cita}/edit', 'edit')->name('citas.edit');
+    Route::put('/citas/{cita}', 'update')->name('citas.update');
 });
 
 // Rutas para la gestión de Ventas
@@ -133,13 +133,13 @@ Route::get('/', function () {
 
 
 Route::controller(PromocionController::class)->group(function () {
-    Route::get('/promociones', 'index')->name('promociones.index');           // Listado principal
+    Route::get('/promociones', 'index')->name('promociones.index');
     Route::get('/promociones/buscar', [PromocionController::class, 'buscar'])->name('promociones.buscar');
-    Route::get('/promociones/create', 'create')->name('promociones.create');  // Formulario crear
-    Route::post('/promociones', 'store')->name('promociones.store');          // Guardar nueva promoción
-    Route::get('/promociones/{promocion}', 'show')->name('promociones.show'); // Ver detalles
-    Route::get('/promociones/{promocion}/edit', 'edit')->name('promociones.edit'); // Editar
-    Route::put('/promociones/{promocion}', 'update')->name('promociones.update');  // Guardar cambios
+    Route::get('/promociones/create', 'create')->name('promociones.create');
+    Route::post('/promociones', 'store')->name('promociones.store');
+    Route::get('/promociones/{promocion}', 'show')->name('promociones.show');
+    Route::get('/promociones/{promocion}/edit', 'edit')->name('promociones.edit');
+    Route::put('/promociones/{promocion}', 'update')->name('promociones.update');
 
 });
 
