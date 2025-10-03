@@ -22,6 +22,14 @@ class Cliente extends Model
         return $this->hasMany(FacturaVenta::class, 'cliente_id');
     }
 
+    public function promociones()
+    {
+        return $this->belongsToMany(Promocion::class, 'promocion_cliente', 'cliente_id', 'promocion_id')
+            ->withPivot(['usos', 'primer_uso', 'ultimo_uso'])
+            ->withTimestamps();
+    }
+
+
 
 
 

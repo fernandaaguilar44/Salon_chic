@@ -19,6 +19,7 @@ use App\Http\Controllers\LlamadoAtencionController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CitaController;
+use App\Http\Controllers\PromocionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -125,5 +126,20 @@ Route::get('/', function () {
         /*'facturaventa' => DB::table('facturaventa')->count(),*/
     ];
 
+
     return view('layouts.dashboard', compact('data'));
 })->name('dashboard');
+
+
+
+Route::controller(PromocionController::class)->group(function () {
+    Route::get('/promociones', 'index')->name('promociones.index');           // Listado principal
+    Route::get('/promociones/buscar', [PromocionController::class, 'buscar'])->name('promociones.buscar');
+    Route::get('/promociones/create', 'create')->name('promociones.create');  // Formulario crear
+    Route::post('/promociones', 'store')->name('promociones.store');          // Guardar nueva promoción
+    Route::get('/promociones/{promocion}', 'show')->name('promociones.show'); // Ver detalles
+    Route::get('/promociones/{promocion}/edit', 'edit')->name('promociones.edit'); // Editar
+    Route::put('/promociones/{promocion}', 'update')->name('promociones.update');  // Guardar cambios
+
+});
+

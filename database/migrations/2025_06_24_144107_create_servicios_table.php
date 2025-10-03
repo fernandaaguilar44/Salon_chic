@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
-
-
             $table->string('nombre_servicio', 50);
             $table->text('descripcion');
             $table->string('codigo_servicio', 7)->unique();
